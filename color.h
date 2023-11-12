@@ -1,0 +1,11 @@
+
+#ifndef RAY_TRACER_CHALLENGE_COLOR_H
+#define RAY_TRACER_CHALLENGE_COLOR_H
+
+
+class color {
+
+};
+
+
+#endif //RAY_TRACER_CHALLENGE_COLOR_H

@@ -8,9 +8,15 @@ find_package(GTest CONFIG REQUIRED)
 
 add_executable(ray_tracer_challenge main.cpp
         Tuple.cpp
-        Tuple.h)
+        Tuple.h
+        util.h
+        color.cpp
+        color.h)
 add_executable(ray_tracer_challenge_test test.cpp
         Tuple.cpp
-        Tuple.h)
+        Tuple.h
+        util.h
+        color.cpp
+        color.h)
 
 target_link_libraries(ray_tracer_challenge_test PRIVATE GTest::gtest GTest::gtest_main)
