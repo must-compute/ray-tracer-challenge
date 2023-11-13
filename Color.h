@@ -2,10 +2,8 @@
 #ifndef RAY_TRACER_CHALLENGE_COLOR_H
 #define RAY_TRACER_CHALLENGE_COLOR_H
 
+#include "BaseTuple.h"
 
-class color {
-
-};
-
+using Color = BaseTuple<TupleOrColor::COLOR>;
 
 #endif //RAY_TRACER_CHALLENGE_COLOR_H

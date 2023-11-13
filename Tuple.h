@@ -2,38 +2,9 @@
 #define RAY_TRACER_CHALLENGE_TUPLE_H
 
 #include "util.h"
+#include "BaseTuple.h"
 
-// TODO consider placing runtime checks against illegal w values (especially points).
-// negation, magnitude, normalize, dot and cross-product.
-struct Tuple {
-    double x, y, z, w;
-
-    Tuple(double x, double y, double z, double w);
-
-    [[nodiscard]] bool is_point() const;
-
-    [[nodiscard]] bool is_vector() const;
-
-    bool operator==(const Tuple &other) const;
-
-    Tuple operator+(const Tuple &other) const;
-
-    Tuple operator-(const Tuple &other) const;
-
-    Tuple operator-() const;
-
-    Tuple operator*(const double &scalar) const;
-
-    Tuple operator/(const double &scalar) const;
-
-    [[nodiscard]] double magnitude() const;
-
-    [[nodiscard]] Tuple normalize() const;
-
-    [[nodiscard]] double dot(const Tuple &other) const;
-
-    [[nodiscard]] Tuple cross(const Tuple &other) const;
-};
+using Tuple = BaseTuple<TupleOrColor::TUPLE>;
 
 // TODO this prevents implicit conversion for params. Not sure if it's idiomatic.
 template<typename T>

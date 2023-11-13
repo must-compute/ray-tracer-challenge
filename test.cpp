@@ -27,10 +27,10 @@ TEST_F(RayTracerFixture, TupleBasic) {
     z = 3.5;
     w = 1.0;
     const Tuple t = Tuple(x, y, z, w);
-    EXPECT_EQ(t.x, x);
-    EXPECT_EQ(t.y, y);
-    EXPECT_EQ(t.z, z);
-    EXPECT_EQ(t.w, w);
+    EXPECT_EQ(t.x(), x);
+    EXPECT_EQ(t.y(), y);
+    EXPECT_EQ(t.z(), z);
+    EXPECT_EQ(t.w(), w);
     EXPECT_TRUE(t.is_point());
     EXPECT_FALSE(t.is_vector());
 }
