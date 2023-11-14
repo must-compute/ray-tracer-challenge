@@ -3,6 +3,7 @@
 #include <map>
 #include "Tuple.h"
 #include "Color.h"
+#include "Canvas.h"
 
 
 class RayTracerFixture : public ::testing::Test {
@@ -203,5 +204,22 @@ TEST_F(RayTracerFixture, ColorElementWiseProduct) {
         const Color c2 = make_color(0.9, 1.0, 0.1);
 
         EXPECT_EQ(c1 * c2, make_color(0.9, 0.2, 0.04));
+    }
+}
+
+TEST_F(RayTracerFixture, CanvasBasic) {
+    {
+        constexpr size_t width = 100;
+        constexpr size_t height = 100;
+        const Canvas<width, height> canvas;
+
+        EXPECT_EQ(canvas.width(), width);
+        EXPECT_EQ(canvas.height(), height);
+        const Color black_pixel = make_color(0.0, 0.0, 0.0);
+        for (const auto &row: canvas.pixels()) {
+            for (const auto &pixel: row) {
+                EXPECT_EQ(pixel, black_pixel);
+            }
+        }
     }
 }

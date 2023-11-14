@@ -13,7 +13,9 @@ add_executable(ray_tracer_challenge main.cpp
         Color.cpp
         Color.h
         BaseTuple.cpp
-        BaseTuple.h)
+        BaseTuple.h
+        Canvas.cpp
+        Canvas.h)
 add_executable(ray_tracer_challenge_test test.cpp
         Tuple.cpp
         Tuple.h
@@ -21,6 +23,8 @@ add_executable(ray_tracer_challenge_test test.cpp
         Color.cpp
         Color.h
         BaseTuple.cpp
-        BaseTuple.h)
+        BaseTuple.h
+        Canvas.cpp
+        Canvas.h)
 
 target_link_libraries(ray_tracer_challenge_test PRIVATE GTest::gtest GTest::gtest_main)

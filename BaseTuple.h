@@ -20,6 +20,8 @@ public:
     // Common methods
     BaseTuple(double x, double y, double z, double w) : x_(x), y_(y), z_(z), w_(w) {};
 
+    BaseTuple() : x_(0.0), y_(0.0), z_(0.0), w_(0.0) {};
+
     bool operator==(const BaseTuple &other) const {
         return within_epsilon(x_, other.x_)
                && within_epsilon(y_, other.y_)
