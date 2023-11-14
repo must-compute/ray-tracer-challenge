@@ -2,6 +2,7 @@
 
 #include <map>
 #include "Tuple.h"
+#include "Color.h"
 
 
 class RayTracerFixture : public ::testing::Test {
@@ -158,4 +159,49 @@ TEST_F(RayTracerFixture, TupleCrossProduct) {
     const Tuple expected = make_vector(-1.0, 2.0, -1.0);
     EXPECT_EQ(v1.cross(v2), expected);
     EXPECT_EQ(v2.cross(v1), -expected);
+}
+
+TEST_F(RayTracerFixture, ColorBasic) {
+    const Color c1 = make_color(-0.5, 0.4, 1.7);
+    EXPECT_EQ(c1.red(), -0.5);
+    EXPECT_EQ(c1.green(), 0.4);
+    EXPECT_EQ(c1.blue(), 1.7);
+}
+
+TEST_F(RayTracerFixture, ColorAddition) {
+    const Color c1 = make_color(3.0, -2.0, 5.0);
+    const Color c2 = make_color(-2.0, 3.0, 1.0);
+
+    EXPECT_EQ(c1 + c2, make_color(1.0, 1.0, 6.0));
+}
+
+TEST_F(RayTracerFixture, ColorSubtraction) {
+    {
+        const Color c1 = make_color(3.0, 2.0, 1.0);
+        const Color c2 = make_color(5.0, 6.0, 7.0);
+        EXPECT_EQ(c1 - c2, make_color(-2.0, -4.0, -6.0));
+    }
+    {
+        // TODO unsure if this makes sense (negative color)
+        const Color c1 = make_color(0.0, 0.0, 0.0);
+        const Color c2 = make_color(5.0, 6.0, 7.0);
+        EXPECT_EQ(c1 - c2, make_color(-5.0, -6.0, -7.0));
+    }
+}
+
+TEST_F(RayTracerFixture, ColorScalarMultiply) {
+    {
+        // TODO do these values make sense for a color?
+        const Color c = make_color(1.0, -2.0, 3.0);
+        EXPECT_EQ(c * 3.5, make_color(3.5, -7.0, 10.5));
+    }
+}
+
+TEST_F(RayTracerFixture, ColorElementWiseProduct) {
+    {
+        const Color c1 = make_color(1.0, 0.2, 0.4);
+        const Color c2 = make_color(0.9, 1.0, 0.1);
+
+        EXPECT_EQ(c1 * c2, make_color(0.9, 0.2, 0.04));
+    }
 }

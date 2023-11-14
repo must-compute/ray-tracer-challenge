@@ -10,7 +10,7 @@ add_executable(ray_tracer_challenge main.cpp
         Tuple.cpp
         Tuple.h
         util.h
-        color.cpp
+        Color.cpp
         Color.h
         BaseTuple.cpp
         BaseTuple.h)
@@ -18,7 +18,7 @@ add_executable(ray_tracer_challenge_test test.cpp
         Tuple.cpp
         Tuple.h
         util.h
-        color.cpp
+        Color.cpp
         Color.h
         BaseTuple.cpp
         BaseTuple.h)

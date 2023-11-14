@@ -102,6 +102,11 @@ public:
     [[nodiscard]] double blue() const requires (t == TupleOrColor::COLOR) {
         return z_;
     }
+
+    [[nodiscard]] BaseTuple operator*(const BaseTuple &other) const requires (t == TupleOrColor::COLOR) {
+        // TODO assuming alpha is not needed
+        return {red() * other.red(), green() * other.green(), blue() * other.blue(), 0.0};
+    }
 };
 
 #endif //RAY_TRACER_CHALLENGE_BASETUPLE_H

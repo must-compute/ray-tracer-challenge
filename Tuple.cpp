@@ -8,4 +8,3 @@
 [[nodiscard]] Tuple make_vector(double x, double y, double z) {
     return {x, y, z, 0.0};
 }
-

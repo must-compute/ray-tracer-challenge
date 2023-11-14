@@ -7,8 +7,8 @@
 using Tuple = BaseTuple<TupleOrColor::TUPLE>;
 
 // TODO this prevents implicit conversion for params. Not sure if it's idiomatic.
-template<typename T>
-Tuple make_point(T x, T y, T z) = delete;
+//template<typename T>
+//Tuple make_point(T x, T y, T z) = delete;
 
 Tuple make_point(double x, double y, double z);
 
