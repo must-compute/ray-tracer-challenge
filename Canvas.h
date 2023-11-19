@@ -48,7 +48,6 @@ public:
         //return ppm_body().insert(0, header);
 
         return header + ppm_body();
-
     }
 
     [[nodiscard]] std::string ppm_body() const {

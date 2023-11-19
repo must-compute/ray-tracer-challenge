@@ -2,6 +2,7 @@
 
 #include <map>
 #include "Tuple.h"
+#include "Matrix.h"
 #include "Color.h"
 #include "Canvas.h"
 #include <filesystem>
@@ -309,4 +310,45 @@ TEST_F(RayTracerFixture, PPMFileSaving) {
     ss << infile.rdbuf();
     EXPECT_EQ(ss.str(), canvas.to_ppm());
     EXPECT_TRUE(std::filesystem::remove(temp_path));
+}
+
+TEST_F(RayTracerFixture, MatrixFourByFourConstruction) {
+    constexpr size_t w = 4;
+    constexpr size_t h = 4;
+    auto cells = std::array<std::array<double, w>, h>{
+            {{1.0, 2.0, 3.0, 4.0}, {5.5, 6.5, 7.5, 8.5}, {9.0, 10.0, 11.0, 12.0}, {13.5, 14.5, 15.5, 16.5}}
+    };
+    auto m = Matrix<h, w>{cells};
+    EXPECT_EQ(m.cells[0][0], 1.0);
+    EXPECT_EQ(m.cells[0][3], 4.0);
+    EXPECT_EQ(m.cells[1][0], 5.5);
+    EXPECT_EQ(m.cells[1][2], 7.5);
+    EXPECT_EQ(m.cells[2][2], 11.0);
+    EXPECT_EQ(m.cells[3][0], 13.5);
+    EXPECT_EQ(m.cells[3][2], 15.5);
+}
+
+TEST_F(RayTracerFixture, MatrixTwoByTwoConstruction) {
+    constexpr size_t w = 2;
+    constexpr size_t h = 2;
+    auto cells = std::array<std::array<double, w>, h>{
+            {{-3.0, 5.0}, {1.0, -2.0}}
+    };
+    auto m = Matrix<h, w>{cells};
+    EXPECT_EQ(m.cells[0][0], -3.0);
+    EXPECT_EQ(m.cells[0][1], 5.0);
+    EXPECT_EQ(m.cells[1][0], 1.0);
+    EXPECT_EQ(m.cells[1][1], -2.0);
+}
+
+TEST_F(RayTracerFixture, MatrixThreeByThreeConstruction) {
+    constexpr size_t w = 3;
+    constexpr size_t h = 3;
+    auto cells = std::array<std::array<double, w>, h>{
+            {{-3.0, 5.0, 0.0}, {1.0, -2.0, -7.0}, {0.0, 1.0, 1.0}}
+    };
+    auto m = Matrix<h, w>{cells};
+    EXPECT_EQ(m.cells[0][0], -3.0);
+    EXPECT_EQ(m.cells[1][1], -2.0);
+    EXPECT_EQ(m.cells[2][2], 1.0);
 }
