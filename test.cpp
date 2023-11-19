@@ -344,11 +344,35 @@ TEST_F(RayTracerFixture, MatrixTwoByTwoConstruction) {
 TEST_F(RayTracerFixture, MatrixThreeByThreeConstruction) {
     constexpr size_t w = 3;
     constexpr size_t h = 3;
-    auto cells = std::array<std::array<double, w>, h>{
+    const auto cells = std::array<std::array<double, w>, h>{
             {{-3.0, 5.0, 0.0}, {1.0, -2.0, -7.0}, {0.0, 1.0, 1.0}}
     };
-    auto m = Matrix<h, w>{cells};
+    const auto m = Matrix<h, w>{cells};
     EXPECT_EQ(m.cells[0][0], -3.0);
     EXPECT_EQ(m.cells[1][1], -2.0);
     EXPECT_EQ(m.cells[2][2], 1.0);
+}
+
+TEST_F(RayTracerFixture, MatrixComparisonEqual) {
+    constexpr size_t w = 4;
+    constexpr size_t h = 4;
+    const auto cells = std::array<std::array<double, w>, h>{
+            {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}, {9.0, 8.0, 7.0, 6.0}, {5.0, 4.0, 3.0, 2.0}}
+    };
+    const auto m1 = Matrix<h, w>{cells};
+    const auto m2 = Matrix<h, w>{cells};
+    EXPECT_TRUE(m1 == m2);
+}
+
+TEST_F(RayTracerFixture, MatrixComparisonNotEqual) {
+    constexpr size_t w = 4;
+    constexpr size_t h = 4;
+    auto cells = std::array<std::array<double, w>, h>{
+            {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}, {9.0, 8.0, 7.0, 6.0}, {5.0, 4.0, 3.0, 2.0}}
+    };
+    const auto m1 = Matrix<h, w>{cells};
+
+    cells[2][3] = 42.0;
+    const auto m2 = Matrix<h, w>{cells};
+    EXPECT_TRUE(m1 != m2);
 }
