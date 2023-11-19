@@ -2,6 +2,8 @@
 #define RAY_TRACER_CHALLENGE_BASETUPLE_H
 
 #include "util.h"
+#include <tuple>
+#include <array>
 
 enum class TupleOrColor {
     TUPLE,
@@ -103,6 +105,10 @@ public:
 
     [[nodiscard]] double blue() const requires (t == TupleOrColor::COLOR) {
         return z_;
+    }
+
+    [[nodiscard]] std::array<double, 3> rgb() const requires (t == TupleOrColor::COLOR) {
+        return {x_, y_, z_};
     }
 
     [[nodiscard]] BaseTuple operator*(const BaseTuple &other) const requires (t == TupleOrColor::COLOR) {
