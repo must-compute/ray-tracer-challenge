@@ -376,3 +376,17 @@ TEST_F(RayTracerFixture, MatrixComparisonNotEqual) {
     const auto m2 = Matrix<h, w>{cells};
     EXPECT_TRUE(m1 != m2);
 }
+
+TEST_F(RayTracerFixture, MatrixComparisonWithinEpsilon) {
+    constexpr size_t w = 4;
+    constexpr size_t h = 4;
+    auto cells = std::array<std::array<double, w>, h>{
+            {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}, {9.0, 8.0, 7.0, 6.0}, {5.0, 4.0, 3.0, 2.0}}
+    };
+    const auto m1 = Matrix<h, w>{cells};
+    auto m2 = Matrix<h, w>{cells};
+    m2.cells[2][3] += EPSILON;
+    EXPECT_TRUE(m1 == m2);
+    m2.cells[2][3] += EPSILON;
+    EXPECT_TRUE(m1 != m2);
+}
