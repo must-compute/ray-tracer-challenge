@@ -4,6 +4,7 @@
 #include "util.h"
 #include <tuple>
 #include <array>
+#include <cassert>
 
 enum class TupleOrColor {
     TUPLE,
@@ -46,6 +47,21 @@ public:
 
     BaseTuple operator/(const double &scalar) const {
         return {x_ / scalar, y_ / scalar, z_ / scalar, w_ / scalar};
+    }
+
+    double &operator[](size_t i) {
+        switch (i) {
+            case 0:
+                return x_;
+            case 1:
+                return y_;
+            case 2:
+                return z_;
+            case 3:
+                return w_;
+            default:
+                assert(false);
+        }
     }
 
     // Tuple-specific methods

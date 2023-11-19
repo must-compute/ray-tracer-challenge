@@ -5,6 +5,7 @@
 #include <array>
 #include <vector>
 #include "util.h"
+#include "BaseTuple.h"
 
 // TODO we don't actually need this to be a struct. Consider just making the Matrix be an alias to the std array data
 // and writing free functions to define the operations.
@@ -31,6 +32,17 @@ struct Matrix {
                                      cells[r][2] * other.cells[2][c] +
                                      cells[r][3] * other.cells[3][c];
             }
+        }
+        return result;
+    }
+
+    BaseTuple<TupleOrColor::TUPLE> operator*(const BaseTuple<TupleOrColor::TUPLE> &other) const {
+        BaseTuple<TupleOrColor::TUPLE> result{};
+        for (size_t r = 0; r < ROWS; ++r) {
+            result[r] = cells[r][0] * other.x() +
+                        cells[r][1] * other.y() +
+                        cells[r][2] * other.z() +
+                        cells[r][3] * other.w();
         }
         return result;
     }

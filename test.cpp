@@ -408,3 +408,15 @@ TEST_F(RayTracerFixture, MatrixMultiplication) {
     EXPECT_EQ(m1 * m2, expected_m);
 }
 
+TEST_F(RayTracerFixture, MatrixMulTuple) {
+    constexpr size_t w = 4;
+    constexpr size_t h = 4;
+    const auto m = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{1.0, 2.0, 3.0, 4.0}, {2.0, 4.0, 4.0, 2.0}, {8.0, 6.0, 4.0, 1.0}, {0.0, 0.0, 0.0, 1.0}}
+    }};
+    const auto t = BaseTuple<TupleOrColor::TUPLE>(1.0, 2.0, 3.0, 1.0);
+
+    const auto expected_tuple = BaseTuple<TupleOrColor::TUPLE>(18.0, 24.0, 33.0, 1.0);
+
+    EXPECT_EQ(m * t, expected_tuple);
+}
