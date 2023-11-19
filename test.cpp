@@ -390,3 +390,21 @@ TEST_F(RayTracerFixture, MatrixComparisonWithinEpsilon) {
     m2.cells[2][3] += EPSILON;
     EXPECT_TRUE(m1 != m2);
 }
+
+TEST_F(RayTracerFixture, MatrixMultiplication) {
+    constexpr size_t w = 4;
+    constexpr size_t h = 4;
+    const auto m1 = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}, {9.0, 8.0, 7.0, 6.0}, {5.0, 4.0, 3.0, 2.0}}
+    }};
+    const auto m2 = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{-2.0, 1.0, 2.0, 3.0}, {3.0, 2.0, 1.0, -1.0}, {4.0, 3.0, 6.0, 5.0}, {1.0, 2.0, 7.0, 8.0}}
+    }};
+
+    const auto expected_m = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{20.0, 22.0, 50.0, 48.0}, {44.0, 54.0, 114.0, 108.0}, {40.0, 58.0, 110.0, 102.0}, {16.0, 26.0, 46.0, 42.0}}
+    }};
+
+    EXPECT_EQ(m1 * m2, expected_m);
+}
+

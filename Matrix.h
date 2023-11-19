@@ -22,6 +22,19 @@ struct Matrix {
         return true;
     }
 
+    Matrix<4, 4> operator*(const Matrix &other) const {
+        Matrix result{};
+        for (size_t r = 0; r < ROWS; ++r) {
+            for (size_t c = 0; c < COLS; ++c) {
+                result.cells[r][c] = cells[r][0] * other.cells[0][c] +
+                                     cells[r][1] * other.cells[1][c] +
+                                     cells[r][2] * other.cells[2][c] +
+                                     cells[r][3] * other.cells[3][c];
+            }
+        }
+        return result;
+    }
+
     // TODO consider making initializer list version
     //    explicit Matrix(std::array<std::array<double, COLS>, ROWS> cells) : cells_{cells} {}
     std::array<std::array<double, COLS>, ROWS> cells;
