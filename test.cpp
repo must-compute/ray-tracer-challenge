@@ -515,3 +515,47 @@ TEST_F(RayTracerFixture, MatrixMinor) {
     EXPECT_EQ(b.determinant(), 25);
     EXPECT_EQ(m.minor(1, 0), 25);
 }
+
+TEST_F(RayTracerFixture, MatrixCofactor) {
+    constexpr size_t w = 3;
+    constexpr size_t h = 3;
+    const auto m = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{3.0, 5.0, 0.0},
+             {2.0, -1.0, -7.0},
+             {6.0, -1.0, 5.0}}
+    }};
+    EXPECT_EQ(m.minor(0, 0), -12.0);
+    EXPECT_EQ(m.cofactor(0, 0), -12.0);
+    EXPECT_EQ(m.minor(1, 0), 25.0);
+    EXPECT_EQ(m.cofactor(1, 0), -25.0);
+}
+
+TEST_F(RayTracerFixture, MatrixDeterminantThreeByThree) {
+    constexpr size_t w = 3;
+    constexpr size_t h = 3;
+    const auto m = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{1.0, 2.0, 6.0},
+             {-5.0, 8.0, -4.0},
+             {2.0, 6.0, 4.0}}
+    }};
+    EXPECT_EQ(m.cofactor(0, 0), 56.0);
+    EXPECT_EQ(m.cofactor(0, 1), 12.0);
+    EXPECT_EQ(m.cofactor(0, 2), -46.0);
+    EXPECT_EQ(m.determinant(), -196.0);
+}
+
+TEST_F(RayTracerFixture, MatrixDeterminantFourByFour) {
+    constexpr size_t w = 4;
+    constexpr size_t h = 4;
+    const auto m = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{-2.0, -8.0, 3.0, 5.0},
+             {-3.0, 1.0, 7.0, 3.0},
+             {1.0, 2.0, -9.0, 6.0},
+             {-6.0, 7.0, 7.0, -9.0}}
+    }};
+    EXPECT_EQ(m.cofactor(0, 0), 690.0);
+    EXPECT_EQ(m.cofactor(0, 1), 447.0);
+    EXPECT_EQ(m.cofactor(0, 2), 210.0);
+    EXPECT_EQ(m.cofactor(0, 3), 51.0);
+    EXPECT_EQ(m.determinant(), -4071.0);
+}

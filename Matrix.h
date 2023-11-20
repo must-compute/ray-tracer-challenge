@@ -63,6 +63,16 @@ struct Matrix {
         return cells[0][0] * cells[1][1] - cells[0][1] * cells[1][0];
     }
 
+    [[nodiscard]] double determinant() const {
+        double sum = 0.0;
+        // We sum up the result of multiplying each element by its cofactor (for the first row only).
+        for (size_t col = 0; col < COLS; ++col) {
+            sum += cells[0][col] * cofactor(0, col);
+        }
+
+        return sum;
+    }
+
     [[nodiscard]] Matrix<ROWS - 1, COLS - 1> submatrix(const size_t row_to_remove, const size_t col_to_remove) const {
         Matrix<ROWS - 1, COLS - 1> result;
 
@@ -90,6 +100,14 @@ struct Matrix {
 
     [[nodiscard]] double minor(const size_t row_to_remove, const size_t col_to_remove) const {
         return submatrix(row_to_remove, col_to_remove).determinant();
+    }
+
+    [[nodiscard]] double cofactor(const size_t row_to_remove, const size_t col_to_remove) const {
+        auto determinant = submatrix(row_to_remove, col_to_remove).determinant();
+        if (row_to_remove + col_to_remove % 2 == 1) {
+            determinant *= -1;
+        }
+        return determinant;
     }
 
     static Matrix identity() {
