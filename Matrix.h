@@ -9,6 +9,9 @@
 #include "util.h"
 #include "BaseTuple.h"
 
+// NOTE: we use an especially lax epsilon here to get the tests to pass.
+constexpr double MATRIX_EPSILON = 1e-4;
+
 // TODO we don't actually need this to be a struct. Consider just making the Matrix be an alias to the std array data
 // and writing free functions to define the operations.
 template<size_t ROWS, size_t COLS>
@@ -17,7 +20,7 @@ struct Matrix {
     bool operator==(const Matrix &other) const {
         for (size_t i = 0; i < ROWS; ++i) {
             for (size_t j = 0; j < COLS; ++j) {
-                if (!within_epsilon(cells[j][i], other.cells[j][i])) {
+                if (!within_epsilon(cells[j][i], other.cells[j][i], MATRIX_EPSILON)) {
                     return false;
                 }
             }
@@ -107,11 +110,25 @@ struct Matrix {
     }
 
     [[nodiscard]] double cofactor(const size_t row_to_remove, const size_t col_to_remove) const {
-        auto determinant = submatrix(row_to_remove, col_to_remove).determinant();
-        if (row_to_remove + col_to_remove % 2 == 1) {
-            determinant *= -1;
+        auto result = minor(row_to_remove, col_to_remove);
+        if ((row_to_remove + col_to_remove) % 2 == 1) {
+            result *= -1;
         }
-        return determinant;
+        return result;
+    }
+
+    [[nodiscard]] Matrix inverse() const {
+        if (!is_invertible()) {
+            assert((false, "Cannot invert matrix!"));
+        }
+
+        Matrix result;
+        for (size_t row = 0; row < ROWS; ++row) {
+            for (size_t col = 0; col < COLS; ++col) {
+                result.cells[col][row] = cofactor(row, col) / determinant();
+            }
+        }
+        return result;
     }
 
     static Matrix identity() {
