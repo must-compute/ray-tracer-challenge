@@ -559,3 +559,25 @@ TEST_F(RayTracerFixture, MatrixDeterminantFourByFour) {
     EXPECT_EQ(m.cofactor(0, 3), 51.0);
     EXPECT_EQ(m.determinant(), -4071.0);
 }
+
+TEST_F(RayTracerFixture, MatrixIsInvertible) {
+    constexpr size_t w = 4;
+    constexpr size_t h = 4;
+    const auto invertible = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{6.0, 4.0, 4.0, 4.0},
+             {5.0, 5.0, 7.0, 6.0},
+             {4.0, -9.0, 3.0, -7.0},
+             {9.0, 1.0, 7.0, -6.0}}
+    }};
+    EXPECT_EQ(invertible.determinant(), -2120.0);
+    EXPECT_TRUE(invertible.is_invertible());
+
+    const auto not_invertible = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{-4.0, 2.0, -2.0, -3.0},
+             {9.0, 6.0, 2.0, 6.0},
+             {0.0, -5.0, 1.0, -5.0},
+             {0.0, 0.0, 0.0, 0.0}}
+    }};
+    EXPECT_EQ(not_invertible.determinant(), 0.0);
+    EXPECT_FALSE(not_invertible.is_invertible());
+}

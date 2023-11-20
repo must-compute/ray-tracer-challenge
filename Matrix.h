@@ -73,6 +73,10 @@ struct Matrix {
         return sum;
     }
 
+    [[nodiscard]] bool is_invertible() const {
+        return !within_epsilon(determinant(), 0);
+    }
+
     [[nodiscard]] Matrix<ROWS - 1, COLS - 1> submatrix(const size_t row_to_remove, const size_t col_to_remove) const {
         Matrix<ROWS - 1, COLS - 1> result;
 
