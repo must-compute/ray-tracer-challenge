@@ -13,15 +13,16 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <vector>
 
 template<size_t WIDTH, size_t HEIGHT>
 class Canvas {
 public:
-    [[nodiscard]] static consteval size_t width() {
+    [[nodiscard]] consteval size_t width() const {
         return WIDTH;
     }
 
-    [[nodiscard]] static consteval size_t height() {
+    [[nodiscard]] consteval size_t height() const {
         return HEIGHT;
     }
 
@@ -39,9 +40,9 @@ public:
 
     [[nodiscard]] std::string to_ppm() const {
         const std::string header = std::string("P3\n")
-                .append(std::to_string(width()))
+                .append(std::to_string(WIDTH))
                 .append(" ")
-                .append(std::to_string(height()))
+                .append(std::to_string(HEIGHT))
                 .append("\n255\n");
 
         // De-sugared operator+
@@ -52,10 +53,10 @@ public:
 
     [[nodiscard]] std::string ppm_body() const {
         std::vector<std::string> lines;
-        for (size_t row = 0; row < height(); ++row) {
+        for (size_t row = 0; row < HEIGHT; ++row) {
             std::stringstream ss;
 
-            for (size_t col = 0; col < width(); ++col) {
+            for (size_t col = 0; col < WIDTH; ++col) {
                 for (const double color_value: pixels_[row][col].rgb()) {
                     const double clamped = std::clamp(color_value, 0.0, 1.0);
                     const int remapped = static_cast<int>(std::round(std::lerp(0, 255, clamped)));
