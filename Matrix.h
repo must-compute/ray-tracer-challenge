@@ -47,6 +47,29 @@ struct Matrix {
         return result;
     }
 
+    [[nodiscard]] Matrix transpose() const {
+        Matrix<COLS, ROWS> result;
+        for (size_t r = 0; r < ROWS; ++r) {
+            for (size_t c = 0; c < COLS; ++c) {
+                result.cells[r][c] = cells[c][r];
+            }
+        }
+        return result;
+    }
+
+    [[nodiscard]] double determinant() const requires (ROWS == 2 && COLS == 2) {
+        return cells[0][0] * cells[1][1] - cells[0][1] * cells[1][0];
+    }
+
+    static Matrix identity() {
+        Matrix m;
+        static_assert(ROWS == COLS);
+        for (size_t rows = 0; rows < ROWS; rows++) {
+            m.cells[rows][rows] = 1.0;
+        }
+        return m;
+    }
+
     // TODO consider making initializer list version
     //    explicit Matrix(std::array<std::array<double, COLS>, ROWS> cells) : cells_{cells} {}
     std::array<std::array<double, COLS>, ROWS> cells;

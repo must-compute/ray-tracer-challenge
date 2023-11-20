@@ -420,3 +420,51 @@ TEST_F(RayTracerFixture, MatrixMulTuple) {
 
     EXPECT_EQ(m * t, expected_tuple);
 }
+
+TEST_F(RayTracerFixture, MatrixIdentityMultiply) {
+    constexpr size_t w = 4;
+    constexpr size_t h = 4;
+    const auto m = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{1.0, 2.0, 3.0, 4.0}, {2.0, 4.0, 4.0, 2.0}, {8.0, 6.0, 4.0, 1.0}, {0.0, 0.0, 0.0, 1.0}}
+    }};
+    const auto identity = Matrix<h, w>::identity();
+
+    EXPECT_EQ(m * identity, m);
+}
+
+TEST_F(RayTracerFixture, MatrixTranspose) {
+    constexpr size_t w = 4;
+    constexpr size_t h = 4;
+    const auto m = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{0.0, 9.0, 3.0, 0.0},
+             {9.0, 8.0, 0.0, 8.0},
+             {1.0, 8.0, 5.0, 3.0},
+             {0.0, 0.0, 5.0, 8.0}}
+    }};
+    const auto expected = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{0.0, 9.0, 1.0, 0.0},
+             {9.0, 8.0, 8.0, 0.0},
+             {3.0, 0.0, 5.0, 5.0},
+             {0.0, 8.0, 3.0, 8.0}}
+    }};
+
+    EXPECT_EQ(m.transpose(), expected);
+}
+
+TEST_F(RayTracerFixture, MatrixTransposeIdentity) {
+    constexpr size_t w = 4;
+    constexpr size_t h = 4;
+    const auto identity = Matrix<h, w>::identity();
+    EXPECT_EQ(identity.transpose(), identity);
+}
+
+TEST_F(RayTracerFixture, MatrixDeterminant) {
+    constexpr size_t w = 2;
+    constexpr size_t h = 2;
+    const auto m = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{1.0, 5.0},
+             {-3.0, 2.0}}
+    }};
+    const double expected = 17.0;
+    EXPECT_EQ(m.determinant(), expected);
+}
