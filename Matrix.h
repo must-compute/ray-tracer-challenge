@@ -88,6 +88,10 @@ struct Matrix {
         return result;
     }
 
+    [[nodiscard]] double minor(const size_t row_to_remove, const size_t col_to_remove) const {
+        return submatrix(row_to_remove, col_to_remove).determinant();
+    }
+
     static Matrix identity() {
         Matrix m;
         static_assert(ROWS == COLS);

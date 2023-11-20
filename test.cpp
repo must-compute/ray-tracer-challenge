@@ -501,5 +501,17 @@ TEST_F(RayTracerFixture, MatrixSubmatrix) {
         }};
         EXPECT_EQ(m.submatrix(2, 1), expected);
     }
+}
 
+TEST_F(RayTracerFixture, MatrixMinor) {
+    constexpr size_t w = 3;
+    constexpr size_t h = 3;
+    const auto m = Matrix<h, w>{std::array<std::array<double, w>, h>{
+            {{3.0, 5.0, 0.0},
+             {2.0, -1.0, -7.0},
+             {6.0, -1.0, 5.0}}
+    }};
+    const auto b = m.submatrix(1, 0);
+    EXPECT_EQ(b.determinant(), 25);
+    EXPECT_EQ(m.minor(1, 0), 25);
 }
