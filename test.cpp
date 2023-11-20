@@ -468,3 +468,38 @@ TEST_F(RayTracerFixture, MatrixDeterminant) {
     const double expected = 17.0;
     EXPECT_EQ(m.determinant(), expected);
 }
+
+TEST_F(RayTracerFixture, MatrixSubmatrix) {
+    {
+        constexpr size_t w = 3;
+        constexpr size_t h = 3;
+        const auto m = Matrix<h, w>{std::array<std::array<double, w>, h>{
+                {{1.0, 5.0, 0.0},
+                 {-3.0, 2.0, 7.0},
+                 {0.0, 6.0, -3.0}}
+        }};
+        const auto expected = Matrix<h - 1, w - 1>{std::array<std::array<double, w - 1>, h - 1>{
+                {{-3.0, 2.0},
+                 {0.0, 6.0}}
+        }};
+        EXPECT_EQ(m.submatrix(0, 2), expected);
+    }
+
+    {
+        constexpr size_t w = 4;
+        constexpr size_t h = 4;
+        const auto m = Matrix<h, w>{std::array<std::array<double, w>, h>{
+                {{1.0, 5.0, 0.0, 4.2},
+                 {-3.0, 2.0, 7.0, 6.9},
+                 {0.0, 6.0, -3.0, -6.66},
+                 {1.0, 3.0, -2.0, -8.0}}
+        }};
+        const auto expected = Matrix<h - 1, w - 1>{std::array<std::array<double, w - 1>, h - 1>{
+                {{1.0, 0.0, 4.2},
+                 {-3.0, 7.0, 6.9},
+                 {1.0, -2.0, -8.0}}
+        }};
+        EXPECT_EQ(m.submatrix(2, 1), expected);
+    }
+
+}

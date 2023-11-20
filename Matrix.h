@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <array>
 #include <vector>
+#include <string>
+#include <ostream>
 #include "util.h"
 #include "BaseTuple.h"
 
@@ -61,6 +63,31 @@ struct Matrix {
         return cells[0][0] * cells[1][1] - cells[0][1] * cells[1][0];
     }
 
+    [[nodiscard]] Matrix<ROWS - 1, COLS - 1> submatrix(const size_t row_to_remove, const size_t col_to_remove) const {
+        Matrix<ROWS - 1, COLS - 1> result;
+
+
+        for (size_t r = 0; r < ROWS; ++r) {
+            for (size_t c = 0; c < COLS; ++c) {
+                if (r == row_to_remove || c == col_to_remove) {
+                    continue;
+                }
+
+                size_t dest_row = r;
+                size_t dest_col = c;
+                if (r > row_to_remove) {
+                    dest_row = r - 1;
+                }
+                if (c > col_to_remove) {
+                    dest_col = c - 1;
+                }
+                result.cells[dest_row][dest_col] = cells[r][c];
+            }
+        }
+
+        return result;
+    }
+
     static Matrix identity() {
         Matrix m;
         static_assert(ROWS == COLS);
@@ -69,6 +96,22 @@ struct Matrix {
         }
         return m;
     }
+
+    // For pretty printing in GTEST.
+    friend std::ostream &operator<<(std::ostream &os, const Matrix &m) {
+        os << "Matrix<" << ROWS << ", " << COLS << ">{\n";
+
+        for (size_t r = 0; r < ROWS; ++r) {
+            os << "{";
+            for (size_t c = 0; c < COLS; ++c) {
+                os << std::to_string(m.cells[r][c]) << ", ";
+            }
+            os << "}\n";
+        }
+        os << "}";
+        return os;
+    }
+
 
     // TODO consider making initializer list version
     //    explicit Matrix(std::array<std::array<double, COLS>, ROWS> cells) : cells_{cells} {}
