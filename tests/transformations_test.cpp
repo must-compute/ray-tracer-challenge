@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 
-#include "../src/Matrix.h"
 #include "../src/Transformations.h"
 #include "../src/Tuple.h"
 #include <numbers>
