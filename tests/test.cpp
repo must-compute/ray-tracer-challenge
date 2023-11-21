@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
 #include <map>
-#include "Tuple.h"
-#include "Matrix.h"
-#include "Color.h"
-#include "Canvas.h"
+#include "../src/Tuple.h"
+#include "../src/Matrix.h"
+#include "../src/Color.h"
+#include "../src/Canvas.h"
 #include <filesystem>
 #include <fstream>
 
