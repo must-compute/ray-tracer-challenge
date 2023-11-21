@@ -53,7 +53,7 @@ struct Matrix {
     }
 
     [[nodiscard]] Matrix transpose() const {
-        Matrix<COLS, ROWS> result;
+        Matrix<COLS, ROWS> result{};
         for (size_t r = 0; r < ROWS; ++r) {
             for (size_t c = 0; c < COLS; ++c) {
                 result.cells[r][c] = cells[c][r];
@@ -81,7 +81,7 @@ struct Matrix {
     }
 
     [[nodiscard]] Matrix<ROWS - 1, COLS - 1> submatrix(const size_t row_to_remove, const size_t col_to_remove) const {
-        Matrix<ROWS - 1, COLS - 1> result;
+        Matrix<ROWS - 1, COLS - 1> result{};
 
 
         for (size_t r = 0; r < ROWS; ++r) {
@@ -122,7 +122,7 @@ struct Matrix {
             assert((false, "Cannot invert matrix!"));
         }
 
-        Matrix result;
+        Matrix result{};
         for (size_t row = 0; row < ROWS; ++row) {
             for (size_t col = 0; col < COLS; ++col) {
                 result.cells[col][row] = cofactor(row, col) / determinant();
