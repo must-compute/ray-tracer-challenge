@@ -13,7 +13,7 @@ Tuple Ray::position_at_t(double t) const {
     return origin_ + direction_ * t;
 }
 
-std::vector<double> Ray::intersect(const Sphere &sphere) const {
+Intersections Ray::intersect(const Sphere &sphere) const {
 
     const auto sphere_to_ray = origin_ - make_point(0.0, 0.0, 0.0);
 
@@ -32,10 +32,11 @@ std::vector<double> Ray::intersect(const Sphere &sphere) const {
     const auto t1 = (-b - discr_sqrt) / (2 * a);
     const auto t2 = (-b + discr_sqrt) / (2 * a);
 
+    // NOTE: we care about the order of intersections (in ascending order of t).
     if (t1 > t2) {
-        return {t2, t1};
+        return {Intersection{t2, sphere}, Intersection{t1, sphere}};
     }
-    return {t1, t2};
+    return {Intersection{t1, sphere}, Intersection{t2, sphere}};
 }
 
 Tuple Ray::origin() const {

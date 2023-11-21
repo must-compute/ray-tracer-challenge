@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 
 #include "Ray.h"
 #include "Sphere.h"
@@ -27,7 +26,10 @@ TEST(Ray, IntersectSphereTwoPoints) {
     const auto intersections = r.intersect(s);
 
     EXPECT_EQ(intersections.size(), 2);
-    EXPECT_THAT(intersections, ::testing::ElementsAre(4.0, 6.0));
+    EXPECT_EQ(intersections[0].t, 4.0);
+    EXPECT_EQ(intersections[1].t, 6.0);
+    EXPECT_EQ(intersections[0].object, s);
+    EXPECT_EQ(intersections[1].object, s);
 }
 
 TEST(Ray, IntersectSphereTangent) {
@@ -37,7 +39,10 @@ TEST(Ray, IntersectSphereTangent) {
 
     // Intentionally assert that a tangent intersection returns two identical values, as the book recommends to ease things for later chapters.
     EXPECT_EQ(intersections.size(), 2);
-    EXPECT_THAT(intersections, ::testing::ElementsAre(5.0, 5.0));
+    EXPECT_EQ(intersections[0].t, 5.0);
+    EXPECT_EQ(intersections[1].t, 5.0);
+    EXPECT_EQ(intersections[0].object, s);
+    EXPECT_EQ(intersections[1].object, s);
 }
 
 TEST(Ray, IntersectSphereMiss) {
@@ -52,7 +57,10 @@ TEST(Ray, IntersectOriginatesInsideSphere) {
     const auto s = Sphere{};
     const auto intersections = r.intersect(s);
     EXPECT_EQ(intersections.size(), 2);
-    EXPECT_THAT(intersections, ::testing::ElementsAre(-1.0, 1.0));
+    EXPECT_EQ(intersections[0].t, -1.0);
+    EXPECT_EQ(intersections[1].t, 1.0);
+    EXPECT_EQ(intersections[0].object, s);
+    EXPECT_EQ(intersections[1].object, s);
 }
 
 TEST(Ray, IntersectSphereBehindRay) {
@@ -60,5 +68,8 @@ TEST(Ray, IntersectSphereBehindRay) {
     const auto s = Sphere{};
     const auto intersections = r.intersect(s);
     EXPECT_EQ(intersections.size(), 2);
-    EXPECT_THAT(intersections, ::testing::ElementsAre(-6.0, -4.0));
+    EXPECT_EQ(intersections[0].t, -6.0);
+    EXPECT_EQ(intersections[1].t, -4.0);
+    EXPECT_EQ(intersections[0].object, s);
+    EXPECT_EQ(intersections[1].object, s);
 }

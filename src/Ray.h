@@ -3,6 +3,7 @@
 
 #include "Tuple.h"
 #include "Sphere.h"
+#include "Intersection.h"
 
 #include <vector>
 
@@ -19,9 +20,8 @@ public:
     // Returns the point if we move t units along the ray.
     [[nodiscard]] Tuple position_at_t(double t) const;
 
-    // TODO soon we'll have to replace these intersection doubles with actual Intersection objects.
-    // Returns the points of intersection with the given shape. Intersection means the t value along the ray.
-    [[nodiscard]] std::vector<double> intersect(const Sphere &sphere) const;
+    // Returns the points of intersection with the given shape.
+    [[nodiscard]] Intersections intersect(const Sphere &sphere) const;
 
 private:
     // The origin of the ray. This should be a point (i.e. w == 1).

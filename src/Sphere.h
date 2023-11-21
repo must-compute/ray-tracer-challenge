@@ -4,7 +4,11 @@
 
 
 class Sphere {
-
+public:
+    // TODO implement
+    bool operator==(const Sphere& other) const {
+        return true;
+    }
 };
 
 
