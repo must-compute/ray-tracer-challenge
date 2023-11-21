@@ -3,6 +3,9 @@
 #include "../src/Matrix.h"
 #include "../src/Transformations.h"
 #include "../src/Tuple.h"
+#include <numbers>
+#include <cmath>
+
 
 TEST(Transformations, MultiplyTranslation) {
     const auto transform = tf::translation(5.0, -3.0, 2.0);
@@ -48,4 +51,39 @@ TEST(Transformations, ScalingReflection) {
     const auto transform = tf::scaling(-1.0, 1.0, 1.0);
     const auto point = make_point(2.0, 3.0, 4.0);
     EXPECT_EQ(transform * point, make_point(-2.0, 3.0, 4.0));
+}
+
+TEST(Transformations, RotationX) {
+    using namespace std::numbers;
+    const auto point = make_point(0.0, 1.0, 0.0);
+    const auto half_quarter = tf::rotation_x(pi / 4.0);
+    const auto full_quarter = tf::rotation_x(pi / 2.0);
+    EXPECT_EQ(half_quarter * point, make_point(0.0, std::sqrt(2.0) / 2.0, std::sqrt(2.0) / 2.0));
+    EXPECT_EQ(full_quarter * point, make_point(0.0, 0.0, 1.0));
+}
+
+TEST(Transformations, RotationXInverse) {
+    using namespace std::numbers;
+    const auto point = make_point(0.0, 1.0, 0.0);
+    const auto half_quarter = tf::rotation_x(pi / 4.0);
+    const auto inverse = half_quarter.inverse();
+    EXPECT_EQ(inverse * point, make_point(0.0, std::sqrt(2.0) / 2.0, -std::sqrt(2.0) / 2.0));
+}
+
+TEST(Transformations, RotationY) {
+    using namespace std::numbers;
+    const auto point = make_point(0.0, 0.0, 1.0);
+    const auto half_quarter = tf::rotation_y(pi / 4.0);
+    const auto full_quarter = tf::rotation_y(pi / 2.0);
+    EXPECT_EQ(half_quarter * point, make_point(std::sqrt(2.0) / 2.0, 0.0, std::sqrt(2.0) / 2.0));
+    EXPECT_EQ(full_quarter * point, make_point(1.0, 0.0, 0.0));
+}
+
+TEST(Transformations, RotationZ) {
+    using namespace std::numbers;
+    const auto point = make_point(0.0, 1.0, 0.0);
+    const auto half_quarter = tf::rotation_z(pi / 4.0);
+    const auto full_quarter = tf::rotation_z(pi / 2.0);
+    EXPECT_EQ(half_quarter * point, make_point(-std::sqrt(2.0) / 2.0, std::sqrt(2.0) / 2.0, 0.0));
+    EXPECT_EQ(full_quarter * point, make_point(-1.0, 0.0, 0.0));
 }
