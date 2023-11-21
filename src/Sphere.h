@@ -1,0 +1,11 @@
+
+#ifndef RAY_TRACER_CHALLENGE_SPHERE_H
+#define RAY_TRACER_CHALLENGE_SPHERE_H
+
+
+class Sphere {
+
+};
+
+
+#endif //RAY_TRACER_CHALLENGE_SPHERE_H
