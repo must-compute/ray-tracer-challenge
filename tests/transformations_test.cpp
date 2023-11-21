@@ -87,3 +87,39 @@ TEST(Transformations, RotationZ) {
     EXPECT_EQ(half_quarter * point, make_point(-std::sqrt(2.0) / 2.0, std::sqrt(2.0) / 2.0, 0.0));
     EXPECT_EQ(full_quarter * point, make_point(-1.0, 0.0, 0.0));
 }
+
+TEST(Transformations, ShearingXY) {
+    const auto transform = tf::shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    const auto point = make_point(2.0, 3.0, 4.0);
+    EXPECT_EQ(transform * point, make_point(5.0, 3.0, 4.0));
+}
+
+TEST(Transformations, ShearingXZ) {
+    const auto transform = tf::shearing(0.0, 1.0, 0.0, 0.0, 0.0, 0.0);
+    const auto point = make_point(2.0, 3.0, 4.0);
+    EXPECT_EQ(transform * point, make_point(6.0, 3.0, 4.0));
+}
+
+TEST(Transformations, ShearingYX) {
+    const auto transform = tf::shearing(0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
+    const auto point = make_point(2.0, 3.0, 4.0);
+    EXPECT_EQ(transform * point, make_point(2.0, 5.0, 4.0));
+}
+
+TEST(Transformations, ShearingYZ) {
+    const auto transform = tf::shearing(0.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+    const auto point = make_point(2.0, 3.0, 4.0);
+    EXPECT_EQ(transform * point, make_point(2.0, 7.0, 4.0));
+}
+
+TEST(Transformations, ShearingZX) {
+    const auto transform = tf::shearing(0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    const auto point = make_point(2.0, 3.0, 4.0);
+    EXPECT_EQ(transform * point, make_point(2.0, 3.0, 6.0));
+}
+
+TEST(Transformations, ShearingZY) {
+    const auto transform = tf::shearing(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+    const auto point = make_point(2.0, 3.0, 4.0);
+    EXPECT_EQ(transform * point, make_point(2.0, 3.0, 7.0));
+}
