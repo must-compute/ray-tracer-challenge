@@ -123,3 +123,30 @@ TEST(Transformations, ShearingZY) {
     const auto point = make_point(2.0, 3.0, 4.0);
     EXPECT_EQ(transform * point, make_point(2.0, 3.0, 7.0));
 }
+
+TEST(Transformations, AllInSequence) {
+    using namespace std::numbers;
+    const auto point = make_point(1.0, 0.0, 1.0);
+    const auto A = tf::rotation_x(pi / 2.0);
+    const auto B = tf::scaling(5.0, 5.0, 5.0);
+    const auto C = tf::translation(10.0, 5.0, 7.0);
+
+    const auto p2 = A * point;
+    EXPECT_EQ(p2, make_point(1.0, -1.0, 0.0));
+
+    const auto p3 = B * p2;
+    EXPECT_EQ(p3, make_point(5.0, -5.0, 0.0));
+
+    const auto p4 = C * p3;
+    EXPECT_EQ(p4, make_point(15.0, 0.0, 7.0));
+}
+
+TEST(Transformations, AllChained) {
+    using namespace std::numbers;
+    const auto point = make_point(1.0, 0.0, 1.0);
+    const auto A = tf::rotation_x(pi / 2.0);
+    const auto B = tf::scaling(5.0, 5.0, 5.0);
+    const auto C = tf::translation(10.0, 5.0, 7.0);
+    const auto transform = C * B * A;
+    EXPECT_EQ(transform * point, make_point(15.0, 0.0, 7.0));
+}
