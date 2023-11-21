@@ -14,9 +14,28 @@ Tuple Ray::position_at_t(double t) const {
 }
 
 std::vector<double> Ray::intersect(const Sphere &sphere) const {
-    std::vector<double> intersections;
-    // TODO implement
-    return intersections;
+
+    const auto sphere_to_ray = origin_ - make_point(0.0, 0.0, 0.0);
+
+    const auto a = direction_.dot(direction_);
+    const auto b = 2 * direction_.dot(sphere_to_ray);
+    const auto c = sphere_to_ray.dot(sphere_to_ray) - 1.0;
+
+    const auto discriminant = (b * b) - 4 * (a * c);
+
+    if (discriminant < 0.0) {
+        // MISS!
+        return {};
+    }
+
+    const auto discr_sqrt = std::sqrt(discriminant);
+    const auto t1 = (-b - discr_sqrt) / (2 * a);
+    const auto t2 = (-b + discr_sqrt) / (2 * a);
+
+    if (t1 > t2) {
+        return {t2, t1};
+    }
+    return {t1, t2};
 }
 
 Tuple Ray::origin() const {
