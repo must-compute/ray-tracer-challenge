@@ -3,6 +3,7 @@
 #include "Ray.h"
 #include "Sphere.h"
 #include "Tuple.h"
+#include "Transformations.h"
 
 TEST(Ray, Creation) {
     const auto origin = make_point(1.0, 2.0, 3.0);
@@ -72,4 +73,22 @@ TEST(Ray, IntersectSphereBehindRay) {
     EXPECT_EQ(intersections[1].t, -4.0);
     EXPECT_EQ(intersections[0].object, s);
     EXPECT_EQ(intersections[1].object, s);
+}
+
+TEST(Ray, TranslatingARay) {
+    const auto r1 = Ray(make_point(1.0, 2.0, 3.0), make_vector(0.0, 1.0, 0.0));
+    const auto m = tf::translation(3.0, 4.0, 5.0);
+
+    const auto r2 = r1.transform(m);
+    EXPECT_EQ(r2.origin(), make_point(4, 6, 8));
+    EXPECT_EQ(r2.direction(), make_vector(0, 1, 0));
+}
+
+TEST(Ray, ScalingARay) {
+    const auto r1 = Ray(make_point(1.0, 2.0, 3.0), make_vector(0.0, 1.0, 0.0));
+    const auto m = tf::scaling(2.0, 3.0, 4.0);
+
+    const auto r2 = r1.transform(m);
+    EXPECT_EQ(r2.origin(), make_point(2.0, 6.0, 12.0));
+    EXPECT_EQ(r2.direction(), make_vector(0.0, 3.0, 0.0));
 }

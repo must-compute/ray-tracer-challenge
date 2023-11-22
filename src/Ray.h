@@ -1,9 +1,10 @@
 #ifndef RAY_TRACER_CHALLENGE_RAY_H
 #define RAY_TRACER_CHALLENGE_RAY_H
 
-#include "Tuple.h"
-#include "Sphere.h"
 #include "Intersection.h"
+#include "Matrix.h"
+#include "Sphere.h"
+#include "Tuple.h"
 
 #include <vector>
 
@@ -22,6 +23,8 @@ public:
 
     // Returns the points of intersection with the given shape.
     [[nodiscard]] Intersections intersect(const Sphere &sphere) const;
+
+    [[nodiscard]] Ray transform(const Matrix<4, 4> &m) const;
 
 private:
     // The origin of the ray. This should be a point (i.e. w == 1).
