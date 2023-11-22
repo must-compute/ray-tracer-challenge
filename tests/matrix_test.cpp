@@ -75,9 +75,9 @@ TEST(Matrix, ComparisonWithinEpsilon) {
     };
     const auto m1 = Matrix<h, w>{cells};
     auto m2 = Matrix<h, w>{cells};
-    m2.cells[2][3] += MATRIX_EPSILON;
+    m2.cells[2][3] += EPSILON;
     EXPECT_TRUE(m1 == m2);
-    m2.cells[2][3] += MATRIX_EPSILON;
+    m2.cells[2][3] += EPSILON;
     EXPECT_TRUE(m1 != m2);
 }
 

@@ -5,6 +5,8 @@
 #include <tuple>
 #include <array>
 #include <cassert>
+#include <ostream>
+
 
 enum class TupleOrColor {
     TUPLE,
@@ -110,6 +112,14 @@ public:
                 0.0};
     }
 
+    // For pretty printing in GTEST.
+    friend std::ostream &operator<<(std::ostream &os, const BaseTuple &tup) requires (t == TupleOrColor::TUPLE) {
+        os << "BaseTuple<" << "TUPLE>\n";
+        os << "{x: " << std::to_string(tup.x_) << ", y:" << std::to_string(tup.y_) << ", z:";
+        os << std::to_string(tup.z_) << ", w:" << std::to_string(tup.w_) << "}";
+        return os;
+    }
+
     // Color-specific methods
     [[nodiscard]] double red() const requires (t == TupleOrColor::COLOR) {
         return x_;
@@ -130,6 +140,14 @@ public:
     [[nodiscard]] BaseTuple operator*(const BaseTuple &other) const requires (t == TupleOrColor::COLOR) {
         // TODO assuming alpha is not needed
         return {red() * other.red(), green() * other.green(), blue() * other.blue(), 0.0};
+    }
+
+    // For pretty printing in GTEST.
+    friend std::ostream &operator<<(std::ostream &os, const BaseTuple &tup) requires (t == TupleOrColor::COLOR) {
+        os << "BaseTuple<" << "COLOR>\n";
+        os << "{red: " << std::to_string(tup.x_) << ", green:" << std::to_string(tup.y_) << ", blue:";
+        os << std::to_string(tup.z_) << "}";
+        return os;
     }
 };
 

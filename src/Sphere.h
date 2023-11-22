@@ -4,6 +4,7 @@
 
 #include "Matrix.h"
 #include "Transformations.h"
+#include "Tuple.h"
 
 class Sphere {
 public:
@@ -14,6 +15,9 @@ public:
     [[nodiscard]] tf::Transform transform() const;
 
     void set_transform(const tf::Transform &tf_in);
+
+    [[nodiscard]] Tuple normal_at(const Tuple &point_in_world_space) const;
+
 
 private:
     tf::Transform transform_;

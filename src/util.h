@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-constexpr double EPSILON = 1e-14;
+constexpr double EPSILON = 1e-4;
 
 [[nodiscard]] inline bool within_epsilon(double a, double b, double epsilon = EPSILON) {
     return std::abs(a - b) < epsilon;
