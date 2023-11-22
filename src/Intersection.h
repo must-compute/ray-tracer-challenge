@@ -14,7 +14,7 @@ struct Intersection {
 
 using Intersections = std::vector<Intersection>;
 
-std::optional<Intersection> hit(const Intersections& intersections);
+std::optional<Intersection> hit(const Intersections &intersections);
 
 
 #endif //RAY_TRACER_CHALLENGE_INTERSECTION_H
