@@ -92,3 +92,22 @@ TEST(Ray, ScalingARay) {
     EXPECT_EQ(r2.origin(), make_point(2.0, 6.0, 12.0));
     EXPECT_EQ(r2.direction(), make_vector(0.0, 3.0, 0.0));
 }
+
+
+TEST(Sphere, IntersectingScaledSphereWithRay) {
+    const auto r1 = Ray(make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0));
+    auto s = Sphere{};
+    s.set_transform(tf::scaling(2.0, 2.0, 2.0));
+    const auto xs = r1.intersect(s);
+    EXPECT_EQ(xs.size(), 2);
+    EXPECT_EQ(xs[0].t, 3.0);
+    EXPECT_EQ(xs[1].t, 7.0);
+}
+
+TEST(Sphere, IntersectingTranslatedSphereWithRay) {
+    const auto r1 = Ray(make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0));
+    auto s = Sphere{};
+    s.set_transform(tf::translation(5.0, 0.0, 0.0));
+    const auto xs = r1.intersect(s);
+    EXPECT_EQ(xs.size(), 0);
+}

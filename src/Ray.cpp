@@ -15,10 +15,11 @@ Tuple Ray::position_at_t(double t) const {
 
 Intersections Ray::intersect(const Sphere &sphere) const {
 
-    const auto sphere_to_ray = origin_ - make_point(0.0, 0.0, 0.0);
+    const auto transformed_ray = this->transform(sphere.transform().inverse());
+    const auto sphere_to_ray = transformed_ray.origin_ - make_point(0.0, 0.0, 0.0);
 
-    const auto a = direction_.dot(direction_);
-    const auto b = 2 * direction_.dot(sphere_to_ray);
+    const auto a = transformed_ray.direction_.dot(transformed_ray.direction_);
+    const auto b = 2 * transformed_ray.direction_.dot(sphere_to_ray);
     const auto c = sphere_to_ray.dot(sphere_to_ray) - 1.0;
 
     const auto discriminant = (b * b) - 4 * (a * c);
