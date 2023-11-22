@@ -47,6 +47,6 @@ Tuple Ray::direction() const {
     return direction_;
 }
 
-Ray Ray::transform(const Matrix<4, 4> &m) const {
+Ray Ray::transform(const tf::Transform &m) const {
     return {m * origin_, m * direction_};
 }

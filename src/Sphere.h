@@ -3,17 +3,20 @@
 
 
 #include "Matrix.h"
+#include "Transformations.h"
 
 class Sphere {
 public:
-    Sphere() : transform_(Matrix<4, 4>::identity()) {}
+    Sphere() : transform_(tf::Transform::identity()) {}
 
     bool operator==(const Sphere &other) const = default;
 
-    [[nodiscard]] Matrix<4, 4> transform() const;
+    [[nodiscard]] tf::Transform transform() const;
+
+    void set_transform(const tf::Transform &tf_in);
 
 private:
-    Matrix<4, 4> transform_;
+    tf::Transform transform_;
 };
 
 

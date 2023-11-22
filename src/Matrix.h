@@ -17,6 +17,9 @@ constexpr double MATRIX_EPSILON = 1e-4;
 template<size_t ROWS, size_t COLS>
 struct Matrix {
 
+    static_assert(ROWS > 0);
+    static_assert(COLS > 0);
+
     bool operator==(const Matrix &other) const {
         for (size_t i = 0; i < ROWS; ++i) {
             for (size_t j = 0; j < COLS; ++j) {
@@ -28,7 +31,7 @@ struct Matrix {
         return true;
     }
 
-    Matrix<4, 4> operator*(const Matrix &other) const {
+    Matrix<4, 4> operator*(const Matrix &other) const requires (ROWS == 4 && COLS == 4) {
         Matrix result{};
         for (size_t r = 0; r < ROWS; ++r) {
             for (size_t c = 0; c < COLS; ++c) {
@@ -41,7 +44,8 @@ struct Matrix {
         return result;
     }
 
-    BaseTuple<TupleOrColor::TUPLE> operator*(const BaseTuple<TupleOrColor::TUPLE> &other) const {
+    BaseTuple<TupleOrColor::TUPLE>
+    operator*(const BaseTuple<TupleOrColor::TUPLE> &other) const requires (ROWS == 4 && COLS == 4) {
         BaseTuple<TupleOrColor::TUPLE> result{};
         for (size_t r = 0; r < ROWS; ++r) {
             result[r] = cells[r][0] * other.x() +
@@ -80,7 +84,8 @@ struct Matrix {
         return !within_epsilon(determinant(), 0);
     }
 
-    [[nodiscard]] Matrix<ROWS - 1, COLS - 1> submatrix(const size_t row_to_remove, const size_t col_to_remove) const {
+    [[nodiscard]] Matrix<ROWS - 1, COLS - 1>
+    submatrix(const size_t row_to_remove, const size_t col_to_remove) const {
         Matrix<ROWS - 1, COLS - 1> result{};
 
 
