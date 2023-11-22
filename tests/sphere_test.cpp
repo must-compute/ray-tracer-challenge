@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <cmath>
+#include <numbers>
 
 #include "Sphere.h"
 #include "Matrix.h"
@@ -59,8 +59,23 @@ TEST(Sphere, ComputingNormalOnTranslatedSphere) {
 
 TEST(Sphere, ComputingNormalOnTransformedSphere) {
     auto s = Sphere{};
-    const auto m = tf::scaling(1.0, 0.5, 1.0) * tf::rotation_z(M_PI / 5.0);
+    const auto m = tf::scaling(1.0, 0.5, 1.0) * tf::rotation_z(std::numbers::pi / 5.0);
     s.set_transform(m);
     const auto n = s.normal_at(make_point(0.0, std::sqrt(2.0) / 2.0, -std::sqrt(2.0) / 2.0));
     EXPECT_EQ(n, make_vector(0, 0.97014, -0.24254));
+}
+
+TEST(Sphere, ReflectingAt45Degrees) {
+    const auto v = make_vector(1.0, -1.0, 0.0);
+    const auto n = make_vector(0.0, 1.0, 0.0);
+    const auto r = v.reflect(n);
+    EXPECT_EQ(r, make_vector(1.0, 1.0, 0.0));
+}
+
+TEST(Sphere, ReflectingSlanted) {
+    const auto v = make_vector(0.0, -1.0, 0.0);
+    const double loc = std::sqrt(2.0) / 2.0;
+    const auto n = make_vector(loc, loc, 0.0);
+    const auto r = v.reflect(n);
+    EXPECT_EQ(r, make_vector(1.0, 0.0, 0.0));
 }

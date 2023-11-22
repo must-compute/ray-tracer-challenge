@@ -112,6 +112,14 @@ public:
                 0.0};
     }
 
+    // Return the current vector reflected about the given normal.
+    BaseTuple reflect(const BaseTuple &normal) const requires (t == TupleOrColor::TUPLE) {
+        // TODO make sure these only run in debug mode.
+        assert(this->is_vector());
+        assert(normal.is_vector());
+        return *this - (normal * 2.0 * this->dot(normal));
+    }
+
     // For pretty printing in GTEST.
     friend std::ostream &operator<<(std::ostream &os, const BaseTuple &tup) requires (t == TupleOrColor::TUPLE) {
         os << "BaseTuple<" << "TUPLE>\n";
