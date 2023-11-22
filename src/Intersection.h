@@ -8,7 +8,7 @@
 struct Intersection {
     bool operator==(const Intersection &other) const = default;
 
-    double t;
+    double t{};
     Sphere object;
 };
 

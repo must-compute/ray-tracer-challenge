@@ -132,7 +132,7 @@ struct Matrix {
     }
 
     static Matrix identity() {
-        Matrix m;
+        Matrix m{};
         static_assert(ROWS == COLS);
         for (size_t rows = 0; rows < ROWS; rows++) {
             m.cells[rows][rows] = 1.0;
