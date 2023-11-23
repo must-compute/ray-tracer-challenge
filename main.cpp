@@ -1,5 +1,6 @@
 #include <filesystem>
 #include "Canvas.h"
+#include "Intersection.h"
 #include "Sphere.h"
 #include "Ray.h"
 
@@ -13,6 +14,10 @@ int main() {
     const Color white = make_color(1.0, 1.0, 1.0);
     const Color black = make_color(0.0, 0.0, 0.0);
     auto s = Sphere{};
+    auto m = Material{};
+    m.color = make_color(1.0, 0.2, 1.0);
+    s.set_material(m);
+    const auto point_light = PointLight{make_point(-10.0, 10.0, -10.0), white};
     auto canvas = Canvas<width, height>();
 
     for (size_t row = 0; row < height; ++row) {
@@ -22,8 +27,17 @@ int main() {
             const auto position = make_point(world_x, world_y, wall_z);
             const auto ray = Ray(ray_origin, (position - ray_origin).normalize());
             const auto xs = ray.intersect(s);
-            const auto selected_color = xs.empty() ? white : black;
-            canvas.write_pixel(col, row, selected_color);
+            const auto maybe_hit = hit(xs);
+            Color color{};
+            if (maybe_hit.has_value()) {
+                const auto point = ray.position_at_t(maybe_hit->t);
+                const auto normal = maybe_hit->object.normal_at(point);
+                const auto eye = -ray.direction();
+                color = maybe_hit->object.material().lighting(point_light, point, eye, normal);
+            } else {
+                color = black;
+            }
+            canvas.write_pixel(col, row, color);
         }
     }
     std::filesystem::path temp_path = "./output.ppm";
