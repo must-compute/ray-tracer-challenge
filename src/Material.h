@@ -2,6 +2,8 @@
 #define RAY_TRACER_CHALLENGE_MATERIAL_H
 
 #include "Color.h"
+#include "Tuple.h"
+#include "PointLight.h"
 
 struct Material {
     Material();
@@ -13,6 +15,12 @@ struct Material {
     double diffuse{}; // non-negative, typically between 0 and 1
     double specular{}; // non-negative, typically between 0 and 1
     double shininess{}; // non-negative, typically between 10 (large highlight) and 200 (small highlight)
+
+    [[nodiscard]] Color lighting(
+            const PointLight &light,
+            const Tuple &point,
+            const Tuple &eyev,
+            const Tuple &normalv) const;
 };
 
 
