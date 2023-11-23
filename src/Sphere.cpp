@@ -5,8 +5,16 @@ tf::Transform Sphere::transform() const {
     return transform_;
 }
 
+Material Sphere::material() const {
+    return material_;
+}
+
 void Sphere::set_transform(const tf::Transform &tf_in) {
     transform_ = tf_in;
+}
+
+void Sphere::set_material(const Material &m) {
+    material_ = m;
 }
 
 Tuple Sphere::normal_at(const Tuple &point_in_world_space) const {
