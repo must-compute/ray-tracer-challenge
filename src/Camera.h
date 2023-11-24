@@ -7,14 +7,7 @@
 class Camera {
 
 public:
-    Camera(const size_t hsize_in, const size_t vsize_in, const double field_of_view_in) :
-            hsize(hsize_in),
-            vsize(vsize_in),
-            field_of_view(field_of_view_in),
-            transform(tf::Transform::identity()) {
-        // TODO initialize pixel_size properly
-        pixel_size = 0.0;
-    }
+    Camera(size_t hsize_in, size_t vsize_in, double field_of_view_in);
 
     [[nodiscard]] size_t get_hsize() const;
 
@@ -35,7 +28,12 @@ private:
     size_t vsize;
     double field_of_view;
     tf::Transform transform;
+    // The size of each pixel in world units.
     double pixel_size;
+    // The size of half the canvas width in world units.
+    double half_width;
+    // The size of half the canvas height in world units.
+    double half_height;
 };
 
 #endif //RAY_TRACER_CHALLENGE_CAMERA_H
