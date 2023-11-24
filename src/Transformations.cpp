@@ -72,4 +72,19 @@ namespace tf {
                 }
         };
     }
+
+    [[nodiscard]] Transform view_transform(const Tuple &from, const Tuple &to, const Tuple &up) {
+        const auto forward = (to - from).normalize();
+        const auto left = forward.cross(up.normalize());
+        const auto true_up = left.cross(forward);
+        const auto orientation = Transform{
+                std::array<std::array<double, 4>, 4>{
+                        {{left.x(), left.y(), left.z(), 0.0},
+                         {true_up.x(), true_up.y(), true_up.z(), 0.0},
+                         {-forward.x(), -forward.y(), -forward.z(), 0.0},
+                         {0.0, 0.0, 0.0, 1.0}}
+                }
+        };
+        return orientation * tf::translation(-from.x(), -from.y(), -from.z());
+    }
 }

@@ -2,6 +2,7 @@
 
 #include "../src/Transformations.h"
 #include "../src/Tuple.h"
+#include "../src/Matrix.h"
 #include <numbers>
 #include <cmath>
 
@@ -149,3 +150,47 @@ TEST(Transformations, AllChained) {
     const auto transform = C * B * A;
     EXPECT_EQ(transform * point, make_point(15.0, 0.0, 7.0));
 }
+
+TEST(Transformations, TransformationMatrixForTheDefaultOrientation) {
+    const auto from = make_point(0.0, 0.0, 0.0);
+    const auto to = make_point(0.0, 0.0, -1.0);
+    const auto up = make_vector(0.0, 1.0, 0.0);
+    const auto t = tf::view_transform(from, to, up);
+    EXPECT_EQ(t, tf::Transform::identity());
+}
+
+TEST(Transformations, ViewTransformationMatrixInDirectionPosZ) {
+    // this is like looking into a mirror
+    const auto from = make_point(0.0, 0.0, 0.0);
+    const auto to = make_point(0.0, 0.0, 1.0);
+    const auto up = make_vector(0.0, 1.0, 0.0);
+    const auto t = tf::view_transform(from, to, up);
+    EXPECT_EQ(t, tf::scaling(-1.0, 1.0, -1.0));
+}
+
+TEST(Transformations, ViewTransformationMovesTheWorld) {
+    const auto from = make_point(0.0, 0.0, 8.0);
+    const auto to = make_point(0.0, 0.0, 0.0);
+    const auto up = make_vector(0.0, 1.0, 0.0);
+    const auto t = tf::view_transform(from, to, up);
+    EXPECT_EQ(t, tf::translation(0.0, 0.0, -8.0));
+}
+
+TEST(Transformations, ArbitraryViewTransformation) {
+    const auto from = make_point(1.0, 3.0, 2.0);
+    const auto to = make_point(4.0, -2.0, 8.0);
+    const auto up = make_vector(1.0, 1.0, 0.0);
+    const auto t = tf::view_transform(from, to, up);
+    const auto expected_transform = tf::Transform{
+            std::array<std::array<double, 4>, 4>{
+                    {
+                            {-0.50709, 0.50709, 0.67612, -2.36643},
+                            {0.76772, 0.60609, 0.12122, -2.82843},
+                            {-0.35857, 0.59761, -0.71714, 0.0},
+                            {0.0, 0.0, 0.0, 1.0}
+                    }
+            }
+    };
+    EXPECT_EQ(t, expected_transform);
+}
+
