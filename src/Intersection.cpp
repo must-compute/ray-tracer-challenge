@@ -1,5 +1,6 @@
 
 #include "Intersection.h"
+#include "Ray.h"
 #include <algorithm>
 
 std::optional<Intersection> hit(const Intersections &intersections) {
@@ -14,4 +15,16 @@ std::optional<Intersection> hit(const Intersections &intersections) {
         return *iter;
     }
     return std::nullopt;
+}
+
+IntersectionComputation Intersection::prepare_computations(const Ray &ray) const {
+    auto comps = IntersectionComputation{};
+
+    comps.t = t;
+    comps.object = object;
+    comps.point = ray.position_at_t(comps.t);
+    comps.eyev = -ray.direction();
+    comps.normalv = comps.object.normal_at(comps.point);
+
+    return comps;
 }

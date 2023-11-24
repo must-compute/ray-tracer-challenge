@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
+#include <optional>
 
 #include "Intersection.h"
+#include "Ray.h"
 #include "Sphere.h"
-#include <optional>
 
 TEST(Intersection, Creation) {
     const auto sphere = Sphere();
@@ -60,4 +61,16 @@ TEST(Intersection, HitLowestNonNegative) {
     const auto hit_maybe = hit(xs);
     EXPECT_TRUE(hit_maybe);
     EXPECT_EQ(*hit_maybe, i4);
+}
+
+TEST(Intersection, PrecomputingIntersectionState) {
+    const auto r = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+    const auto s = Sphere();
+    const auto i = Intersection{4.0, s};
+    const auto comps = i.prepare_computations(r);
+    EXPECT_EQ(comps.t, i.t);
+    EXPECT_EQ(comps.object, i.object);
+    EXPECT_EQ(comps.point, make_point(0.0, 0.0, -1.0));
+    EXPECT_EQ(comps.eyev, make_vector(0.0, 0.0, -1.0));
+    EXPECT_EQ(comps.normalv, make_vector(0.0, 0.0, -1.0));
 }

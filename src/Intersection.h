@@ -2,8 +2,11 @@
 #define RAY_TRACER_CHALLENGE_INTERSECTION_H
 
 #include "Sphere.h"
-#include <vector>
+#include "IntersectionComputation.h"
 #include <optional>
+#include <vector>
+
+class Ray; // to avoid a circular dependency (Ray.h includes Intersection.h)
 
 struct Intersection {
     bool operator==(const Intersection &other) const = default;
@@ -11,6 +14,8 @@ struct Intersection {
     bool operator<(const Intersection &other) const {
         return t < other.t;
     }
+
+    [[nodiscard]] IntersectionComputation prepare_computations(const Ray &ray) const;
 
     double t{};
     Sphere object;
