@@ -74,3 +74,22 @@ TEST(Intersection, PrecomputingIntersectionState) {
     EXPECT_EQ(comps.eyev, make_vector(0.0, 0.0, -1.0));
     EXPECT_EQ(comps.normalv, make_vector(0.0, 0.0, -1.0));
 }
+
+TEST(Intersection, HitIntersectionOutside) {
+    const auto r = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+    const auto s = Sphere();
+    const auto i = Intersection{4.0, s};
+    const auto comps = i.prepare_computations(r);
+    EXPECT_FALSE(comps.inside);
+}
+
+TEST(Intersection, HitIntersectionInside) {
+    const auto r = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 0.0, 1.0)};
+    const auto s = Sphere();
+    const auto i = Intersection{1.0, s};
+    const auto comps = i.prepare_computations(r);
+    EXPECT_EQ(comps.point, make_point(0.0, 0.0, 1.0));
+    EXPECT_EQ(comps.eyev, make_vector(0.0, 0.0, -1.0));
+    EXPECT_EQ(comps.normalv, make_vector(0.0, 0.0, -1.0));
+    EXPECT_TRUE(comps.inside);
+}

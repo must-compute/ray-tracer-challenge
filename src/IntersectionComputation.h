@@ -11,6 +11,7 @@ struct IntersectionComputation {
     Tuple point{};
     Tuple eyev{};
     Tuple normalv{};
+    bool inside{};
 
 };
 
