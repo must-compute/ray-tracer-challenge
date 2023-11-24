@@ -12,6 +12,8 @@ public:
 
     [[nodiscard]] Tuple position() const;
 
+    bool operator==(const PointLight &other) const = default;
+
 
 private:
     Color intensity_;
