@@ -12,6 +12,8 @@ struct World {
     std::optional<PointLight> light{};
 
     [[nodiscard]] Intersections intersect(const Ray &ray) const;
+
+    [[nodiscard]] Color shade_hit(const IntersectionComputation &comps) const;
 };
 
 [[nodiscard]] World make_default_world();

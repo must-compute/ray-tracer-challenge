@@ -22,7 +22,7 @@
     return world;
 }
 
-[[nodiscard]] Intersections World::intersect(const Ray &ray) const {
+Intersections World::intersect(const Ray &ray) const {
     auto all_xs = Intersections{};
     for (auto obj: objects) {
         auto obj_xs = ray.intersect(obj);
@@ -32,4 +32,11 @@
     std::sort(all_xs.begin(), all_xs.end());
 
     return all_xs;
+}
+
+Color World::shade_hit(const IntersectionComputation &comps) const {
+    if (light.has_value()) {
+        return comps.object.material().lighting(*light, comps.point, comps.eyev, comps.normalv);
+    }
+    return Color{};
 }

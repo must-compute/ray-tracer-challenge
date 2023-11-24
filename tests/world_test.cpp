@@ -36,3 +36,24 @@ TEST(World, IntersectWorldWithRay) {
     EXPECT_EQ(xs[2].t, 5.5);
     EXPECT_EQ(xs[3].t, 6);
 }
+
+TEST(World, ShadingAnIntersection) {
+    const auto world = make_default_world();
+    const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+    EXPECT_FALSE(world.objects.empty());
+    const auto &shape = world.objects.front();
+    const auto i = Intersection{4.0, shape};
+    const auto comps = i.prepare_computations(ray);
+    EXPECT_EQ(world.shade_hit(comps), make_color(0.38066, 0.47583, 0.2855));
+}
+
+TEST(World, ShadingAnIntersectionFromTheInside) {
+    auto world = make_default_world();
+    world.light = PointLight{make_point(0.0, 0.25, 0.0), make_color(1.0, 1.0, 1.0)};
+    const auto ray = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 0.0, 1.0)};
+    EXPECT_GE(world.objects.size(), 2);
+    const auto &shape = world.objects[1];
+    const auto i = Intersection{0.5, shape};
+    const auto comps = i.prepare_computations(ray);
+    EXPECT_EQ(world.shade_hit(comps), make_color(0.90498, 0.90498, 0.90498));
+}
