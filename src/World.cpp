@@ -40,3 +40,15 @@ Color World::shade_hit(const IntersectionComputation &comps) const {
     }
     return Color{};
 }
+
+[[nodiscard]] Color World::color_at(const Ray &ray) const {
+    const auto xs = intersect(ray);
+    const auto maybe_hit = hit(xs);
+
+    if (!maybe_hit.has_value()) {
+        return Color{};
+    }
+
+    const auto comps = maybe_hit->prepare_computations(ray);
+    return shade_hit(comps);
+}

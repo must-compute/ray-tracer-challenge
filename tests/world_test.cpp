@@ -57,3 +57,35 @@ TEST(World, ShadingAnIntersectionFromTheInside) {
     const auto comps = i.prepare_computations(ray);
     EXPECT_EQ(world.shade_hit(comps), make_color(0.90498, 0.90498, 0.90498));
 }
+
+TEST(World, ColorWhenRayMisses) {
+    auto world = make_default_world();
+    const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 1.0, 0.0)};
+    EXPECT_EQ(world.color_at(ray), Color{});
+}
+
+TEST(World, ColorWhenRayHits) {
+    auto world = make_default_world();
+    const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+    EXPECT_EQ(world.color_at(ray), make_color(0.38066, 0.47583, 0.2855));
+}
+
+TEST(World, ColorWithIntersectionBehindTheRay) {
+    // If the eye is inside two concentric spheres, check that we hit the inside of the inner sphere.
+    // We set the ambient component to 1.0 because no light makes it into the insides.
+    auto world = make_default_world();
+
+    // Set the materials
+    EXPECT_GE(world.objects.size(), 2);
+    auto &outer = world.objects[0];
+    auto &inner = world.objects[1];
+    auto outer_m = outer.material();
+    outer_m.ambient = 1.0;
+    outer.set_material(outer_m);
+    auto inner_m = inner.material();
+    inner_m.ambient = 1.0;
+    inner.set_material(inner_m);
+
+    const auto ray = Ray{make_point(0.0, 0.0, 0.75), make_vector(0.0, 0.0, -1.0)};
+    EXPECT_EQ(world.color_at(ray), inner_m.color);
+}
