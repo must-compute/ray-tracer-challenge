@@ -8,6 +8,10 @@
 struct Intersection {
     bool operator==(const Intersection &other) const = default;
 
+    bool operator<(const Intersection &other) const {
+        return t < other.t;
+    }
+
     double t{};
     Sphere object;
 };

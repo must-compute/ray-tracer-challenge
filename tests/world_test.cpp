@@ -3,6 +3,7 @@
 #include "Sphere.h"
 #include "PointLight.h"
 #include "World.h"
+#include "Ray.h"
 
 TEST(World, CreatingWorld) {
     const auto w = World{};
@@ -23,4 +24,15 @@ TEST(World, CreatingDefaultWorld) {
     const auto world = make_default_world();
     EXPECT_TRUE(world.light.has_value());
     EXPECT_EQ(*world.light, light);
+}
+
+TEST(World, IntersectWorldWithRay) {
+    const auto world = make_default_world();
+    const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+    const auto xs = world.intersect(ray);
+    EXPECT_EQ(xs.size(), 4);
+    EXPECT_EQ(xs[0].t, 4);
+    EXPECT_EQ(xs[1].t, 4.5);
+    EXPECT_EQ(xs[2].t, 5.5);
+    EXPECT_EQ(xs[3].t, 6);
 }

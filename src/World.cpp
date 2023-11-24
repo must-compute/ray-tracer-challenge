@@ -21,3 +21,15 @@
 
     return world;
 }
+
+[[nodiscard]] Intersections World::intersect(const Ray &ray) const {
+    auto all_xs = Intersections{};
+    for (auto obj: objects) {
+        auto obj_xs = ray.intersect(obj);
+        all_xs.insert(all_xs.end(), obj_xs.begin(), obj_xs.end());
+    }
+
+    std::sort(all_xs.begin(), all_xs.end());
+
+    return all_xs;
+}
