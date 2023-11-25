@@ -1,45 +1,78 @@
 #include <filesystem>
+#include <numbers>
+
 #include "Canvas.h"
 #include "Intersection.h"
 #include "Sphere.h"
 #include "Ray.h"
+#include "World.h"
+#include "Camera.h"
+
 
 int main() {
-    constexpr size_t width = 100;
-    constexpr size_t height = width;
-    const auto ray_origin = make_point(0.0, 0.0, -5.0);
-    const auto wall_z = 10.0;
-    const auto wall_size = 7.0;
-    const auto pixel_size = wall_size / width;
+    using std::numbers::pi;
+
+    const size_t width = 500;
+    const size_t height = 500;
     const Color white = make_color(1.0, 1.0, 1.0);
     const Color black = make_color(0.0, 0.0, 0.0);
-    auto s = Sphere{};
-    auto m = Material{};
-    m.color = make_color(1.0, 0.2, 1.0);
-    s.set_material(m);
-    const auto point_light = PointLight{make_point(-10.0, 10.0, -10.0), white};
-    auto canvas = Canvas<width, height>();
+    auto world = World{};
 
-    for (size_t row = 0; row < height; ++row) {
-        const auto world_y = (wall_size / 2.0) - (pixel_size * static_cast<double>(row));
-        for (size_t col = 0; col < width; ++col) {
-            const auto world_x = (wall_size / 2.0) - (pixel_size * static_cast<double>(col));
-            const auto position = make_point(world_x, world_y, wall_z);
-            const auto ray = Ray(ray_origin, (position - ray_origin).normalize());
-            const auto xs = ray.intersect(s);
-            const auto maybe_hit = hit(xs);
-            Color color{};
-            if (maybe_hit.has_value()) {
-                const auto point = ray.position_at_t(maybe_hit->t);
-                const auto normal = maybe_hit->object.normal_at(point);
-                const auto eye = -ray.direction();
-                color = maybe_hit->object.material().lighting(point_light, point, eye, normal);
-            } else {
-                color = black;
-            }
-            canvas.write_pixel(col, row, color);
-        }
-    }
+    auto floor = Sphere{};
+    floor.set_transform(tf::scaling(10.0, 0.01, 10));
+    auto floor_material = Material{};
+    floor_material.color = make_color(1.0, 0.9, 0.9);
+    floor_material.specular = 0.0;
+    floor.set_material(floor_material);
+    world.objects.push_back(floor);
+
+    auto left_wall = Sphere{};
+    left_wall.set_transform(tf::translation(0.0, 0.0, 5.0) * tf::rotation_y(-pi / 4.0) * tf::rotation_x(pi / 2.0) *
+                            tf::scaling(10.0, 0.01, 10.0));
+    left_wall.set_material(floor_material);
+    world.objects.push_back(left_wall);
+
+    auto right_wall = Sphere{};
+    right_wall.set_transform(tf::translation(0.0, 0.0, 5.0) * tf::rotation_y(pi / 4.0) * tf::rotation_x(pi / 2.0) *
+                             tf::scaling(10.0, 0.01, 10.0));
+    right_wall.set_material(floor_material);
+    world.objects.push_back(right_wall);
+
+    auto middle_sphere = Sphere{};
+    middle_sphere.set_transform(tf::translation(-0.5, 1.0, 0.5));
+    auto middle_material = Material{};
+    middle_material.color = make_color(0.1, 1.0, 0.5);
+    middle_material.diffuse = 0.7;
+    middle_material.specular = 0.3;
+    middle_sphere.set_material(middle_material);
+    world.objects.push_back(middle_sphere);
+
+    auto right_sphere = Sphere{};
+    right_sphere.set_transform(tf::translation(1.5, 1.0, -0.5) * tf::scaling(0.5, 0.5, 0.5));
+    auto right_material = Material{};
+    right_material.color = make_color(0.5, 1.0, 0.1);
+    right_material.diffuse = 0.7;
+    right_material.specular = 0.3;
+    right_sphere.set_material(right_material);
+    world.objects.push_back(right_sphere);
+
+    auto left_sphere = Sphere{};
+    left_sphere.set_transform(tf::translation(-1.5, 0.33, -0.75) * tf::scaling(0.33, 0.33, 0.33));
+    auto left_material = Material{};
+    left_material.color = make_color(1.0, 0.8, 0.1);
+    left_material.diffuse = 0.7;
+    left_material.specular = 0.3;
+    left_sphere.set_material(right_material);
+    world.objects.push_back(left_sphere);
+
+    world.light = PointLight{make_point(-10.0, 10.0, -10.0), white};
+
+    auto camera = Camera<width, height>{pi / 3.0};
+    camera.set_transform(
+            tf::view_transform(make_point(0.0, 1.5, -5), make_point(0.0, 1.0, 0.0), make_vector(0.0, 1.0, 0.0)));
+
+    auto canvas = camera.render(world);
+
     std::filesystem::path temp_path = "./output.ppm";
     canvas.to_file(temp_path);
     return 0;
