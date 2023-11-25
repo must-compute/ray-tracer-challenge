@@ -35,7 +35,8 @@ Intersections World::intersect(const Ray &ray) const {
 }
 
 Color World::shade_hit(const IntersectionComputation &comps) const {
-    const bool in_shadow = false;
+    // NOTE: without nudging the point away from the surface ever so slightly, tiny floating-point imprecisions would cause us to falsely intersect with ourselves and give a grainy shadow artifact called "acne".
+    const bool in_shadow = is_shadowed(comps.over_point);
 
     if (light.has_value()) {
         return comps.object.material().lighting(*light, comps.point, comps.eyev, comps.normalv, in_shadow);

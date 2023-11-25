@@ -93,3 +93,13 @@ TEST(Intersection, HitIntersectionInside) {
     EXPECT_EQ(comps.normalv, make_vector(0.0, 0.0, -1.0));
     EXPECT_TRUE(comps.inside);
 }
+
+TEST(Intersection, HitShouldOffsetPoint) {
+    const auto r = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+    auto s = Sphere();
+    s.set_transform(tf::translation(0.0, 0.0, 1.0));
+    const auto i = Intersection{5.0, s};
+    const auto comps = i.prepare_computations(r);
+    EXPECT_LT(comps.over_point.z(), -EPSILON / 2.0);
+    EXPECT_GT(comps.point.z(), comps.over_point.z());
+}

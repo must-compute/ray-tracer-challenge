@@ -58,6 +58,22 @@ TEST(World, ShadingAnIntersectionFromTheInside) {
     EXPECT_EQ(world.shade_hit(comps), make_color(0.90498, 0.90498, 0.90498));
 }
 
+TEST(World, ShadingWithAnIntersectionInShadow) {
+    auto world = World{};
+    world.light = PointLight{make_point(0.0, 0.0, -10.0), make_color(1.0, 1.0, 1.0)};
+    const auto s1 = Sphere{};
+    auto s2 = Sphere{};
+    s2.set_transform(tf::translation(0.0, 0.0, 10.0));
+    world.objects.push_back(s1);
+    world.objects.push_back(s2);
+
+    const auto ray = Ray{make_point(0.0, 0.0, 5.0), make_vector(0.0, 0.0, 1.0)};
+    const auto i = Intersection{4.0, s2};
+    const auto comps = i.prepare_computations(ray);
+    const auto c = world.shade_hit(comps);
+    EXPECT_EQ(c, make_color(0.1, 0.1, 0.1));
+}
+
 TEST(World, ColorWhenRayMisses) {
     auto world = make_default_world();
     const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 1.0, 0.0)};
