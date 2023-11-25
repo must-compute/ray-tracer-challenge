@@ -12,8 +12,8 @@
 int main() {
     using std::numbers::pi;
 
-    const size_t width = 100;
-    const size_t height = 50;
+    const size_t width = 200;
+    const size_t height = 100;
     const Color white = make_color(1.0, 1.0, 1.0);
     const Color black = make_color(0.0, 0.0, 0.0);
     auto world = World{};
@@ -41,7 +41,7 @@ int main() {
     auto middle_sphere = Sphere{};
     middle_sphere.set_transform(tf::translation(-0.5, 1.0, 0.5));
     auto middle_material = Material{};
-    middle_material.color = make_color(0.1, 1.0, 0.5);
+    middle_material.color = make_color(0.9, 0.1, 0.1);
     middle_material.diffuse = 0.7;
     middle_material.specular = 0.3;
     middle_sphere.set_material(middle_material);
@@ -50,19 +50,20 @@ int main() {
     auto right_sphere = Sphere{};
     right_sphere.set_transform(tf::translation(1.5, 1.0, -0.5) * tf::scaling(0.5, 0.5, 0.5));
     auto right_material = Material{};
-    right_material.color = make_color(0.5, 1.0, 0.1);
+    right_material.color = make_color(0.0, 1.0, 0.1);
     right_material.diffuse = 0.7;
     right_material.specular = 0.3;
     right_sphere.set_material(right_material);
     world.objects.push_back(right_sphere);
 
     auto left_sphere = Sphere{};
-    left_sphere.set_transform(tf::translation(-1.5, 0.33, -0.75) * tf::scaling(0.33, 0.33, 0.33));
+    left_sphere.set_transform(
+            tf::translation(-1.5, 2.0, -0.75) * tf::rotation_z(pi / 4.0) * tf::scaling(1.0, 0.33, 0.33));
     auto left_material = Material{};
-    left_material.color = make_color(1.0, 0.8, 0.1);
+    left_material.color = make_color(0.2, 0.3, 1.0);
     left_material.diffuse = 0.7;
     left_material.specular = 0.3;
-    left_sphere.set_material(right_material);
+    left_sphere.set_material(left_material);
     world.objects.push_back(left_sphere);
 
     world.light = PointLight{make_point(-10.0, 10.0, -10.0), white};
