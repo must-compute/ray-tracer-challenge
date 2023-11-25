@@ -89,3 +89,27 @@ TEST(World, ColorWithIntersectionBehindTheRay) {
     const auto ray = Ray{make_point(0.0, 0.0, 0.75), make_vector(0.0, 0.0, -1.0)};
     EXPECT_EQ(world.color_at(ray), inner_m.color);
 }
+
+TEST(World, NoShadowWhenNothingIsColinearWithPointAndLight) {
+    const auto w = make_default_world();
+    const auto p = make_point(0.0, 10.0, 0.0);
+    EXPECT_FALSE(w.is_shadowed(p));
+}
+
+TEST(World, ShadowWhenAnObjectIsBetweenThePointAndTheLight) {
+    const auto w = make_default_world();
+    const auto p = make_point(10.0, -10.0, 10.0);
+    EXPECT_TRUE(w.is_shadowed(p));
+}
+
+TEST(World, NoShadowWhenObjectIsBehindTheLight) {
+    const auto w = make_default_world();
+    const auto p = make_point(-20.0, 20.0, -20.0);
+    EXPECT_FALSE(w.is_shadowed(p));
+}
+
+TEST(World, NoShadowWhenObjectIsBehindThePoint) {
+    const auto w = make_default_world();
+    const auto p = make_point(-2.0, 2.0, -2.0);
+    EXPECT_FALSE(w.is_shadowed(p));
+}

@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <optional>
+
+#include "Intersection.h"
 #include "Sphere.h"
 #include "Ray.h"
 
@@ -17,6 +19,8 @@ struct World {
     [[nodiscard]] Color shade_hit(const IntersectionComputation &comps) const;
 
     [[nodiscard]] Color color_at(const Ray &ray) const;
+
+    [[nodiscard]] bool is_shadowed(const Tuple &point) const;
 };
 
 [[nodiscard]] World make_default_world();

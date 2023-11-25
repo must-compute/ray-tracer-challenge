@@ -54,3 +54,21 @@ Color World::shade_hit(const IntersectionComputation &comps) const {
     const auto comps = maybe_hit->prepare_computations(ray);
     return shade_hit(comps);
 }
+
+bool World::is_shadowed(const Tuple &point) const {
+
+    if (!light.has_value()) {
+        return true;
+    }
+
+    const auto v = point - (light->position());
+    const auto distance = v.magnitude();
+    const auto ray = Ray{light->position(), v.normalize()};
+    const auto intersections = intersect(ray);
+    const auto maybe_hit = hit(intersections);
+    if (maybe_hit.has_value() && maybe_hit->t < distance) {
+        return true;
+    }
+
+    return false;
+}
