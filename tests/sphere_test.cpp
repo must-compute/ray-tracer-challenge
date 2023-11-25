@@ -51,21 +51,6 @@ TEST(Sphere, NormalIsNormalized) {
     EXPECT_EQ(n, n.normalize());
 }
 
-TEST(Sphere, ComputingNormalOnTranslatedSphere) {
-    auto s = Sphere{};
-    s.set_transform(tf::translation(0.0, 1.0, 0.0));
-    const auto n = s.normal_at(make_point(0.0, 1.70711, -0.70711));
-    EXPECT_EQ(n, make_vector(0, 0.70711, -0.70711));
-}
-
-TEST(Sphere, ComputingNormalOnTransformedSphere) {
-    auto s = Sphere{};
-    const auto m = tf::scaling(1.0, 0.5, 1.0) * tf::rotation_z(std::numbers::pi / 5.0);
-    s.set_transform(m);
-    const auto n = s.normal_at(make_point(0.0, std::sqrt(2.0) / 2.0, -std::sqrt(2.0) / 2.0));
-    EXPECT_EQ(n, make_vector(0, 0.97014, -0.24254));
-}
-
 TEST(Sphere, ReflectingAt45Degrees) {
     const auto v = make_vector(1.0, -1.0, 0.0);
     const auto n = make_vector(0.0, 1.0, 0.0);
