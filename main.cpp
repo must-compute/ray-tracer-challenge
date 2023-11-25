@@ -12,8 +12,8 @@
 int main() {
     using std::numbers::pi;
 
-    const size_t width = 500;
-    const size_t height = 500;
+    const size_t width = 100;
+    const size_t height = 50;
     const Color white = make_color(1.0, 1.0, 1.0);
     const Color black = make_color(0.0, 0.0, 0.0);
     auto world = World{};

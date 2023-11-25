@@ -3,10 +3,16 @@
 Material::Material() : color{make_color(1.0, 1.0, 1.0)}, ambient{0.1}, diffuse{0.9}, specular{0.9},
                        shininess{200.0} {}
 
-Color Material::lighting(const PointLight &light, const Tuple &point, const Tuple &eyev, const Tuple &normalv) const {
+Color Material::lighting(const PointLight &light, const Tuple &point, const Tuple &eyev, const Tuple &normalv,
+                         const bool in_shadow) const {
     const auto effective_color = color * light.intensity();
     const auto lightv = (light.position() - point).normalize();
     const auto ambient_contribution = effective_color * ambient;
+
+    if (in_shadow) {
+        return ambient_contribution;
+    }
+
     const auto light_dot_normal = lightv.dot(normalv);
     const auto black = make_color(0.0, 0.0, 0.0);
     Color diffuse_contribution{};

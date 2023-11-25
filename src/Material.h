@@ -20,7 +20,8 @@ struct Material {
             const PointLight &light,
             const Tuple &point,
             const Tuple &eyev,
-            const Tuple &normalv) const;
+            const Tuple &normalv,
+            bool in_shadow) const;
 };
 
 

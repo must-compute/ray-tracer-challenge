@@ -35,8 +35,10 @@ Intersections World::intersect(const Ray &ray) const {
 }
 
 Color World::shade_hit(const IntersectionComputation &comps) const {
+    const bool in_shadow = false;
+
     if (light.has_value()) {
-        return comps.object.material().lighting(*light, comps.point, comps.eyev, comps.normalv);
+        return comps.object.material().lighting(*light, comps.point, comps.eyev, comps.normalv, in_shadow);
     }
     return Color{};
 }

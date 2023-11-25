@@ -22,8 +22,9 @@ TEST(Material, LightingWithEyeBetweenLightAndSurface) {
     const auto eyev = make_vector(0.0, 0.0, -1.0);
     const auto normalv = make_vector(0.0, 0.0, -1.0);
     const auto light = PointLight{make_point(0.0, 0.0, -10.0), make_color(1.0, 1.0, 1.0)};
+    const bool in_shadow = false;
 
-    const auto result = m.lighting(light, position, eyev, normalv);
+    const auto result = m.lighting(light, position, eyev, normalv, in_shadow);
     EXPECT_EQ(result, make_color(1.9, 1.9, 1.9));
 }
 
@@ -35,8 +36,9 @@ TEST(Material, LightingWithEyeBetweenLightAndSurfaceWithEyeOffest45) {
     const auto eyev = make_vector(0.0, loc, loc);
     const auto normalv = make_vector(0.0, 0.0, -1.0);
     const auto light = PointLight{make_point(0.0, 0.0, -10.0), make_color(1.0, 1.0, 1.0)};
+    const bool in_shadow = false;
 
-    const auto result = m.lighting(light, position, eyev, normalv);
+    const auto result = m.lighting(light, position, eyev, normalv, in_shadow);
     EXPECT_EQ(result, make_color(1.0, 1.0, 1.0));
 }
 
@@ -47,8 +49,9 @@ TEST(Material, LightingWithEyeOppositeSurfaceWithLightOffset45) {
     const auto eyev = make_vector(0.0, 0.0, -1.0);
     const auto normalv = make_vector(0.0, 0.0, -1.0);
     const auto light = PointLight{make_point(0.0, 10.0, -10.0), make_color(1.0, 1.0, 1.0)};
+    const bool in_shadow = false;
 
-    const auto result = m.lighting(light, position, eyev, normalv);
+    const auto result = m.lighting(light, position, eyev, normalv, in_shadow);
     EXPECT_EQ(result, make_color(0.7364, 0.7364, 0.7364));
 }
 
@@ -60,8 +63,9 @@ TEST(Material, LightingWithEyeInPathOfReflection) {
     const auto eyev = make_vector(0.0, loc, loc);
     const auto normalv = make_vector(0.0, 0.0, -1.0);
     const auto light = PointLight{make_point(0.0, 10.0, -10.0), make_color(1.0, 1.0, 1.0)};
+    const bool in_shadow = false;
 
-    const auto result = m.lighting(light, position, eyev, normalv);
+    const auto result = m.lighting(light, position, eyev, normalv, in_shadow);
     EXPECT_EQ(result, make_color(1.6364, 1.6364, 1.6364));
 }
 
@@ -72,7 +76,20 @@ TEST(Material, LightBehindSurface) {
     const auto eyev = make_vector(0.0, 0.0, -1.0);
     const auto normalv = make_vector(0.0, 0.0, -1.0);
     const auto light = PointLight{make_point(0.0, 0.0, 10.0), make_color(1.0, 1.0, 1.0)};
+    const bool in_shadow = false;
 
-    const auto result = m.lighting(light, position, eyev, normalv);
+    const auto result = m.lighting(light, position, eyev, normalv, in_shadow);
     EXPECT_EQ(result, make_color(0.1, 0.1, 0.1));
+}
+
+TEST(Material, LightingWithSurfaceInShadow) {
+    const auto m = Material{};
+    const auto position = make_point(0, 0, 0);
+
+    const auto eyev = make_vector(0.0, 0.0, -1.0);
+    const auto normalv = make_vector(0.0, 0.0, -1.0);
+    const auto light = PointLight{make_point(0.0, 0.0, -10.0), make_color(1.0, 1.0, 1.0)};
+    const bool in_shadow = true;
+
+    EXPECT_EQ(m.lighting(light, position, eyev, normalv, in_shadow), make_color(0.1, 0.1, 0.1));
 }
