@@ -18,7 +18,7 @@ TEST(Intersection, Aggregating) {
     const auto i1 = Intersection{1.0, sphere};
     const auto i2 = Intersection{2.0, sphere};
     const auto xs = Intersections{i1, i2};
-    EXPECT_EQ(xs.size(), 2);
+    ASSERT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 1.0);
     EXPECT_EQ(xs[1].t, 2.0);
 }

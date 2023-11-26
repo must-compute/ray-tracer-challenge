@@ -4,8 +4,6 @@
 #include "Shape.h"
 #include "Intersection.h"
 #include "Ray.h"
-#include "Material.h"
-#include "Transformations.h"
 #include "Tuple.h"
 
 class TestShape final : public Shape {

@@ -10,7 +10,6 @@
 
 class Ray;
 
-// TODO convert to struct & make the methods free functions
 class Sphere final : public Shape {
 public:
     bool operator==(const Sphere &other) const = default;

@@ -1,7 +1,7 @@
 #include <filesystem>
 #include <numbers>
+#include <memory>
 
-#include "Canvas.h"
 #include "Intersection.h"
 #include "Sphere.h"
 #include "Ray.h"
@@ -24,19 +24,19 @@ int main() {
     floor_material.color = make_color(1.0, 0.9, 0.9);
     floor_material.specular = 0.0;
     floor.set_material(floor_material);
-    world.objects.push_back(floor);
+    world.objects.push_back(std::make_shared<Sphere>(floor));
 
     auto left_wall = Sphere{};
     left_wall.set_transform(tf::translation(0.0, 0.0, 5.0) * tf::rotation_y(-pi / 4.0) * tf::rotation_x(pi / 2.0) *
                             tf::scaling(10.0, 0.01, 10.0));
     left_wall.set_material(floor_material);
-    world.objects.push_back(left_wall);
+    world.objects.push_back(std::make_shared<Sphere>(left_wall));
 
     auto right_wall = Sphere{};
     right_wall.set_transform(tf::translation(0.0, 0.0, 5.0) * tf::rotation_y(pi / 4.0) * tf::rotation_x(pi / 2.0) *
                              tf::scaling(10.0, 0.01, 10.0));
     right_wall.set_material(floor_material);
-    world.objects.push_back(right_wall);
+    world.objects.push_back(std::make_shared<Sphere>(right_wall));
 
     auto middle_sphere = Sphere{};
     middle_sphere.set_transform(tf::translation(-0.5, 1.0, 0.5));
@@ -45,7 +45,7 @@ int main() {
     middle_material.diffuse = 0.7;
     middle_material.specular = 0.3;
     middle_sphere.set_material(middle_material);
-    world.objects.push_back(middle_sphere);
+    world.objects.push_back(std::make_shared<Sphere>(middle_sphere));
 
     auto right_sphere = Sphere{};
     right_sphere.set_transform(tf::translation(1.5, 1.0, -0.5) * tf::scaling(0.5, 0.5, 0.5));
@@ -54,7 +54,7 @@ int main() {
     right_material.diffuse = 0.7;
     right_material.specular = 0.3;
     right_sphere.set_material(right_material);
-    world.objects.push_back(right_sphere);
+    world.objects.push_back(std::make_shared<Sphere>(right_sphere));
 
     auto left_sphere = Sphere{};
     left_sphere.set_transform(
@@ -64,7 +64,7 @@ int main() {
     left_material.diffuse = 0.7;
     left_material.specular = 0.3;
     left_sphere.set_material(left_material);
-    world.objects.push_back(left_sphere);
+    world.objects.push_back(std::make_shared<Sphere>(left_sphere));
 
     world.light = PointLight{make_point(-10.0, 10.0, -10.0), white};
 

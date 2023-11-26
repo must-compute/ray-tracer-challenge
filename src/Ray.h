@@ -21,9 +21,6 @@ public:
     // Returns the point if we move t units along the ray.
     [[nodiscard]] Tuple position_at_t(double t) const;
 
-    // Returns the points of intersection with the given shape.
-    //[[nodiscard]] Intersections intersect(const Sphere &sphere) const;
-
     [[nodiscard]] Ray transform(const tf::Transform &m) const;
 
 private:

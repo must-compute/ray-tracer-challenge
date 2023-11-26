@@ -1,10 +1,7 @@
 #ifndef RAY_TRACER_CHALLENGE_INTERSECTIONCOMPUTATION_H
 #define RAY_TRACER_CHALLENGE_INTERSECTIONCOMPUTATION_H
 
-//#include "Sphere.h"
-
 #include "Tuple.h"
-
 
 class Shape;
 

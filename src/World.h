@@ -10,7 +10,6 @@
 #include "Ray.h"
 
 struct World {
-    // TODO should contain not just spheres
     std::vector<std::shared_ptr<Shape>> objects{};
     // TODO check page 96 for how to add multiple lights.
     std::optional<PointLight> light{};

@@ -7,7 +7,6 @@
 #include <memory>
 
 class Ray; // to avoid a circular dependency (Ray.h includes Intersection.h)
-//class Sphere;
 class Shape;
 
 struct Intersection {
