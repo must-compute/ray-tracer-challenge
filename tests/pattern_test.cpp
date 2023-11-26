@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "Color.h"
 #include "StripePattern.h"
+#include "TestPattern.h"
 #include "Tuple.h"
 #include "Sphere.h"
 
@@ -66,4 +67,32 @@ TEST_F(PatternFixture, StripesWithBothObjectAndPatternTransformation) {
     pattern.set_transform(tf::translation(0.5, 0.0, 0.0));
 
     EXPECT_EQ(pattern.stripe_at_object(object, make_point(2.5, 0.0, 0.0)), white);
+}
+
+TEST_F(PatternFixture, PatternWithObjectTransformation) {
+    auto object = Sphere{};
+    object.set_transform(tf::scaling(2.0, 2.0, 2.0));
+
+    const auto pattern = TestPattern{};
+
+    EXPECT_EQ(pattern.pattern_at_shape(object, make_point(2.0, 3.0, 4.0)), make_color(1.0, 1.5, 2.0));
+}
+
+TEST_F(PatternFixture, PatternWithPatternTransformation) {
+    const auto object = Sphere{};
+
+    auto pattern = TestPattern{};
+    pattern.set_transform(tf::scaling(2.0, 2.0, 2.0));
+
+    EXPECT_EQ(pattern.pattern_at_shape(object, make_point(2.0, 3.0, 4.0)), make_color(1.0, 1.5, 2.0));
+}
+
+TEST_F(PatternFixture, PatternWithObjectAndPatternTransformation) {
+    auto object = Sphere{};
+    object.set_transform(tf::scaling(2.0, 2.0, 2.0));
+
+    auto pattern = TestPattern{};
+    pattern.set_transform(tf::translation(0.5, 1.0, 1.5));
+
+    EXPECT_EQ(pattern.pattern_at_shape(object, make_point(2.5, 3.0, 3.5)), make_color(0.75, 0.5, 0.25));
 }
