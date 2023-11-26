@@ -8,6 +8,8 @@
 #include "PointLight.h"
 #include "StripePattern.h"
 
+class Shape;
+
 struct Material {
     Material();
 
@@ -22,6 +24,7 @@ struct Material {
 
 
     [[nodiscard]] Color lighting(
+            const Shape &object,
             const PointLight &light,
             const Tuple &point,
             const Tuple &eyev,

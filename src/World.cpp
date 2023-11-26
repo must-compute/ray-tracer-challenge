@@ -42,7 +42,8 @@ Color World::shade_hit(const IntersectionComputation &comps) const {
 
     if (light.has_value()) {
         assert(comps.object);
-        return comps.object->material().lighting(*light, comps.point, comps.eyev, comps.normalv, in_shadow);
+        return comps.object->material().lighting(*comps.object, *light, comps.point, comps.eyev, comps.normalv,
+                                                 in_shadow);
     }
     return Color{};
 }
