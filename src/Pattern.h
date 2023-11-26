@@ -13,6 +13,8 @@ public:
 
     Pattern(const Color &a, const Color &b);
 
+    virtual ~Pattern() = default;
+
     bool operator==(const Pattern &other) const = default;
 
     [[nodiscard]] Color a() const;

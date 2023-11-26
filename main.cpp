@@ -8,6 +8,7 @@
 #include "Ray.h"
 #include "World.h"
 #include "Camera.h"
+#include "StripePattern.h"
 
 
 int main() {
@@ -23,7 +24,8 @@ int main() {
     auto floor_material = Material{};
     floor_material.color = make_color(1.0, 0.9, 0.9);
     floor_material.specular = 0.0;
-    floor_material.pattern = StripePattern{make_color(0.5, 0.2, 1.0), make_color(1.0, 0.2, 0.5)};
+    floor_material.pattern = std::make_shared<StripePattern>(
+            StripePattern{make_color(0.5, 0.2, 1.0), make_color(1.0, 0.2, 0.5)});
     floor.set_material(floor_material);
     world.objects.push_back(std::make_shared<Plane>(floor));
 

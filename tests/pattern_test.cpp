@@ -19,26 +19,26 @@ TEST_F(PatternFixture, CreateStripePattern) {
 
 TEST_F(PatternFixture, StripePatternAlternatesInX) {
     const auto pattern = StripePattern{white, black};
-    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 0.0, 0.0)), white);
-    EXPECT_EQ(pattern.stripe_at(make_point(0.9, 0.0, 0.0)), white);
-    EXPECT_EQ(pattern.stripe_at(make_point(1.0, 0.0, 0.0)), black);
-    EXPECT_EQ(pattern.stripe_at(make_point(-0.1, 0.0, 0.0)), black);
-    EXPECT_EQ(pattern.stripe_at(make_point(-1.0, 0.0, 0.0)), black);
-    EXPECT_EQ(pattern.stripe_at(make_point(-1.1, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.9, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(1.0, 0.0, 0.0)), black);
+    EXPECT_EQ(pattern.pattern_at(make_point(-0.1, 0.0, 0.0)), black);
+    EXPECT_EQ(pattern.pattern_at(make_point(-1.0, 0.0, 0.0)), black);
+    EXPECT_EQ(pattern.pattern_at(make_point(-1.1, 0.0, 0.0)), white);
 }
 
 TEST_F(PatternFixture, StripePatternIsConstantInY) {
     const auto pattern = StripePattern{white, black};
-    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 0.0, 0.0)), white);
-    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 1.0, 0.0)), white);
-    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 2.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 1.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 2.0, 0.0)), white);
 }
 
 TEST_F(PatternFixture, StripePatternIsConstantInZ) {
     const auto pattern = StripePattern{white, black};
-    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 0.0, 1.0)), white);
-    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 0.0, 1.0)), white);
-    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 0.0, 2.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 1.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 1.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 2.0)), white);
 }
 
 TEST_F(PatternFixture, StripesWithObjectTransformation) {
@@ -47,7 +47,7 @@ TEST_F(PatternFixture, StripesWithObjectTransformation) {
 
     const auto pattern = StripePattern{white, black};
 
-    EXPECT_EQ(pattern.stripe_at_object(object, make_point(1.5, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at_shape(object, make_point(1.5, 0.0, 0.0)), white);
 }
 
 TEST_F(PatternFixture, StripesWithPatternTransformation) {
@@ -56,7 +56,7 @@ TEST_F(PatternFixture, StripesWithPatternTransformation) {
     auto pattern = StripePattern{white, black};
     pattern.set_transform(tf::scaling(2.0, 2.0, 2.0));
 
-    EXPECT_EQ(pattern.stripe_at_object(object, make_point(1.5, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at_shape(object, make_point(1.5, 0.0, 0.0)), white);
 }
 
 TEST_F(PatternFixture, StripesWithBothObjectAndPatternTransformation) {
@@ -66,7 +66,7 @@ TEST_F(PatternFixture, StripesWithBothObjectAndPatternTransformation) {
     auto pattern = StripePattern{white, black};
     pattern.set_transform(tf::translation(0.5, 0.0, 0.0));
 
-    EXPECT_EQ(pattern.stripe_at_object(object, make_point(2.5, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at_shape(object, make_point(2.5, 0.0, 0.0)), white);
 }
 
 TEST_F(PatternFixture, PatternWithObjectTransformation) {

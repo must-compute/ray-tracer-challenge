@@ -4,33 +4,20 @@
 #include "Color.h"
 #include "Tuple.h"
 #include "Transformations.h"
+#include "Pattern.h"
 
 class Shape;
 
-class StripePattern {
+class StripePattern final : public Pattern {
 public:
-    StripePattern();
+    //StripePattern();
 
     StripePattern(const Color &a, const Color &b);
 
     bool operator==(const StripePattern &other) const = default;
 
-    [[nodiscard]] Color a() const;
+    [[nodiscard]] Color pattern_at(const Tuple &point) const override;
 
-    [[nodiscard]] Color b() const;
-
-    [[nodiscard]] tf::Transform transform() const;
-
-    void set_transform(const tf::Transform &t);
-
-    [[nodiscard]] Color stripe_at(const Tuple &point) const;
-
-    [[nodiscard]] Color stripe_at_object(const Shape &object, const Tuple &world_point) const;
-
-private:
-    Color a_;
-    Color b_;
-    tf::Transform transform_;
 };
 
 

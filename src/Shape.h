@@ -13,6 +13,10 @@ class Shape {
 public:
     Shape() : transform_(tf::Transform::identity()) {}
 
+    virtual ~Shape() = default;
+
+    Shape(const Shape &other) = default;
+
     bool operator==(const Shape &other) const = default;
 
     // NOTE: intersect() is non-const only because the TestShape test requires it to mutate an internal member.
@@ -27,6 +31,7 @@ public:
     void set_transform(const tf::Transform &tf_in);
 
     void set_material(const Material &m);
+
 
 protected:
     tf::Transform transform_;

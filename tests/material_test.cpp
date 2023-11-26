@@ -106,7 +106,7 @@ TEST(Material, LightingWithSurfaceInShadow) {
 TEST(Material, LightingWithPatternApplied) {
     const auto s = Sphere{};
     auto m = Material{};
-    m.pattern = StripePattern{make_color(1.0, 1.0, 1.0), make_color(0.0, 0.0, 0.0)};
+    m.pattern = std::make_unique<StripePattern>(StripePattern{make_color(1.0, 1.0, 1.0), make_color(0.0, 0.0, 0.0)});
     m.ambient = 1.0;
     m.diffuse = 0.0;
     m.specular = 0.0;
