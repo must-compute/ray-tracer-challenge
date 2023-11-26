@@ -4,6 +4,8 @@
 #include "Material.h"
 #include "Tuple.h"
 #include "PointLight.h"
+#include "StripePattern.h"
+
 
 TEST(Material, DefaultMaterial) {
     auto m = Material{};
@@ -92,4 +94,23 @@ TEST(Material, LightingWithSurfaceInShadow) {
     const bool in_shadow = true;
 
     EXPECT_EQ(m.lighting(light, position, eyev, normalv, in_shadow), make_color(0.1, 0.1, 0.1));
+}
+
+TEST(Material, LightingWithPatternApplied) {
+    auto m = Material{};
+    m.pattern = StripePattern{make_color(1.0, 1.0, 1.0), make_color(0.0, 0.0, 0.0)};
+    m.ambient = 1.0;
+    m.diffuse = 0.0;
+    m.specular = 0.0;
+
+    const auto eyev = make_vector(0.0, 0.0, -1.0);
+    const auto normalv = make_vector(0.0, 0.0, -1.0);
+    const auto light = PointLight{make_point(0.0, 0.0, -10.0), make_color(1.0, 1.0, 1.0)};
+
+    const bool in_shadow = false;
+    const auto c1 = m.lighting(light, make_point(0.9, 0.0, 0.0), eyev, normalv, in_shadow);
+    const auto c2 = m.lighting(light, make_point(1.1, 0.0, 0.0), eyev, normalv, in_shadow);
+
+    EXPECT_EQ(c1, make_color(1.0, 1.0, 1.0));
+    EXPECT_EQ(c2, make_color(0.0, 0.0, 0.0));
 }

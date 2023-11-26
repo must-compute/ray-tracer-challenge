@@ -1,0 +1,41 @@
+#include <gtest/gtest.h>
+#include "Color.h"
+#include "StripePattern.h"
+#include "Tuple.h"
+
+class PatternFixture : public ::testing::Test {
+protected:
+    const Color black = make_color(0.0, 0.0, 0.0);
+    const Color white = make_color(1.0, 1.0, 1.0);
+};
+
+TEST_F(PatternFixture, CreateStripePattern) {
+    const auto pattern = StripePattern{white, black};
+    EXPECT_EQ(pattern.a(), white);
+    EXPECT_EQ(pattern.b(), black);
+}
+
+TEST_F(PatternFixture, StripePatternAlternatesInX) {
+    const auto pattern = StripePattern{white, black};
+    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.stripe_at(make_point(0.9, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.stripe_at(make_point(1.0, 0.0, 0.0)), black);
+    EXPECT_EQ(pattern.stripe_at(make_point(-0.1, 0.0, 0.0)), black);
+    EXPECT_EQ(pattern.stripe_at(make_point(-1.0, 0.0, 0.0)), black);
+    EXPECT_EQ(pattern.stripe_at(make_point(-1.1, 0.0, 0.0)), white);
+}
+
+TEST_F(PatternFixture, StripePatternIsConstantInY) {
+    const auto pattern = StripePattern{white, black};
+    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 1.0, 0.0)), white);
+    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 2.0, 0.0)), white);
+}
+
+TEST_F(PatternFixture, StripePatternIsConstantInZ) {
+    const auto pattern = StripePattern{white, black};
+    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 0.0, 1.0)), white);
+    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 0.0, 1.0)), white);
+    EXPECT_EQ(pattern.stripe_at(make_point(0.0, 0.0, 2.0)), white);
+}
+

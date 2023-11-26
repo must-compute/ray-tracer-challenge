@@ -20,21 +20,25 @@ int main() {
     auto world = World{};
 
     auto floor = Plane{};
-//    floor.set_transform(tf::scaling(10.0, 0.01, 10));
     auto floor_material = Material{};
     floor_material.color = make_color(1.0, 0.9, 0.9);
     floor_material.specular = 0.0;
+    floor_material.pattern = StripePattern{make_color(0.5, 0.2, 1.0), make_color(1.0, 0.2, 0.5)};
     floor.set_material(floor_material);
     world.objects.push_back(std::make_shared<Plane>(floor));
 
+    auto wall_material = Material{};
+    wall_material.color = make_color(1.0, 0.9, 0.9);
+    wall_material.specular = 0.0;
+
     auto left_wall = Plane{};
     left_wall.set_transform(tf::translation(0.0, 0.0, 5.0) * tf::rotation_y(-pi / 4.0) * tf::rotation_x(pi / 2.0));
-    left_wall.set_material(floor_material);
+    left_wall.set_material(wall_material);
     world.objects.push_back(std::make_shared<Plane>(left_wall));
 
     auto right_wall = Plane{};
     right_wall.set_transform(tf::translation(0.0, 0.0, 5.0) * tf::rotation_y(pi / 4.0) * tf::rotation_x(pi / 2.0));
-    right_wall.set_material(floor_material);
+    right_wall.set_material(wall_material);
     world.objects.push_back(std::make_shared<Plane>(right_wall));
 
     auto middle_sphere = Sphere{};

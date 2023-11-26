@@ -5,7 +5,9 @@ Material::Material() : color{make_color(1.0, 1.0, 1.0)}, ambient{0.1}, diffuse{0
 
 Color Material::lighting(const PointLight &light, const Tuple &point, const Tuple &eyev, const Tuple &normalv,
                          const bool in_shadow) const {
-    const auto effective_color = color * light.intensity();
+    const auto color_to_use = pattern.has_value() ? pattern->stripe_at(point) : color;
+
+    const auto effective_color = color_to_use * light.intensity();
     const auto lightv = (light.position() - point).normalize();
     const auto ambient_contribution = effective_color * ambient;
 
