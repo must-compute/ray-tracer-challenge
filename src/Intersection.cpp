@@ -1,6 +1,7 @@
 
 #include "Intersection.h"
 #include "Ray.h"
+#include "Shape.h"
 #include <algorithm>
 
 std::optional<Intersection> hit(const Intersections &intersections) {
@@ -20,11 +21,12 @@ std::optional<Intersection> hit(const Intersections &intersections) {
 IntersectionComputation Intersection::prepare_computations(const Ray &ray) const {
     auto comps = IntersectionComputation{};
 
+    assert(object);
     comps.t = t;
     comps.object = object;
     comps.point = ray.position_at_t(comps.t);
     comps.eyev = -ray.direction();
-    comps.normalv = comps.object.normal_at(comps.point);
+    comps.normalv = comps.object->normal_at(comps.point);
 
     if (comps.normalv.dot(comps.eyev) < 0) {
         comps.inside = true;

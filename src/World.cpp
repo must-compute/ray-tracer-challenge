@@ -1,4 +1,5 @@
 #include "World.h"
+#include "Sphere.h"
 
 [[nodiscard]] World make_default_world() {
     auto world = World{};
@@ -15,8 +16,8 @@
     auto s2 = Sphere{};
     s2.set_transform(tf::scaling(0.5, 0.5, 0.5));
 
-    world.objects.push_back(s1);
-    world.objects.push_back(s2);
+    world.objects.push_back(std::make_shared<Sphere>(std::move(s1)));
+    world.objects.push_back(std::make_shared<Sphere>(std::move(s2)));
     world.light = std::make_optional(light);
 
     return world;
@@ -24,8 +25,9 @@
 
 Intersections World::intersect(const Ray &ray) const {
     auto all_xs = Intersections{};
-    for (auto obj: objects) {
-        auto obj_xs = ray.intersect(obj);
+    for (const auto &obj: objects) {
+        assert(obj);
+        auto obj_xs = obj->intersect(ray);
         all_xs.insert(all_xs.end(), obj_xs.begin(), obj_xs.end());
     }
 
@@ -39,7 +41,8 @@ Color World::shade_hit(const IntersectionComputation &comps) const {
     const bool in_shadow = is_shadowed(comps.over_point);
 
     if (light.has_value()) {
-        return comps.object.material().lighting(*light, comps.point, comps.eyev, comps.normalv, in_shadow);
+        assert(comps.object);
+        return comps.object->material().lighting(*light, comps.point, comps.eyev, comps.normalv, in_shadow);
     }
     return Color{};
 }

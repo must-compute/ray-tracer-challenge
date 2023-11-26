@@ -1,13 +1,17 @@
 #ifndef RAY_TRACER_CHALLENGE_INTERSECTIONCOMPUTATION_H
 #define RAY_TRACER_CHALLENGE_INTERSECTIONCOMPUTATION_H
 
-#include "Sphere.h"
+//#include "Sphere.h"
+
 #include "Tuple.h"
+
+
+class Shape;
 
 struct IntersectionComputation {
 
     double t{};
-    Sphere object{};
+    std::shared_ptr<Shape> object{};
     Tuple point{};
     Tuple eyev{};
     Tuple normalv{};

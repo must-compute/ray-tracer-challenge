@@ -3,7 +3,6 @@
 
 #include "Intersection.h"
 #include "Matrix.h"
-#include "Sphere.h"
 #include "Tuple.h"
 #include "Transformations.h"
 
@@ -23,7 +22,7 @@ public:
     [[nodiscard]] Tuple position_at_t(double t) const;
 
     // Returns the points of intersection with the given shape.
-    [[nodiscard]] Intersections intersect(const Sphere &sphere) const;
+    //[[nodiscard]] Intersections intersect(const Sphere &sphere) const;
 
     [[nodiscard]] Ray transform(const tf::Transform &m) const;
 

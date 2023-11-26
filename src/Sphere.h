@@ -2,32 +2,22 @@
 #define RAY_TRACER_CHALLENGE_SPHERE_H
 
 
+#include "Shape.h"
 #include "Matrix.h"
 #include "Material.h"
 #include "Transformations.h"
 #include "Tuple.h"
 
-// TODO convert to struct & make the methods free functions
-class Sphere {
-public:
-    Sphere() : transform_(tf::Transform::identity()) {}
+class Ray;
 
+// TODO convert to struct & make the methods free functions
+class Sphere final : public Shape {
+public:
     bool operator==(const Sphere &other) const = default;
 
-    [[nodiscard]] tf::Transform transform() const;
+    [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 
-    [[nodiscard]] Material material() const;
-
-    void set_transform(const tf::Transform &tf_in);
-
-    void set_material(const Material &m);
-
-    [[nodiscard]] Tuple normal_at(const Tuple &point_in_world_space) const;
-
-
-private:
-    tf::Transform transform_;
-    Material material_;
+    [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space) const override;
 };
 
 

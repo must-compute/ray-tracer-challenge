@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <memory>
 #include "Material.h"
 #include "Sphere.h"
 #include "PointLight.h"
@@ -64,11 +65,11 @@ TEST(World, ShadingWithAnIntersectionInShadow) {
     const auto s1 = Sphere{};
     auto s2 = Sphere{};
     s2.set_transform(tf::translation(0.0, 0.0, 10.0));
-    world.objects.push_back(s1);
-    world.objects.push_back(s2);
+    world.objects.push_back(std::make_shared<Sphere>(s1));
+    world.objects.push_back(std::make_shared<Sphere>(s2));
 
     const auto ray = Ray{make_point(0.0, 0.0, 5.0), make_vector(0.0, 0.0, 1.0)};
-    const auto i = Intersection{4.0, s2};
+    const auto i = Intersection{4.0, std::make_shared<Sphere>(s2)};
     const auto comps = i.prepare_computations(ray);
     const auto c = world.shade_hit(comps);
     EXPECT_EQ(c, make_color(0.1, 0.1, 0.1));
@@ -95,12 +96,14 @@ TEST(World, ColorWithIntersectionBehindTheRay) {
     EXPECT_GE(world.objects.size(), 2);
     auto &outer = world.objects[0];
     auto &inner = world.objects[1];
-    auto outer_m = outer.material();
+    ASSERT_TRUE(outer);
+    ASSERT_TRUE(inner);
+    auto outer_m = outer->material();
     outer_m.ambient = 1.0;
-    outer.set_material(outer_m);
-    auto inner_m = inner.material();
+    outer->set_material(outer_m);
+    auto inner_m = inner->material();
     inner_m.ambient = 1.0;
-    inner.set_material(inner_m);
+    inner->set_material(inner_m);
 
     const auto ray = Ray{make_point(0.0, 0.0, 0.75), make_vector(0.0, 0.0, -1.0)};
     EXPECT_EQ(world.color_at(ray), inner_m.color);

@@ -13,6 +13,7 @@ Tuple Ray::position_at_t(double t) const {
     return origin_ + direction_ * t;
 }
 
+/*
 Intersections Ray::intersect(const Sphere &sphere) const {
 
     const auto transformed_ray = this->transform(sphere.transform().inverse());
@@ -39,6 +40,7 @@ Intersections Ray::intersect(const Sphere &sphere) const {
     }
     return {Intersection{t1, sphere}, Intersection{t2, sphere}};
 }
+ */
 
 Tuple Ray::origin() const {
     return origin_;

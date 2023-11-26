@@ -1,12 +1,14 @@
 #ifndef RAY_TRACER_CHALLENGE_INTERSECTION_H
 #define RAY_TRACER_CHALLENGE_INTERSECTION_H
 
-#include "Sphere.h"
 #include "IntersectionComputation.h"
 #include <optional>
 #include <vector>
+#include <memory>
 
 class Ray; // to avoid a circular dependency (Ray.h includes Intersection.h)
+//class Sphere;
+class Shape;
 
 struct Intersection {
     bool operator==(const Intersection &other) const = default;
@@ -18,7 +20,7 @@ struct Intersection {
     [[nodiscard]] IntersectionComputation prepare_computations(const Ray &ray) const;
 
     double t{};
-    Sphere object;
+    std::shared_ptr<Shape> object{};
 };
 
 using Intersections = std::vector<Intersection>;

@@ -3,14 +3,15 @@
 
 #include <vector>
 #include <optional>
+#include <memory>
 
 #include "Intersection.h"
-#include "Sphere.h"
+#include "Shape.h"
 #include "Ray.h"
 
 struct World {
     // TODO should contain not just spheres
-    std::vector<Sphere> objects{};
+    std::vector<std::shared_ptr<Shape>> objects{};
     // TODO check page 96 for how to add multiple lights.
     std::optional<PointLight> light{};
 
