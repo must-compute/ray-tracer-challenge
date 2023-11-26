@@ -18,7 +18,7 @@ struct Material {
     double diffuse{}; // non-negative, typically between 0 and 1
     double specular{}; // non-negative, typically between 0 and 1
     double shininess{}; // non-negative, typically between 10 (large highlight) and 200 (small highlight)
-    std::optional<StripePattern> pattern{};
+    std::optional<StripePattern> pattern{}; // if set, overrides "color" field.
 
 
     [[nodiscard]] Color lighting(

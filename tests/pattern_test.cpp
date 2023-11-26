@@ -2,6 +2,7 @@
 #include "Color.h"
 #include "StripePattern.h"
 #include "Tuple.h"
+#include "Sphere.h"
 
 class PatternFixture : public ::testing::Test {
 protected:
@@ -39,3 +40,30 @@ TEST_F(PatternFixture, StripePatternIsConstantInZ) {
     EXPECT_EQ(pattern.stripe_at(make_point(0.0, 0.0, 2.0)), white);
 }
 
+TEST_F(PatternFixture, StripesWithObjectTransformation) {
+    auto object = Sphere{};
+    object.set_transform(tf::scaling(2.0, 2.0, 2.0));
+
+    const auto pattern = StripePattern{white, black};
+
+    EXPECT_EQ(pattern.stripe_at_object(object, make_point(1.5, 0.0, 0.0)), white);
+}
+
+TEST_F(PatternFixture, StripesWithPatternTransformation) {
+    const auto object = Sphere{};
+
+    auto pattern = StripePattern{white, black};
+    pattern.set_transform(tf::scaling(2.0, 2.0, 2.0));
+
+    EXPECT_EQ(pattern.stripe_at_object(object, make_point(1.5, 0.0, 0.0)), white);
+}
+
+TEST_F(PatternFixture, StripesWithBothObjectAndPatternTransformation) {
+    auto object = Sphere{};
+    object.set_transform(tf::scaling(2.0, 2.0, 2.0));
+
+    auto pattern = StripePattern{white, black};
+    pattern.set_transform(tf::translation(0.5, 0.0, 0.0));
+
+    EXPECT_EQ(pattern.stripe_at_object(object, make_point(2.5, 0.0, 0.0)), white);
+}
