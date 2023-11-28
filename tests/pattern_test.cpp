@@ -2,6 +2,7 @@
 #include "Color.h"
 #include "StripePattern.h"
 #include "GradientPattern.h"
+#include "RingPattern.h"
 #include "TestPattern.h"
 #include "Tuple.h"
 #include "Sphere.h"
@@ -105,4 +106,13 @@ TEST_F(PatternFixture, GradientLinearlyInterpolatesBetweenColors) {
     EXPECT_EQ(pattern.pattern_at(make_point(0.25, 0.0, 0.0)), make_color(0.75, 0.75, 0.75));
     EXPECT_EQ(pattern.pattern_at(make_point(0.5, 0.0, 0.0)), make_color(0.5, 0.5, 0.5));
     EXPECT_EQ(pattern.pattern_at(make_point(0.75, 0.0, 0.0)), make_color(0.25, 0.25, 0.25));
+}
+
+TEST_F(PatternFixture, RingGradientShouldExtendInBothXAndZ) {
+    auto pattern = RingPattern{white, black};
+
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(1.0, 0.0, 0.0)), black);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 1.0)), black);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.708, 0.0, 0.708)), black); // Slightly more than sqrt(2)/2
 }
