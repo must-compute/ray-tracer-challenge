@@ -5,7 +5,6 @@
 
 class TestPattern final : public Pattern {
 public:
-
     [[nodiscard]] Color pattern_at(const Tuple &point) const override;
 };
 

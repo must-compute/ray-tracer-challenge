@@ -10,8 +10,6 @@ class Shape;
 
 class StripePattern final : public Pattern {
 public:
-    //StripePattern();
-
     StripePattern(const Color &a, const Color &b);
 
     bool operator==(const StripePattern &other) const = default;

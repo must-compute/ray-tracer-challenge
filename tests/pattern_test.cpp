@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "Color.h"
 #include "StripePattern.h"
+#include "GradientPattern.h"
 #include "TestPattern.h"
 #include "Tuple.h"
 #include "Sphere.h"
@@ -95,4 +96,13 @@ TEST_F(PatternFixture, PatternWithObjectAndPatternTransformation) {
     pattern.set_transform(tf::translation(0.5, 1.0, 1.5));
 
     EXPECT_EQ(pattern.pattern_at_shape(object, make_point(2.5, 3.0, 3.5)), make_color(0.75, 0.5, 0.25));
+}
+
+TEST_F(PatternFixture, GradientLinearlyInterpolatesBetweenColors) {
+    auto pattern = GradientPattern{white, black};
+
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.25, 0.0, 0.0)), make_color(0.75, 0.75, 0.75));
+    EXPECT_EQ(pattern.pattern_at(make_point(0.5, 0.0, 0.0)), make_color(0.5, 0.5, 0.5));
+    EXPECT_EQ(pattern.pattern_at(make_point(0.75, 0.0, 0.0)), make_color(0.25, 0.25, 0.25));
 }
