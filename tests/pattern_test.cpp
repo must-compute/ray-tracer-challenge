@@ -4,6 +4,7 @@
 #include "GradientPattern.h"
 #include "RingPattern.h"
 #include "TestPattern.h"
+#include "CheckerPattern.h"
 #include "Tuple.h"
 #include "Sphere.h"
 
@@ -115,4 +116,28 @@ TEST_F(PatternFixture, RingGradientShouldExtendInBothXAndZ) {
     EXPECT_EQ(pattern.pattern_at(make_point(1.0, 0.0, 0.0)), black);
     EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 1.0)), black);
     EXPECT_EQ(pattern.pattern_at(make_point(0.708, 0.0, 0.708)), black); // Slightly more than sqrt(2)/2
+}
+
+TEST_F(PatternFixture, CheckerGradientShouldRepeatInX) {
+    auto pattern = CheckerPattern{white, black};
+
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.99, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(1.01, 0.0, 0.0)), black);
+}
+
+TEST_F(PatternFixture, CheckerGradientShouldRepeatInY) {
+    auto pattern = CheckerPattern{white, black};
+
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.99, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 1.01, 0.0)), black);
+}
+
+TEST_F(PatternFixture, CheckerGradientShouldRepeatInZ) {
+    auto pattern = CheckerPattern{white, black};
+
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 0.99)), white);
+    EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 1.01)), black);
 }
