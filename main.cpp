@@ -9,6 +9,7 @@
 #include "World.h"
 #include "Camera.h"
 #include "StripePattern.h"
+#include "RingPattern.h"
 
 
 int main() {
@@ -40,6 +41,8 @@ int main() {
 
     auto right_wall = Plane{};
     right_wall.set_transform(tf::translation(0.0, 0.0, 5.0) * tf::rotation_y(pi / 4.0) * tf::rotation_x(pi / 2.0));
+    wall_material.pattern = std::make_shared<RingPattern>(
+            RingPattern{make_color(0.0, 1.0, 1.0), make_color(1.0, 1.0, 0.0)});
     right_wall.set_material(wall_material);
     world.objects.push_back(std::make_shared<Plane>(right_wall));
 
