@@ -77,3 +77,13 @@ bool World::is_shadowed(const Tuple &point) const {
 
     return false;
 }
+
+Color World::reflected_color(const IntersectionComputation &comps) const {
+    assert(comps.object);
+    if (const auto reflectivity = comps.object->material().reflective; reflectivity > 0.0) {
+        const auto ray = Ray{comps.over_point, comps.reflectv};
+        return color_at(ray) * reflectivity;
+    } else {
+        return make_color(0.0, 0.0, 0.0);
+    }
+}

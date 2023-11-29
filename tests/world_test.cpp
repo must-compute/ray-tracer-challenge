@@ -5,6 +5,7 @@
 #include "PointLight.h"
 #include "World.h"
 #include "Ray.h"
+#include "Plane.h"
 
 TEST(World, CreatingWorld) {
     const auto w = World{};
@@ -62,14 +63,14 @@ TEST(World, ShadingAnIntersectionFromTheInside) {
 TEST(World, ShadingWithAnIntersectionInShadow) {
     auto world = World{};
     world.light = PointLight{make_point(0.0, 0.0, -10.0), make_color(1.0, 1.0, 1.0)};
-    const auto s1 = Sphere{};
-    auto s2 = Sphere{};
-    s2.set_transform(tf::translation(0.0, 0.0, 10.0));
-    world.objects.push_back(std::make_shared<Sphere>(s1));
-    world.objects.push_back(std::make_shared<Sphere>(s2));
+    const auto s1 = std::make_shared<Sphere>(Sphere{});
+    auto s2 = std::make_shared<Sphere>(Sphere{});
+    s2->set_transform(tf::translation(0.0, 0.0, 10.0));
+    world.objects.push_back(s1);
+    world.objects.push_back(s2);
 
     const auto ray = Ray{make_point(0.0, 0.0, 5.0), make_vector(0.0, 0.0, 1.0)};
-    const auto i = Intersection{4.0, std::make_shared<Sphere>(s2)};
+    const auto i = Intersection{4.0, s2};
     const auto comps = i.prepare_computations(ray);
     const auto c = world.shade_hit(comps);
     EXPECT_EQ(c, make_color(0.1, 0.1, 0.1));
@@ -131,4 +132,40 @@ TEST(World, NoShadowWhenObjectIsBehindThePoint) {
     const auto w = make_default_world();
     const auto p = make_point(-2.0, 2.0, -2.0);
     EXPECT_FALSE(w.is_shadowed(p));
+}
+
+TEST(World, ReflectedColorForNonReflectiveMaterial) {
+    const auto world = make_default_world();
+    const auto ray = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 0.0, 1.0)};
+
+    ASSERT_GE(world.objects.size(), 2);
+    auto shape = world.objects[1];
+
+    auto material = shape->material();
+    material.ambient = 1.0;
+    shape->set_material(material);
+
+    const auto intersection = Intersection{1.0, shape};
+    const auto comps = intersection.prepare_computations(ray);
+    EXPECT_EQ(world.reflected_color(comps), make_color(0.0, 0.0, 0.0));
+}
+
+TEST(World, ReflectedColorForReflectiveMaterial) {
+    auto world = make_default_world();
+
+    auto material = Material{};
+    material.reflective = 0.5;
+    auto plane = std::make_shared<Plane>(Plane{});
+
+    plane->set_material(material);
+    plane->set_transform(tf::translation(0.0, -1.0, 0.0));
+
+    world.objects.push_back(plane);
+
+    const auto loc = std::sqrt(2.0) / 2.0;
+    const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
+    const auto intersection = Intersection{std::sqrt(2.0), plane};
+
+    const auto comps = intersection.prepare_computations(ray);
+    EXPECT_EQ(world.reflected_color(comps), make_color(0.19032, 0.2379, 0.14274));
 }

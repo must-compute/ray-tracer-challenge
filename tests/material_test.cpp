@@ -122,3 +122,8 @@ TEST(Material, LightingWithPatternApplied) {
     EXPECT_EQ(c1, make_color(1.0, 1.0, 1.0));
     EXPECT_EQ(c2, make_color(0.0, 0.0, 0.0));
 }
+
+TEST(Material, ReflectivityForDefaultMaterial) {
+    auto m = Material{};
+    EXPECT_EQ(m.reflective, 0.0);
+}

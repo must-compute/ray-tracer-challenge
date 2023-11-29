@@ -1,9 +1,11 @@
 #include <gtest/gtest.h>
 #include <optional>
+#include <memory>
 
 #include "Intersection.h"
 #include "Ray.h"
 #include "Sphere.h"
+#include "Plane.h"
 
 TEST(Intersection, Creation) {
     const auto sphere = std::make_shared<Sphere>(Sphere{});
@@ -103,4 +105,16 @@ TEST(Intersection, HitShouldOffsetPoint) {
     const auto comps = i.prepare_computations(r);
     EXPECT_LT(comps.over_point.z(), -EPSILON / 2.0);
     EXPECT_GT(comps.point.z(), comps.over_point.z());
+}
+
+TEST(Intersection, PrecomputingTheReflectionVector) {
+    const auto plane = std::make_shared<Plane>(Plane{});
+
+    const auto loc = std::sqrt(2.0) / 2.0;
+    const auto r = Ray{make_point(0.0, 1.0, -1.0), make_vector(0.0, -loc, loc)};
+
+    const auto i = Intersection{std::sqrt(2.0), plane};
+
+    const auto comps = i.prepare_computations(r);
+    EXPECT_EQ(comps.reflectv, make_vector(0.0, loc, loc));
 }

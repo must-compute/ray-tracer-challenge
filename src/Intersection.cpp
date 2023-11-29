@@ -35,6 +35,8 @@ IntersectionComputation Intersection::prepare_computations(const Ray &ray) const
         comps.inside = false;
     }
 
+    comps.reflectv = ray.direction().reflect(comps.normalv);
+
     comps.over_point = comps.point + (comps.normalv * EPSILON);
 
     return comps;

@@ -21,6 +21,8 @@ struct World {
     [[nodiscard]] Color color_at(const Ray &ray) const;
 
     [[nodiscard]] bool is_shadowed(const Tuple &point) const;
+
+    [[nodiscard]] Color reflected_color(const IntersectionComputation &comps) const;
 };
 
 [[nodiscard]] World make_default_world();
