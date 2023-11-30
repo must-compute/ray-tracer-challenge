@@ -118,3 +118,48 @@ TEST(Intersection, PrecomputingTheReflectionVector) {
     const auto comps = i.prepare_computations(r);
     EXPECT_EQ(comps.reflectv, make_vector(0.0, loc, loc));
 }
+
+TEST(Intersection, FindingN1AndN2AtVariousIntersections) {
+    auto A = std::make_shared<Sphere>(make_glass_sphere());
+    A->set_transform(tf::scaling(2.0, 2.0, 2.0));
+    auto material_a = Material{};
+    material_a.refractive_index = 1.5;
+    A->set_material(material_a);
+
+    auto B = std::make_shared<Sphere>(make_glass_sphere());
+    B->set_transform(tf::translation(0.0, 0.0, -0.25));
+    auto material_b = Material{};
+    material_b.refractive_index = 2.0;
+    B->set_material(material_b);
+
+    auto C = std::make_shared<Sphere>(make_glass_sphere());
+    C->set_transform(tf::translation(0.0, 0.0, 0.25));
+    auto material_c = Material{};
+    material_c.refractive_index = 2.5;
+    C->set_material(material_c);
+
+    const auto ray = Ray{make_point(0.0, 0.0, -4.0), make_vector(0.0, 0.0, 1.0)};
+    const auto xs = Intersections{
+            Intersection{2, A},
+            Intersection{2.75, B},
+            Intersection{3.25, C},
+            Intersection{4.75, B},
+            Intersection{5.25, C},
+            Intersection{6, A}
+    };
+
+    std::vector<std::pair<double, double>> expected_ns{
+            {1.0, 1.5},
+            {1.5, 2.0},
+            {2.0, 2.5},
+            {2.5, 2.5},
+            {2.5, 1.5},
+            {1.5, 1.0}
+    };
+
+    for (size_t index = 0; index < expected_ns.size(); ++index) {
+        const auto comps = xs[index].prepare_computations(ray, xs);
+        EXPECT_EQ(comps.n1, expected_ns[index].first);
+        EXPECT_EQ(comps.n2, expected_ns[index].second);
+    }
+}

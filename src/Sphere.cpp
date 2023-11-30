@@ -40,3 +40,12 @@ Tuple Sphere::local_normal_at(const Tuple &point_in_object_space) const {
     }
     return {Intersection{t1, copy}, Intersection{t2, copy}};
 }
+
+[[nodiscard]] Sphere make_glass_sphere() {
+    auto sphere = Sphere{};
+    auto material = Material{};
+    material.transparency = 1.0;
+    material.refractive_index = 1.5;
+    sphere.set_material(material);
+    return sphere;
+}

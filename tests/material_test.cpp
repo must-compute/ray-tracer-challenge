@@ -127,3 +127,9 @@ TEST(Material, ReflectivityForDefaultMaterial) {
     auto m = Material{};
     EXPECT_EQ(m.reflective, 0.0);
 }
+
+TEST(Material, TransparencyAndRefractiveIndexForDefaultMaterial) {
+    auto m = Material{};
+    EXPECT_EQ(m.transparency, 0.0);
+    EXPECT_EQ(m.refractive_index, 1.0);
+}

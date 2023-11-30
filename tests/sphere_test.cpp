@@ -79,3 +79,10 @@ TEST(Sphere, SphereMaterialAssignment) {
     s.set_material(m);
     EXPECT_EQ(s.material(), m);
 }
+
+TEST(Sphere, HelperForProducingGlassSphere) {
+    const auto sphere = make_glass_sphere();
+    EXPECT_EQ(sphere.transform(), tf::Transform::identity());
+    EXPECT_EQ(sphere.material().transparency, 1.0);
+    EXPECT_EQ(sphere.material().refractive_index, 1.5);
+}

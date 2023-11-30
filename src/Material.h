@@ -22,7 +22,8 @@ struct Material {
     double shininess{}; // non-negative, typically between 10 (large highlight) and 200 (small highlight)
     std::shared_ptr<Pattern> pattern{}; // if set, overrides "color" field.
     double reflective{}; // non-negative, typically between 0 and 1
-
+    double transparency{}; // non-negative, typically between 0 and 1
+    double refractive_index{};
 
     [[nodiscard]] Color lighting(
             const Shape &object,

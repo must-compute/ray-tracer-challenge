@@ -20,4 +20,6 @@ public:
 };
 
 
+[[nodiscard]] Sphere make_glass_sphere();
+
 #endif //RAY_TRACER_CHALLENGE_SPHERE_H

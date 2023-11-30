@@ -9,6 +9,11 @@
 class Ray; // to avoid a circular dependency (Ray.h includes Intersection.h)
 class Shape;
 
+
+struct Intersection;
+
+using Intersections = std::vector<Intersection>;
+
 struct Intersection {
     bool operator==(const Intersection &other) const = default;
 
@@ -16,13 +21,12 @@ struct Intersection {
         return t < other.t;
     }
 
-    [[nodiscard]] IntersectionComputation prepare_computations(const Ray &ray) const;
+    [[nodiscard]] IntersectionComputation
+    prepare_computations(const Ray &ray, const Intersections &xs = {}) const;
 
     double t{};
     std::shared_ptr<Shape> object{};
 };
-
-using Intersections = std::vector<Intersection>;
 
 std::optional<Intersection> hit(const Intersections &intersections);
 
