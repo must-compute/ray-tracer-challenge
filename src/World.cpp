@@ -36,19 +36,25 @@ Intersections World::intersect(const Ray &ray) const {
     return all_xs;
 }
 
-Color World::shade_hit(const IntersectionComputation &comps) const {
+// NOTE: These three functions (shade_hit, color_at, and reflected_color) have infinite recursion, but we break it by passing a decrementing "remaining" argument.
+// We use these pragmas to get clang-tidy to suppress the infinite recursion warning.
+
+Color World::shade_hit(const IntersectionComputation &comps, size_t remaining) const { // NOLINT
     // NOTE: without nudging the point away from the surface ever so slightly, tiny floating-point imprecisions would cause us to falsely intersect with ourselves and give a grainy shadow artifact called "acne".
     const bool in_shadow = is_shadowed(comps.over_point);
 
     if (light.has_value()) {
         assert(comps.object);
-        return comps.object->material().lighting(*comps.object, *light, comps.point, comps.eyev, comps.normalv,
-                                                 in_shadow);
+        const auto surface = comps.object->material().lighting(*comps.object, *light, comps.point, comps.eyev,
+                                                               comps.normalv,
+                                                               in_shadow);
+        const auto reflected = reflected_color(comps, remaining);
+        return surface + reflected;
     }
     return Color{};
 }
 
-[[nodiscard]] Color World::color_at(const Ray &ray) const {
+[[nodiscard]] Color World::color_at(const Ray &ray, size_t remaining) const { // NOLINT
     const auto xs = intersect(ray);
     const auto maybe_hit = hit(xs);
 
@@ -57,7 +63,17 @@ Color World::shade_hit(const IntersectionComputation &comps) const {
     }
 
     const auto comps = maybe_hit->prepare_computations(ray);
-    return shade_hit(comps);
+    return shade_hit(comps, remaining);
+}
+
+Color World::reflected_color(const IntersectionComputation &comps, size_t remaining) const { // NOLINT
+    assert(comps.object);
+    if (const auto reflectivity = comps.object->material().reflective; reflectivity > 0.0 && remaining > 0) {
+        const auto ray = Ray{comps.over_point, comps.reflectv};
+        return color_at(ray, remaining - 1) * reflectivity;
+    } else {
+        return make_color(0.0, 0.0, 0.0);
+    }
 }
 
 bool World::is_shadowed(const Tuple &point) const {
@@ -78,12 +94,3 @@ bool World::is_shadowed(const Tuple &point) const {
     return false;
 }
 
-Color World::reflected_color(const IntersectionComputation &comps) const {
-    assert(comps.object);
-    if (const auto reflectivity = comps.object->material().reflective; reflectivity > 0.0) {
-        const auto ray = Ray{comps.over_point, comps.reflectv};
-        return color_at(ray) * reflectivity;
-    } else {
-        return make_color(0.0, 0.0, 0.0);
-    }
-}

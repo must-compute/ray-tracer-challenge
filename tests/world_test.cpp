@@ -169,3 +169,66 @@ TEST(World, ReflectedColorForReflectiveMaterial) {
     const auto comps = intersection.prepare_computations(ray);
     EXPECT_EQ(world.reflected_color(comps), make_color(0.19032, 0.2379, 0.14274));
 }
+
+TEST(World, ShadeHitWithReflectiveMaterial) {
+    auto world = make_default_world();
+
+    auto material = Material{};
+    material.reflective = 0.5;
+    auto plane = std::make_shared<Plane>(Plane{});
+
+    plane->set_material(material);
+    plane->set_transform(tf::translation(0.0, -1.0, 0.0));
+
+    world.objects.push_back(plane);
+
+    const auto loc = std::sqrt(2.0) / 2.0;
+    const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
+    const auto intersection = Intersection{std::sqrt(2.0), plane};
+
+    const auto comps = intersection.prepare_computations(ray);
+    EXPECT_EQ(world.shade_hit(comps), make_color(0.87677, 0.92436, 0.82918));
+}
+
+TEST(World, ColorAtWithMutuallyReflectiveSurfaces) {
+    auto world = World{};
+    world.light = PointLight{make_point(0.0, 0.0, 0.0), make_color(1.0, 1.0, 1.0)};
+
+    auto plane_material = Material{};
+    plane_material.reflective = 1.0;
+
+    auto lower_plane = std::make_shared<Plane>(Plane{});
+    lower_plane->set_material(plane_material);
+    lower_plane->set_transform(tf::translation(0.0, -1.0, 0.0));
+
+    auto upper_plane = std::make_shared<Plane>(Plane{});
+    upper_plane->set_material(plane_material);
+    upper_plane->set_transform(tf::translation(0.0, 1.0, 0.0));
+
+    world.objects.push_back(lower_plane);
+    world.objects.push_back(upper_plane);
+
+    const auto ray = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 1.0, 0.0)};
+
+    std::ignore = world.color_at(ray);
+}
+
+TEST(World, ReflectedColorAtMaxRecursiveDepth) {
+    auto world = make_default_world();
+
+    auto plane_material = Material{};
+    plane_material.reflective = 0.5;
+
+    auto plane = std::make_shared<Plane>(Plane{});
+    plane->set_material(plane_material);
+    plane->set_transform(tf::translation(0.0, -1.0, 0.0));
+
+    world.objects.push_back(plane);
+
+    const auto loc = std::sqrt(2.0) / 2.0;
+    const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
+    const auto intersection = Intersection{std::sqrt(2.0), plane};
+    const auto comps = intersection.prepare_computations(ray);
+
+    EXPECT_EQ(world.reflected_color(comps, 0), make_color(0.0, 0.0, 0.0));
+}

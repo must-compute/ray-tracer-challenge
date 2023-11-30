@@ -16,13 +16,13 @@ struct World {
 
     [[nodiscard]] Intersections intersect(const Ray &ray) const;
 
-    [[nodiscard]] Color shade_hit(const IntersectionComputation &comps) const;
+    [[nodiscard]] Color shade_hit(const IntersectionComputation &comps, size_t remaining = 5) const;
 
-    [[nodiscard]] Color color_at(const Ray &ray) const;
+    [[nodiscard]] Color color_at(const Ray &ray, size_t remaining = 5) const;
 
     [[nodiscard]] bool is_shadowed(const Tuple &point) const;
 
-    [[nodiscard]] Color reflected_color(const IntersectionComputation &comps) const;
+    [[nodiscard]] Color reflected_color(const IntersectionComputation &comps, size_t remaining = 5) const;
 };
 
 [[nodiscard]] World make_default_world();
