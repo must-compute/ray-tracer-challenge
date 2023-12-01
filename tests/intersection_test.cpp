@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
-#include <optional>
 #include <memory>
 
 #include "Intersection.h"
 #include "Ray.h"
 #include "Sphere.h"
 #include "Plane.h"
+#include "util.h"
 
 TEST(Intersection, Creation) {
     const auto sphere = std::make_shared<Sphere>(Sphere{});
@@ -162,4 +162,17 @@ TEST(Intersection, FindingN1AndN2AtVariousIntersections) {
         EXPECT_EQ(comps.n1, expected_ns[index].first);
         EXPECT_EQ(comps.n2, expected_ns[index].second);
     }
+}
+
+TEST(Intersection, UnderPointIsOffsetBelowTheSurface) {
+    const auto r = Ray{make_point(0.0, 1.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+    const auto sphere = std::make_shared<Sphere>(make_glass_sphere());
+    sphere->set_transform(tf::translation(0.0, 0.0, 1.0));
+
+    const auto i = Intersection{5.0, sphere};
+    const auto xs = Intersections{i};
+
+    const auto comps = i.prepare_computations(r, xs);
+    EXPECT_GT(comps.under_point.z(), EPSILON / 2.0);
+    EXPECT_LT(comps.point.z(), comps.under_point.z());
 }

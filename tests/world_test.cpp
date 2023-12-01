@@ -232,3 +232,30 @@ TEST(World, ReflectedColorAtMaxRecursiveDepth) {
 
     EXPECT_EQ(world.reflected_color(comps, 0), make_color(0.0, 0.0, 0.0));
 }
+
+TEST(World, RefractedColorWithAnOpaqueSurface) {
+    auto world = make_default_world();
+
+    ASSERT_GT(world.objects.size(), 0);
+    const auto &shape = world.objects.front();
+    const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+    const auto xs = Intersections{Intersection{4.0, shape}, Intersection{6.0, shape}};
+    const auto comps = xs[0].prepare_computations(ray, xs);
+    EXPECT_EQ(world.refracted_color(comps, 5), make_color(0.0, 0.0, 0.0));
+}
+
+TEST(World, RefractedColorAtMaxRecursiveDepth) {
+    auto world = make_default_world();
+
+    ASSERT_GT(world.objects.size(), 0);
+    auto &shape = world.objects.front();
+    auto material = Material{};
+    material.transparency = 1.0;
+    material.refractive_index = 1.5;
+    shape->set_material(material);
+
+    const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+    const auto xs = Intersections{Intersection{4.0, shape}, Intersection{6.0, shape}};
+    const auto comps = xs[0].prepare_computations(ray, xs);
+    EXPECT_EQ(world.refracted_color(comps, 0), make_color(0.0, 0.0, 0.0));
+}

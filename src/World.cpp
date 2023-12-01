@@ -76,6 +76,15 @@ Color World::reflected_color(const IntersectionComputation &comps, size_t remain
     }
 }
 
+Color World::refracted_color(const IntersectionComputation &comps, size_t remaining) const {
+    assert(comps.object);
+    if (const auto transparency = comps.object->material().transparency; transparency > 0.0 && remaining > 0) {
+        return make_color(1.0, 1.0, 1.0);
+    } else {
+        return make_color(0.0, 0.0, 0.0);
+    }
+}
+
 bool World::is_shadowed(const Tuple &point) const {
 
     if (!light.has_value()) {

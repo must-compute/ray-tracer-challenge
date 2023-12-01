@@ -38,6 +38,7 @@ IntersectionComputation Intersection::prepare_computations(const Ray &ray, const
     comps.reflectv = ray.direction().reflect(comps.normalv);
 
     comps.over_point = comps.point + (comps.normalv * EPSILON);
+    comps.under_point = comps.point - (comps.normalv * EPSILON);
 
     // Compute the refractive indices (n1 and n2).
     std::vector<std::shared_ptr<Shape>> seen_objects{};

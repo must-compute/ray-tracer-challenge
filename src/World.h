@@ -23,6 +23,8 @@ struct World {
     [[nodiscard]] bool is_shadowed(const Tuple &point) const;
 
     [[nodiscard]] Color reflected_color(const IntersectionComputation &comps, size_t remaining = 5) const;
+
+    [[nodiscard]] Color refracted_color(const IntersectionComputation &comps, size_t remaining = 5) const;
 };
 
 [[nodiscard]] World make_default_world();
