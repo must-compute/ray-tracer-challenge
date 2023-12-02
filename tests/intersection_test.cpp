@@ -176,3 +176,31 @@ TEST(Intersection, UnderPointIsOffsetBelowTheSurface) {
     EXPECT_GT(comps.under_point.z(), EPSILON / 2.0);
     EXPECT_LT(comps.point.z(), comps.under_point.z());
 }
+
+TEST(Intersection, SchlickApproximationUnderTotalInternalReflection) {
+    const auto shape = std::make_shared<Sphere>(make_glass_sphere());
+    const auto loc = std::sqrt(2.0) / 2.0;
+    const auto ray = Ray{make_point(0.0, 0.0, loc), make_vector(0.0, 1.0, 0.0)};
+    const auto xs = Intersections{Intersection{-loc, shape}, Intersection{loc, shape}};
+    const auto comps = xs[1].prepare_computations(ray, xs);
+    const auto reflectance = comps.schlick();
+    EXPECT_EQ(reflectance, 1.0);
+}
+
+TEST(Intersection, SchlickApproximationWithPerpendicularViewingAngle) {
+    const auto shape = std::make_shared<Sphere>(make_glass_sphere());
+    const auto ray = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 1.0, 0.0)};
+    const auto xs = Intersections{Intersection{-1.0, shape}, Intersection{1.0, shape}};
+    const auto comps = xs[1].prepare_computations(ray, xs);
+    const auto reflectance = comps.schlick();
+    EXPECT_TRUE(within_epsilon(reflectance, 0.04));
+}
+
+TEST(Intersection, SchlickApproximationWithSmallAngleAndN2GreaterThanN1) {
+    const auto shape = std::make_shared<Sphere>(make_glass_sphere());
+    const auto ray = Ray{make_point(0.0, 0.99, -2.0), make_vector(0.0, 0.0, 1.0)};
+    const auto xs = Intersections{Intersection{1.8589, shape}};
+    const auto comps = xs[0].prepare_computations(ray, xs);
+    const auto reflectance = comps.schlick();
+    EXPECT_TRUE(within_epsilon(reflectance, 0.48873));
+}

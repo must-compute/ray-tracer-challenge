@@ -51,6 +51,14 @@ Color World::shade_hit(const IntersectionComputation &comps, size_t remaining) c
                                                                in_shadow);
         const auto reflected = reflected_color(comps, remaining);
         const auto refracted = refracted_color(comps, remaining);
+
+        // Account for Fresnel effect using Schlick approximation
+        const auto &material = comps.object->material();
+        if (material.reflective > 0.0 && material.transparency > 0.0) {
+            const auto reflectance = comps.schlick();
+            return surface + (reflected * reflectance) + (refracted * (1 - reflectance));
+        }
+
         return surface + reflected + refracted;
     }
     return Color{};

@@ -310,7 +310,6 @@ TEST(World, ShadeHitWithTransparentMaterial) {
     auto world = make_default_world();
     ASSERT_GT(world.objects.size(), 1);
 
-
     auto floor = std::make_shared<Plane>(Plane{});
     floor->set_transform(tf::translation(0.0, -1.0, 0.0));
     auto material_a = Material{};
@@ -332,4 +331,31 @@ TEST(World, ShadeHitWithTransparentMaterial) {
     const auto xs = Intersections{Intersection{std::sqrt(2.0), floor}};
     const auto comps = xs[0].prepare_computations(ray, xs);
     EXPECT_EQ(world.shade_hit(comps, 5), make_color(0.93642, 0.68642, 0.68642));
+}
+
+TEST(World, ShadeHitWithReflectiveTransparentMaterial) {
+    auto world = make_default_world();
+    const auto loc = std::sqrt(2.0) / 2.0;
+    const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
+
+    auto floor = std::make_shared<Plane>(Plane{});
+    floor->set_transform(tf::translation(0.0, -1.0, 0.0));
+    auto material_a = Material{};
+    material_a.reflective = 0.5;
+    material_a.transparency = 0.5;
+    material_a.refractive_index = 1.5;
+    floor->set_material(material_a);
+    world.objects.push_back(floor);
+
+    auto ball = std::make_shared<Sphere>(Sphere{});
+    auto material_b = Material{};
+    material_b.color = make_color(1.0, 0.0, 0.0);
+    material_b.ambient = 0.5;
+    ball->set_transform(tf::translation(0.0, -3.5, -0.5));
+    ball->set_material(material_b);
+    world.objects.push_back(ball);
+
+    const auto xs = Intersections{Intersection{std::sqrt(2.0), floor}};
+    const auto comps = xs[0].prepare_computations(ray, xs);
+    EXPECT_EQ(world.shade_hit(comps, 5), make_color(0.93391, 0.69643, 0.69243));
 }

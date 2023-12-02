@@ -19,6 +19,8 @@ struct IntersectionComputation {
     // Refractive indices (entering and exiting).
     double n1{};
     double n2{};
+
+    [[nodiscard]] double schlick() const;
 };
 
 
