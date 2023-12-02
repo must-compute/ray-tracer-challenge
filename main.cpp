@@ -65,6 +65,8 @@ int main() {
     right_material.diffuse = 0.7;
     right_material.specular = 0.3;
     right_material.reflective = 0.5;
+    right_material.refractive_index = 1.5;
+    right_material.transparency = 0.7;
     right_sphere.set_material(right_material);
     world.objects.push_back(std::make_shared<Sphere>(right_sphere));
 
