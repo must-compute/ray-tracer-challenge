@@ -10,6 +10,7 @@
 
 class Shape;
 
+// TODO make into an aggregate (e.g. to allow using designated initializers)
 struct Material {
     Material();
 

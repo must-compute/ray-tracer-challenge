@@ -1,11 +1,12 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include "Material.h"
-#include "Sphere.h"
-#include "PointLight.h"
-#include "World.h"
-#include "Ray.h"
 #include "Plane.h"
+#include "PointLight.h"
+#include "Ray.h"
+#include "Sphere.h"
+#include "TestPattern.h"
+#include "World.h"
 
 TEST(World, CreatingWorld) {
     const auto w = World{};
@@ -258,4 +259,77 @@ TEST(World, RefractedColorAtMaxRecursiveDepth) {
     const auto xs = Intersections{Intersection{4.0, shape}, Intersection{6.0, shape}};
     const auto comps = xs[0].prepare_computations(ray, xs);
     EXPECT_EQ(world.refracted_color(comps, 0), make_color(0.0, 0.0, 0.0));
+}
+
+TEST(World, RefractedColorUnderTotalInternalReflection) {
+    auto world = make_default_world();
+
+    ASSERT_GT(world.objects.size(), 0);
+    auto &shape = world.objects.front();
+    auto material = Material{};
+    material.transparency = 1.0;
+    material.refractive_index = 1.5;
+    shape->set_material(material);
+
+    const auto loc = std::sqrt(2.0) / 2.0;
+    const auto ray = Ray{make_point(0.0, 0.0, loc), make_vector(0.0, 1.0, 0.0)};
+    const auto xs = Intersections{Intersection{-loc, shape}, Intersection{loc, shape}};
+    const auto comps = xs[1].prepare_computations(ray, xs);
+    EXPECT_EQ(world.refracted_color(comps, 5), make_color(0.0, 0.0, 0.0));
+}
+
+TEST(World, RefractedColorWithRefractedRay) {
+    auto world = make_default_world();
+
+    ASSERT_GT(world.objects.size(), 1);
+
+    auto &A = world.objects.front();
+    auto material_a = Material{};
+    material_a.ambient = 1.0;
+    material_a.pattern = std::make_shared<TestPattern>(TestPattern{});
+    A->set_material(material_a);
+
+    auto &B = world.objects[1];
+    auto material_b = Material{};
+    material_b.transparency = 1.0;
+    material_b.refractive_index = 1.5;
+    B->set_material(material_b);
+
+    const auto ray = Ray{make_point(0.0, 0.0, 0.1), make_vector(0.0, 1.0, 0.0)};
+    const auto xs = Intersections{
+            Intersection{-0.9899, A},
+            Intersection{-0.4899, B},
+            Intersection{0.4899, B},
+            Intersection{0.9899, A},
+    };
+    const auto comps = xs[2].prepare_computations(ray, xs);
+    EXPECT_EQ(world.refracted_color(comps, 5), make_color(0.0, 0.99888, 0.04725));
+}
+
+TEST(World, ShadeHitWithTransparentMaterial) {
+    auto world = make_default_world();
+    ASSERT_GT(world.objects.size(), 1);
+
+
+    auto floor = std::make_shared<Plane>(Plane{});
+    floor->set_transform(tf::translation(0.0, -1.0, 0.0));
+    auto material_a = Material{};
+    material_a.transparency = 0.5;
+    material_a.refractive_index = 1.5;
+    floor->set_material(material_a);
+    world.objects.push_back(floor);
+
+    auto ball = std::make_shared<Sphere>(Sphere{});
+    auto material_b = Material{};
+    material_b.color = make_color(1.0, 0.0, 0.0);
+    material_b.ambient = 0.5;
+    ball->set_material(material_b);
+    ball->set_transform(tf::translation(0.0, -3.5, -0.5));
+    world.objects.push_back(ball);
+
+    const auto loc = std::sqrt(2.0) / 2.0;
+    const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
+    const auto xs = Intersections{Intersection{std::sqrt(2.0), floor}};
+    const auto comps = xs[0].prepare_computations(ray, xs);
+    EXPECT_EQ(world.shade_hit(comps, 5), make_color(0.93642, 0.68642, 0.68642));
 }

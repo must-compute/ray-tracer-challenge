@@ -40,7 +40,8 @@ Intersections World::intersect(const Ray &ray) const {
 // We use these pragmas to get clang-tidy to suppress the infinite recursion warning.
 
 Color World::shade_hit(const IntersectionComputation &comps, size_t remaining) const { // NOLINT
-    // NOTE: without nudging the point away from the surface ever so slightly, tiny floating-point imprecisions would cause us to falsely intersect with ourselves and give a grainy shadow artifact called "acne".
+    // NOTE: without nudging the point away from the surface ever so slightly, tiny floating-point imprecisions would
+    // cause us to falsely intersect with ourselves and give a grainy shadow artifact called "acne".
     const bool in_shadow = is_shadowed(comps.over_point);
 
     if (light.has_value()) {
@@ -49,7 +50,8 @@ Color World::shade_hit(const IntersectionComputation &comps, size_t remaining) c
                                                                comps.normalv,
                                                                in_shadow);
         const auto reflected = reflected_color(comps, remaining);
-        return surface + reflected;
+        const auto refracted = refracted_color(comps, remaining);
+        return surface + reflected + refracted;
     }
     return Color{};
 }
@@ -79,7 +81,19 @@ Color World::reflected_color(const IntersectionComputation &comps, size_t remain
 Color World::refracted_color(const IntersectionComputation &comps, size_t remaining) const {
     assert(comps.object);
     if (const auto transparency = comps.object->material().transparency; transparency > 0.0 && remaining > 0) {
-        return make_color(1.0, 1.0, 1.0);
+        const auto n_ratio = comps.n1 / comps.n2;
+        const auto cos_i = comps.eyev.dot(comps.normalv);
+        const auto sin2_t = std::pow(n_ratio, 2) * (1 - std::pow(cos_i, 2));
+
+        if (sin2_t > 1.0) { // total internal reflection
+            return make_color(0.0, 0.0, 0.0);
+        }
+
+        const auto cos_t = std::sqrt(1.0 - sin2_t);
+        const auto refracted_ray_direction = comps.normalv * (n_ratio * cos_i - cos_t) - (comps.eyev * n_ratio);
+        const auto refracted_ray = Ray{comps.under_point, refracted_ray_direction};
+
+        return color_at(refracted_ray, remaining - 1) * comps.object->material().transparency;
     } else {
         return make_color(0.0, 0.0, 0.0);
     }
