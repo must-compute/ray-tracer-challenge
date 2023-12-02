@@ -28,6 +28,8 @@ public:
 
     [[nodiscard]] Material material() const;
 
+    [[nodiscard]] bool casts_shadow() const;
+
     void set_transform(const tf::Transform &tf_in);
 
     void set_material(const Material &m);

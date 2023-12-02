@@ -39,22 +39,14 @@ int main() {
     left_wall.set_material(left_wall_material);
     world.objects.push_back(std::make_shared<Plane>(left_wall));
 
-    auto right_wall_material = Material{};
-    right_wall_material.color = make_color(1.0, 0.9, 0.9);
-    right_wall_material.specular = 0.0;
-    right_wall_material.pattern = std::make_shared<RingPattern>(
-            RingPattern{make_color(0.0, 1.0, 1.0), make_color(1.0, 1.0, 0.0)});
-    auto right_wall = Plane{};
-    right_wall.set_transform(tf::translation(0.0, 0.0, 5.0) * tf::rotation_y(pi / 4.0) * tf::rotation_x(pi / 2.0));
-    right_wall.set_material(right_wall_material);
-    world.objects.push_back(std::make_shared<Plane>(right_wall));
-
     auto middle_sphere = Sphere{};
     middle_sphere.set_transform(tf::translation(-0.5, 1.0, 0.5));
     auto middle_material = Material{};
     middle_material.color = make_color(0.9, 0.1, 0.1);
-    middle_material.diffuse = 0.7;
-    middle_material.specular = 0.3;
+    middle_material.diffuse = 0.1;
+    middle_material.specular = 0.1;
+    middle_material.refractive_index = 1.5;
+    middle_material.transparency = 1.0;
     middle_sphere.set_material(middle_material);
     world.objects.push_back(std::make_shared<Sphere>(middle_sphere));
 
@@ -64,9 +56,7 @@ int main() {
     right_material.color = make_color(0.0, 1.0, 0.1);
     right_material.diffuse = 0.7;
     right_material.specular = 0.3;
-    right_material.reflective = 0.5;
-    right_material.refractive_index = 1.5;
-    right_material.transparency = 0.7;
+    right_material.reflective = 0.8;
     right_sphere.set_material(right_material);
     world.objects.push_back(std::make_shared<Sphere>(right_sphere));
 

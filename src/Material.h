@@ -25,6 +25,7 @@ struct Material {
     double reflective{}; // non-negative, typically between 0 and 1
     double transparency{}; // non-negative, typically between 0 and 1
     double refractive_index{};
+    bool casts_shadow{};
 
     [[nodiscard]] Color lighting(
             const Shape &object,

@@ -116,10 +116,21 @@ bool World::is_shadowed(const Tuple &point) const {
     const auto v = point - (light->position());
     const auto distance = v.magnitude();
     const auto ray = Ray{light->position(), v.normalize()};
-    const auto intersections = intersect(ray);
-    const auto maybe_hit = hit(intersections);
-    if (maybe_hit.has_value() && maybe_hit->t < distance) {
-        return true;
+    auto intersections = intersect(ray);
+    const auto size = intersections.size();
+    while (!intersections.empty()) {
+        const auto maybe_hit = hit(intersections);
+        if (!maybe_hit.has_value()) {
+            return false;
+        }
+        if (maybe_hit->t >= distance) {
+            return false;
+        }
+        if (maybe_hit->object && maybe_hit->object->casts_shadow()) {
+            return true;
+        }
+
+        intersections.erase(intersections.begin());
     }
 
     return false;

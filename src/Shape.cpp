@@ -8,6 +8,10 @@ Material Shape::material() const {
     return material_;
 }
 
+bool Shape::casts_shadow() const {
+    return material_.casts_shadow;
+}
+
 void Shape::set_transform(const tf::Transform &tf_in) {
     transform_ = tf_in;
 }
