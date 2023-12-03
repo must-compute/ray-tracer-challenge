@@ -3,7 +3,6 @@
 #include "Cube.h"
 #include "Ray.h"
 #include "Tuple.h"
-#include "Transformations.h"
 
 TEST(Cube, RayIntersectsCube) {
     const std::vector<std::tuple<std::string, Tuple, Tuple, double, double>> expected_results = {

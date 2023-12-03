@@ -1,7 +1,23 @@
 #include "Cylinder.h"
 
+double Cylinder::minimum() const {
+    return minimum_;
+}
+
+double Cylinder::maximum() const {
+    return maximum_;
+}
+
+void Cylinder::set_minimum(double min) {
+    minimum_ = min;
+}
+
+void Cylinder::set_maximum(double max) {
+    maximum_ = max;
+}
+
 Tuple Cylinder::local_normal_at(const Tuple &point_in_object_space) const {
-    return {};
+    return make_vector(point_in_object_space.x(), 0.0, point_in_object_space.z());
 }
 
 
@@ -27,5 +43,18 @@ Tuple Cylinder::local_normal_at(const Tuple &point_in_object_space) const {
     const auto t0 = (-b - std::sqrt(discriminant)) / (2 * a);
     const auto t1 = (-b + std::sqrt(discriminant)) / (2 * a);
     const auto cylinder = std::make_shared<Cylinder>(*this);
-    return {Intersection{t0, cylinder}, Intersection{t1, cylinder}};
+
+    Intersections xs{};
+    const auto y0 = ray.origin().y() + (t0 * ray.direction().y());
+    const auto y1 = ray.origin().y() + (t1 * ray.direction().y());
+
+    if (minimum_ < y0 && y0 < maximum_) {
+        xs.push_back(Intersection{t0, cylinder});
+    }
+
+    if (minimum_ < y1 && y1 < maximum_) {
+        xs.push_back(Intersection{t1, cylinder});
+    }
+
+    return xs;
 }

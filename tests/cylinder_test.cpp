@@ -1,9 +1,10 @@
 #include <gtest/gtest.h>
 
+#include <limits>
+
 #include "Cylinder.h"
 #include "Ray.h"
 #include "Tuple.h"
-#include "Transformations.h"
 
 TEST(Cylinder, RayMissesCylinder) {
     const std::vector<std::tuple<Tuple, Tuple>> test_table = {
@@ -34,5 +35,45 @@ TEST(Cylinder, RayHitsCylinder) {
         ASSERT_EQ(xs.size(), 2);
         EXPECT_TRUE(within_epsilon(xs[0].t, t0));
         EXPECT_TRUE(within_epsilon(xs[1].t, t1));
+    }
+}
+
+TEST(Cylinder, NormalVectorOnCylinder) {
+    const std::vector<std::tuple<Tuple, Tuple>> test_table = {
+            {make_point(1.0, 0.0, 0.0),  make_vector(1.0, 0.0, 0.0)},
+            {make_point(0.0, 5.0, -1.0), make_vector(0.0, 0.0, -1.0)},
+            {make_point(0.0, -2.0, 1.0), make_vector(0.0, 0.0, 1.0)},
+            {make_point(-1.0, 1.0, 0.0), make_vector(-1.0, 0.0, 0.0)},
+    };
+
+    for (const auto &[point, normal]: test_table) {
+        auto cylinder = Cylinder{};
+        EXPECT_EQ(cylinder.local_normal_at(point), normal);
+    }
+}
+
+TEST(Cylinder, DefaultMinimumAndMaximumForCylinder) {
+    const auto cylinder = Cylinder{};
+    EXPECT_EQ(cylinder.minimum(), -std::numeric_limits<double>::infinity());
+    EXPECT_EQ(cylinder.maximum(), std::numeric_limits<double>::infinity());
+}
+
+TEST(Cylinder, IntersectingConstrainedCylinder) {
+    const std::vector<std::tuple<Tuple, Tuple, size_t>> test_table = {
+            {make_point(0.0, 1.5, 0.0),  make_vector(0.1, 1.0, 0.0), 0},
+            {make_point(0.0, 3.0, -5.0), make_vector(0.0, 0.0, 1.0), 0},
+            {make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0), 0},
+            {make_point(0.0, 2.0, -5.0), make_vector(0.0, 0.0, 1.0), 0},
+            {make_point(0.0, 1.0, -5.0), make_vector(0.0, 0.0, 1.0), 0},
+            {make_point(0.0, 1.5, -2.0), make_vector(0.0, 0.0, 1.0), 2},
+    };
+
+    auto cylinder = Cylinder{};
+    cylinder.set_minimum(1.0);
+    cylinder.set_maximum(2.0);
+
+    for (const auto &[point, direction, count]: test_table) {
+        const auto ray = Ray{point, direction.normalize()};
+        EXPECT_EQ(cylinder.local_intersect(ray).size(), count);
     }
 }
