@@ -1,7 +1,6 @@
 #ifndef RAY_TRACER_CHALLENGE_CUBE_H
 #define RAY_TRACER_CHALLENGE_CUBE_H
 
-
 #include "Shape.h"
 #include "Tuple.h"
 
