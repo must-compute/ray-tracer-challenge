@@ -40,7 +40,7 @@ Tuple Cube::local_normal_at(const Tuple &point_in_object_space) const {
         return make_vector(0.0, 0.0, point_in_object_space.z());
     }
 
-    assert((false, "unreachable"));
+    assert(false); // unreachable
 }
 
 

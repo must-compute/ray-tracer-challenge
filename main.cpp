@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "StripePattern.h"
 #include "RingPattern.h"
+#include "Cube.h"
 
 
 int main() {
@@ -23,10 +24,10 @@ int main() {
 
     auto floor = Plane{};
     auto floor_material = Material{};
-    floor_material.color = make_color(1.0, 0.9, 0.9);
-    floor_material.specular = 0.0;
+    floor_material.ambient = 0.4;
+    floor_material.diffuse = 0.9;
     floor_material.pattern = std::make_shared<StripePattern>(
-            StripePattern{make_color(0.5, 0.2, 1.0), make_color(1.0, 0.2, 0.5)});
+            StripePattern{make_color(0.7, 0.7, 0.7), make_color(0.3, 0.3, 0.3)});
     floor.set_material(floor_material);
     world.objects.push_back(std::make_shared<Plane>(floor));
 
@@ -58,31 +59,30 @@ int main() {
     middle_sphere.set_material(middle_material);
     world.objects.push_back(std::make_shared<Sphere>(middle_sphere));
 
+    auto cube = Cube{};
+    auto cube_material = Material{};
+    cube_material.color = make_color(0.0, 1.0, 0.0);
+    cube.set_material(cube_material);
+
+    cube.set_transform(tf::translation(-2.0, 0.5, 1.5) * tf::rotation_y(pi / 8.0));
+    world.objects.push_back(std::make_shared<Cube>(cube));
+
     auto right_sphere = Sphere{};
-    right_sphere.set_transform(tf::translation(1.5, 1.0, -0.5) * tf::scaling(0.5, 0.5, 0.5));
+    right_sphere.set_transform(tf::translation(1.5, 0.5, 1.5) * tf::scaling(0.5, 0.5, 0.5));
     auto right_material = Material{};
     right_material.color = make_color(0.0, 1.0, 0.1);
+    right_material.ambient = 0.1;
     right_material.diffuse = 0.7;
     right_material.specular = 0.3;
-    right_material.reflective = 0.8;
+    right_material.reflective = 0.1;
     right_sphere.set_material(right_material);
     world.objects.push_back(std::make_shared<Sphere>(right_sphere));
-
-    auto left_sphere = Sphere{};
-    left_sphere.set_transform(
-            tf::translation(-1.5, 2.0, -0.75) * tf::rotation_z(pi / 4.0) * tf::scaling(1.0, 0.33, 0.33));
-    auto left_material = Material{};
-    left_material.color = make_color(0.2, 0.3, 1.0);
-    left_material.diffuse = 0.7;
-    left_material.specular = 0.3;
-    left_sphere.set_material(left_material);
-    world.objects.push_back(std::make_shared<Sphere>(left_sphere));
 
     world.light = PointLight{make_point(-10.0, 10.0, -10.0), white};
 
     auto camera = Camera<width, height>{pi / 3.0};
     camera.set_transform(
-            tf::view_transform(make_point(0.0, 1.5, -5), make_point(0.0, 1.0, 0.0), make_vector(0.0, 1.0, 0.0)));
+            tf::view_transform(make_point(1.0, 2.5, -5), make_point(0.0, 1.0, 0.0), make_vector(0.0, 1.0, 0.0)));
 
     auto canvas = camera.render(world);
 
