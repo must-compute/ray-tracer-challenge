@@ -2,6 +2,8 @@
 #define RAY_TRACER_CHALLENGE_CAMERA_H
 
 #include <cstddef>
+#include <thread>
+#include <vector>
 #include "Canvas.h"
 #include "Ray.h"
 #include "Transformations.h"
@@ -73,14 +75,22 @@ public:
 
     [[nodiscard]] Canvas<WIDTH, HEIGHT> render(const World &world) const {
         auto image = Canvas<WIDTH, HEIGHT>{};
+        std::vector<std::thread> threads;
 
         for (size_t y = 0; y < HEIGHT; ++y) {
-            for (size_t x = 0; x < WIDTH; ++x) {
-                const auto ray = ray_for_pixel(x, y);
-                const auto color = world.color_at(ray);
-                image.write_pixel(x, y, color);
-            }
+            threads.emplace_back([&, y] {
+                for (size_t x = 0; x < WIDTH; ++x) {
+                    const auto ray = ray_for_pixel(x, y);
+                    const auto color = world.color_at(ray);
+                    image.write_pixel(x, y, color);
+                }
+            });
         }
+
+        for (auto &thread: threads) {
+            thread.join();
+        }
+
         return image;
     }
 

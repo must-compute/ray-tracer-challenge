@@ -15,7 +15,7 @@
 int main() {
     using std::numbers::pi;
 
-    const size_t width = 200;
+    const size_t width = 250;
     const size_t height = 100;
     const Color white = make_color(1.0, 1.0, 1.0);
     const Color black = make_color(0.0, 0.0, 0.0);
@@ -31,21 +31,29 @@ int main() {
     world.objects.push_back(std::make_shared<Plane>(floor));
 
     auto left_wall_material = Material{};
-    left_wall_material.color = make_color(1.0, 0.9, 0.9);
-    left_wall_material.specular = 0.0;
-    left_wall_material.reflective = 0.1;
+    left_wall_material.color = make_color(0.4, 0.4, 1.0);
+    left_wall_material.diffuse = 0.9;
+    left_wall_material.ambient = 0.9;
     auto left_wall = Plane{};
     left_wall.set_transform(tf::translation(0.0, 0.0, 5.0) * tf::rotation_y(-pi / 4.0) * tf::rotation_x(pi / 2.0));
     left_wall.set_material(left_wall_material);
-    world.objects.push_back(std::make_shared<Plane>(left_wall));
+    //world.objects.push_back(std::make_shared<Plane>(left_wall));
+
+    auto dome_material = Material{};
+    auto dome = Sphere{};
+    dome.set_transform(tf::scaling(100.0, 100.0, 100.0));
+    world.objects.push_back(std::make_shared<Sphere>(dome));
 
     auto middle_sphere = Sphere{};
     middle_sphere.set_transform(tf::translation(-0.5, 1.0, 0.5));
     auto middle_material = Material{};
     middle_material.color = make_color(0.9, 0.1, 0.1);
+    middle_material.ambient = 0.1;
     middle_material.diffuse = 0.1;
-    middle_material.specular = 0.1;
-    middle_material.refractive_index = 1.5;
+    middle_material.specular = 1.0;
+    middle_material.shininess = 300.0;
+    middle_material.refractive_index = 1.3;
+    middle_material.reflective = 0.9;
     middle_material.transparency = 1.0;
     middle_sphere.set_material(middle_material);
     world.objects.push_back(std::make_shared<Sphere>(middle_sphere));
