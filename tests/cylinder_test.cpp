@@ -77,3 +77,28 @@ TEST(Cylinder, IntersectingConstrainedCylinder) {
         EXPECT_EQ(cylinder.local_intersect(ray).size(), count);
     }
 }
+
+TEST(Cylinder, DefaultClosedValueForCylinder) {
+    const auto cylinder = Cylinder{};
+    EXPECT_FALSE(cylinder.closed());
+}
+
+TEST(Cylinder, IntersectingCapsOfClosedCylinder) {
+    const std::vector<std::tuple<Tuple, Tuple, size_t>> test_table = {
+            {make_point(0.0, 3.0, 0.0),   make_vector(0.0, -1.0, 0.0), 2},
+            {make_point(0.0, 3.0, -2.0),  make_vector(0.0, -1.0, 2.0), 2},
+            {make_point(0.0, 4.0, -2.0),  make_vector(0.0, -1.0, 1.0), 2},
+            {make_point(0.0, 0.0, -2.0),  make_vector(0.0, 1.0, 2.0),  2},
+            {make_point(0.0, -1.0, -2.0), make_vector(0.0, 1.0, 1.0),  2},
+    };
+
+    auto cylinder = Cylinder{};
+    cylinder.set_minimum(1.0);
+    cylinder.set_maximum(2.0);
+    cylinder.set_closed(true);
+
+    for (const auto &[point, direction, count]: test_table) {
+        const auto ray = Ray{point, direction.normalize()};
+        EXPECT_EQ(cylinder.local_intersect(ray).size(), count);
+    }
+}

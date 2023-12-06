@@ -1,5 +1,12 @@
 #include "Cylinder.h"
 
+// helper function to check if intersection at t is within a radius of 1.0 from the y-axis.
+[[nodiscard]] bool is_ray_cap_intersecting(const Ray &ray, double t) {
+    const auto x = ray.origin().x() + t * ray.direction().x();
+    const auto z = ray.origin().z() + t * ray.direction().z();
+    return (std::pow(x, 2) + std::pow(z, 2)) <= 1.0;
+}
+
 double Cylinder::minimum() const {
     return minimum_;
 }
@@ -23,10 +30,12 @@ Tuple Cylinder::local_normal_at(const Tuple &point_in_object_space) const {
 
 [[nodiscard]] Intersections Cylinder::local_intersect(const Ray &ray) {
     const auto a = std::pow(ray.direction().x(), 2) + std::pow(ray.direction().z(), 2);
+    Intersections xs{};
+    intersect_caps(ray, xs);
 
-    // Ray is parallel to the y axis.
+    // Ray is parallel to the y-axis, so we only need to check intersections on caps;
     if (std::abs(a) < EPSILON) {
-        return {};
+        return xs;
     }
 
     const auto b = 2 * ray.origin().x() * ray.direction().x() +
@@ -44,7 +53,6 @@ Tuple Cylinder::local_normal_at(const Tuple &point_in_object_space) const {
     const auto t1 = (-b + std::sqrt(discriminant)) / (2 * a);
     const auto cylinder = std::make_shared<Cylinder>(*this);
 
-    Intersections xs{};
     const auto y0 = ray.origin().y() + (t0 * ray.direction().y());
     const auto y1 = ray.origin().y() + (t1 * ray.direction().y());
 
@@ -57,4 +65,33 @@ Tuple Cylinder::local_normal_at(const Tuple &point_in_object_space) const {
     }
 
     return xs;
+}
+
+bool Cylinder::closed() const {
+    return closed_;
+}
+
+void Cylinder::set_closed(bool closed) {
+    closed_ = closed;
+}
+
+void Cylinder::intersect_caps(const Ray &ray, Intersections &xs) const {
+    // caps only matter if the cylinder is closed and might be intersected by the ray (i.e. ray not parallel to the cap)
+    if ((!closed_) || within_epsilon(ray.direction().y(), 0.0)) {
+        return;
+    }
+
+    const auto shared_cylinder = std::make_shared<Cylinder>(*this);
+
+    // check lower cap
+    auto t = (minimum_ - ray.origin().y()) / ray.direction().y();
+    if (is_ray_cap_intersecting(ray, t)) {
+        xs.push_back(Intersection{t, shared_cylinder});
+    }
+
+    // check upper cap
+    t = (maximum_ - ray.origin().y()) / ray.direction().y();
+    if (is_ray_cap_intersecting(ray, t)) {
+        xs.push_back(Intersection{t, shared_cylinder});
+    }
 }
