@@ -102,3 +102,23 @@ TEST(Cylinder, IntersectingCapsOfClosedCylinder) {
         EXPECT_EQ(cylinder.local_intersect(ray).size(), count);
     }
 }
+
+TEST(Cylinder, NormalVectorOnCylinderEndCaps) {
+    const std::vector<std::tuple<Tuple, Tuple>> test_table = {
+            {make_point(0.0, 1.0, 0.0), make_vector(0.0, -1.0, 0.0)},
+            {make_point(0.5, 1.0, 0.0), make_vector(0.0, -1.0, 0.0)},
+            {make_point(0.0, 1.0, 0.5), make_vector(0.0, -1.0, 0.0)},
+            {make_point(0.0, 2.0, 0.0), make_vector(0.0, 1.0, 0.0)},
+            {make_point(0.5, 2.0, 0.0), make_vector(0.0, 1.0, 0.0)},
+            {make_point(0.0, 2.0, 0.5), make_vector(0.0, 1.0, 0.0)},
+    };
+
+    auto cylinder = Cylinder{};
+    cylinder.set_minimum(1.0);
+    cylinder.set_maximum(2.0);
+    cylinder.set_closed(true);
+
+    for (const auto &[point, normal]: test_table) {
+        EXPECT_EQ(cylinder.local_normal_at(point), normal);
+    }
+}

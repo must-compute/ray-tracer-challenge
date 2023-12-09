@@ -24,7 +24,16 @@ void Cylinder::set_maximum(double max) {
 }
 
 Tuple Cylinder::local_normal_at(const Tuple &point_in_object_space) const {
-    return make_vector(point_in_object_space.x(), 0.0, point_in_object_space.z());
+    // square of the distance from the y-axis
+    const auto dist = std::pow(point_in_object_space.x(), 2) + std::pow(point_in_object_space.z(), 2);
+
+    if (dist < 1 && point_in_object_space.y() >= maximum_ - EPSILON) { // ON TOP CAP
+        return make_vector(0.0, 1.0, 0.0);
+    } else if (dist < 1 && point_in_object_space.y() >= minimum_ - EPSILON) { // ON BOTTOM CAP
+        return make_vector(0.0, -1.0, 0.0);
+    } else { // ON CYLINDER
+        return make_vector(point_in_object_space.x(), 0.0, point_in_object_space.z());
+    }
 }
 
 
