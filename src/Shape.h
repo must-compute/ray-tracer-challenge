@@ -41,7 +41,7 @@ protected:
 
     [[nodiscard]] virtual Intersections local_intersect(const Ray &ray) = 0;
 
-    [[nodiscard]] virtual Tuple local_normal_at(const Tuple &point_in_world_space) const = 0;
+    [[nodiscard]] virtual Tuple local_normal_at(const Tuple &point_in_object_space) const = 0;
 
 };
 
