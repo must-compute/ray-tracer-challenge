@@ -11,6 +11,7 @@
 #include "StripePattern.h"
 #include "RingPattern.h"
 #include "Cube.h"
+#include "Cone.h"
 
 
 int main() {
@@ -77,6 +78,19 @@ int main() {
     right_material.reflective = 0.1;
     right_sphere.set_material(right_material);
     world.objects.push_back(std::make_shared<Sphere>(right_sphere));
+
+    auto cone = std::make_shared<Cone>(Cone{});
+    cone->set_minimum(0.0);
+    cone->set_maximum(1.0);
+    cone->set_transform(tf::translation(2.0, 0.0, 0.0) * tf::scaling(0.4, 1.5, 0.4));
+    auto cone_material = Material{};
+    cone_material.color = make_color(1.0, 1.0, 0.0);
+    cone_material.ambient = 0.3;
+    cone_material.diffuse = 0.6;
+    cone_material.specular = 0.3;
+    cone_material.reflective = 0.0;
+    cone->set_material(cone_material);
+    world.objects.push_back(cone);
 
     world.light = PointLight{make_point(-10.0, 10.0, -10.0), white};
 
