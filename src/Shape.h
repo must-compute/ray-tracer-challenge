@@ -1,6 +1,8 @@
 #ifndef RAY_TRACER_CHALLENGE_SHAPE_H
 #define RAY_TRACER_CHALLENGE_SHAPE_H
 
+#include <memory>
+
 #include "Matrix.h"
 #include "Material.h"
 #include "Transformations.h"
@@ -30,14 +32,19 @@ public:
 
     [[nodiscard]] bool casts_shadow() const;
 
+    [[nodiscard]] std::shared_ptr<Shape> parent() const;
+
     void set_transform(const tf::Transform &tf_in);
 
     void set_material(const Material &m);
+
+    void set_parent(const std::shared_ptr<Shape> parent);
 
 
 protected:
     tf::Transform transform_;
     Material material_;
+    std::shared_ptr<Shape> parent_;
 
     [[nodiscard]] virtual Intersections local_intersect(const Ray &ray) = 0;
 

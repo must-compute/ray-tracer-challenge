@@ -12,12 +12,20 @@ bool Shape::casts_shadow() const {
     return material_.casts_shadow;
 }
 
+[[nodiscard]] std::shared_ptr<Shape> Shape::parent() const {
+    return parent_;
+}
+
 void Shape::set_transform(const tf::Transform &tf_in) {
     transform_ = tf_in;
 }
 
 void Shape::set_material(const Material &m) {
     material_ = m;
+}
+
+void Shape::set_parent(const std::shared_ptr<Shape> parent) {
+    parent_ = parent;
 }
 
 Intersections Shape::intersect(const Ray &ray) {

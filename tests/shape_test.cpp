@@ -61,3 +61,8 @@ TEST(TestShape, ComputingNormalOnTransformedShape) {
     const double loc = std::sqrt(2.0) / 2.0;
     EXPECT_EQ(test_shape.normal_at(make_point(0.0, loc, -loc)), make_vector(0.0, 0.97014, -0.24254));
 }
+
+TEST(TestShape, ShapeHasParentAttribute) {
+    const auto s = TestShape{};
+    EXPECT_EQ(s.parent(), nullptr);
+}
