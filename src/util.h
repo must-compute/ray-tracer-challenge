@@ -2,6 +2,12 @@
 #define RAY_TRACER_CHALLENGE_UTIL_H
 
 #include <cmath>
+#include <stdexcept>
+
+class NotImplementedException : public std::logic_error {
+public:
+    NotImplementedException() : std::logic_error("Intentionally not implemented!!!") {}
+};
 
 constexpr double EPSILON = 1e-4;
 

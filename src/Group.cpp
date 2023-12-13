@@ -1,10 +1,5 @@
 #include "Group.h"
-#include <stdexcept>
-
-class NotImplementedException : public std::logic_error {
-public:
-    NotImplementedException() : std::logic_error("Intentionally not implemented!!!") {}
-};
+#include "util.h"
 
 std::vector<std::shared_ptr<Shape>> Group::children() const {
     return children_;
