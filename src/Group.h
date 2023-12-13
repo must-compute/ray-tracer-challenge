@@ -13,7 +13,7 @@ public:
 
     [[nodiscard]] std::vector<std::shared_ptr<Shape>> children() const;
 
-    void add_child(const std::shared_ptr<Shape> &child);
+    static void add_child(const std::shared_ptr<Group> &group, const std::shared_ptr<Shape> &child);
 
     [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 

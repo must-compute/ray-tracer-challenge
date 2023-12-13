@@ -5,11 +5,9 @@ std::vector<std::shared_ptr<Shape>> Group::children() const {
     return children_;
 }
 
-// TODO: stare at this for a bit. A const-ref to a shared_ptr doesn't prevent us from mutating the pointed-at Shape. This seems wrong.
-void Group::add_child(const std::shared_ptr<Shape> &child) {
-    children_.push_back(child);
-    // TODO: I'm not sure it makes sense (or that it's safe) to create a shared ptr to "this" in here. Walk through what happens when a tree of these is allocated and deallocated
-    child->set_parent(std::make_shared<Group>(*this));
+void Group::add_child(const std::shared_ptr<Group> &group, const std::shared_ptr<Shape> &child) {
+    group->children_.push_back(child);
+    child->set_parent(group);
 }
 
 Intersections Group::local_intersect(const Ray &ray) {
