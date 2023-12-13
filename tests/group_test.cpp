@@ -6,16 +6,16 @@
 #include "TestShape.h"
 
 TEST(Group, CreateNewGroup) {
-    const auto g = Group{};
-    EXPECT_EQ(g.transform(), tf::Transform::identity());
-    EXPECT_EQ(g.children().size(), 0);
+    const auto g = Group::make_group();
+    EXPECT_EQ(g->transform(), tf::Transform::identity());
+    EXPECT_EQ(g->children().size(), 0);
 }
 
 TEST(Group, AddingChildToGroup) {
-    auto g = std::make_shared<Group>(Group{});
+    auto g = Group::make_group();
     const auto s = std::make_shared<TestShape>(TestShape{});
     ASSERT_EQ(g->children().size(), 0);
-    Group::add_child(g, s);
+    g->add_child(s);
     ASSERT_EQ(g->children().size(), 1);
     EXPECT_EQ(g->children()[0], s);
     ASSERT_TRUE(s->parent());
@@ -23,21 +23,21 @@ TEST(Group, AddingChildToGroup) {
 }
 
 TEST(Group, IntersectingRayWithEmptyGroup) {
-    auto g = Group{};
+    auto g = Group::make_group();
     const auto r = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 0.0, 1.0)};
-    EXPECT_EQ(g.local_intersect(r).size(), 0);
+    EXPECT_EQ(g->local_intersect(r).size(), 0);
 }
 
 TEST(Group, IntersectingRayWithNonEmptyGroup) {
-    auto g = std::make_shared<Group>(Group{});
+    auto g = Group::make_group();
     auto s1 = std::make_shared<Sphere>(Sphere{});
     auto s2 = std::make_shared<Sphere>(Sphere{});
     auto s3 = std::make_shared<Sphere>(Sphere{});
     s2->set_transform(tf::translation(0.0, 0.0, -3.0));
     s3->set_transform(tf::translation(5.0, 0.0, 0.0));
-    Group::add_child(g, s1);
-    Group::add_child(g, s2);
-    Group::add_child(g, s3);
+    g->add_child(s1);
+    g->add_child(s2);
+    g->add_child(s3);
 
     const auto r = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
     const auto xs = g->local_intersect(r);
@@ -53,13 +53,13 @@ TEST(Group, IntersectingRayWithNonEmptyGroup) {
 }
 
 TEST(Group, IntersectingTransformedGroup) {
-    auto g = std::make_shared<Group>(Group{});
+    auto g = Group::make_group();
     g->set_transform(tf::scaling(2.0, 2.0, 2.0));
 
     auto s1 = std::make_shared<Sphere>(Sphere{});
     s1->set_transform(tf::translation(5.0, 0.0, 0.0));
 
-    Group::add_child(g, s1);
+    g->add_child(s1);
 
     const auto r = Ray{make_point(10.0, 0.0, -10.0), make_vector(0.0, 0.0, 1.0)};
     const auto xs = g->intersect(r);
