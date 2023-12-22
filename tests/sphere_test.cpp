@@ -5,6 +5,7 @@
 #include "Material.h"
 #include "Matrix.h"
 #include "Transformations.h"
+#include "Group.h"
 
 TEST(Sphere, SphereDefaultTransformation) {
     const auto s = Sphere{};
@@ -85,4 +86,18 @@ TEST(Sphere, HelperForProducingGlassSphere) {
     EXPECT_EQ(sphere.transform(), tf::Transform::identity());
     EXPECT_EQ(sphere.material().transparency, 1.0);
     EXPECT_EQ(sphere.material().refractive_index, 1.5);
+}
+
+TEST(Sphere, ConvertingPointToWorldSpaceToObjectSpace) {
+    auto g1 = Group::make_group();
+    g1->set_transform(tf::rotation_y(std::numbers::pi / 2));
+    auto g2 = Group::make_group();
+    g2->set_transform(tf::scaling(2.0, 2.0, 2.0));
+    g1->add_child(g2);
+
+    auto s = std::make_shared<Sphere>(Sphere{});
+    s->set_transform(tf::translation(5.0, 0.0, 0.0));
+    g2->add_child(s);
+
+    EXPECT_EQ(s->world_to_object(make_point(-2.0, 0.0, -10.0)), make_point(0.0, 0.0, -1.0));
 }
