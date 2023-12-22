@@ -52,3 +52,14 @@ Tuple Shape::world_to_object(const Tuple& point_in_world_space) const {
     // Recursion base case.
     return transform_.inverse() * point_in_world_space;
 }
+
+Tuple Shape::normal_to_world(const Tuple& normal_in_object_space) const {
+    auto normal = transform_.inverse().transpose() * normal_in_object_space;
+    normal = BaseTuple<TupleOrColor::TUPLE>{normal.x(), normal.y(), normal.z(), 0.0};
+    normal = normal.normalize();
+
+    if (parent_ != nullptr) {
+        normal = parent_->normal_to_world(normal);
+    }
+    return normal;
+}

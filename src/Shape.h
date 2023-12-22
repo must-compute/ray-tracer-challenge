@@ -29,6 +29,8 @@ public:
 
     [[nodiscard]] Tuple world_to_object(const Tuple& point_in_world_space) const;
 
+    [[nodiscard]] Tuple normal_to_world(const Tuple& normal_in_object_space) const;
+
     [[nodiscard]] tf::Transform transform() const;
 
     [[nodiscard]] Material material() const;
