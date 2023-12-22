@@ -7,6 +7,7 @@
 #include "Sphere.h"
 #include "Transformations.h"
 #include "TestShape.h"
+#include "StripePattern.h"
 
 TEST(Group, CreateNewGroup) {
     const auto g = Group::make_group();
@@ -69,7 +70,7 @@ TEST(Group, IntersectingTransformedGroup) {
     EXPECT_EQ(xs.size(), 2);
 }
 
-TEST(Sphere, ConvertingPointToWorldSpaceToObjectSpace) {
+TEST(Group, ConvertingPointToWorldSpaceToObjectSpace) {
     auto g1 = Group::make_group();
     g1->set_transform(tf::rotation_y(std::numbers::pi / 2));
     auto g2 = Group::make_group();
@@ -83,7 +84,7 @@ TEST(Sphere, ConvertingPointToWorldSpaceToObjectSpace) {
     EXPECT_EQ(s->world_to_object(make_point(-2.0, 0.0, -10.0)), make_point(0.0, 0.0, -1.0));
 }
 
-TEST(Sphere, ConvertingNormalFromObjectSpaceToWorldSpace) {
+TEST(Group, ConvertingNormalFromObjectSpaceToWorldSpace) {
     auto g1 = Group::make_group();
     g1->set_transform(tf::rotation_y(std::numbers::pi / 2));
     auto g2 = Group::make_group();
@@ -99,7 +100,7 @@ TEST(Sphere, ConvertingNormalFromObjectSpaceToWorldSpace) {
 }
 
 
-TEST(Sphere, FindingTheNormalOnAChildObject) {
+TEST(Group, FindingTheNormalOnAChildObject) {
     auto g1 = Group::make_group();
     g1->set_transform(tf::rotation_y(std::numbers::pi / 2));
     auto g2 = Group::make_group();
@@ -111,4 +112,31 @@ TEST(Sphere, FindingTheNormalOnAChildObject) {
     g2->add_child(s);
 
     EXPECT_EQ(s->normal_at(make_point(1.7321, 1.1547, -5.5774)), make_vector(0.2857, 0.4286, -0.8571));
+}
+
+TEST(Group, StripesPatternWithGroupTransformation) {
+    const auto white = make_color(1.0, 1.0, 1.0);
+    const auto black = make_color(0.0, 0.0, 0.0);
+
+    auto g1 = Group::make_group();
+    g1->set_transform(tf::translation(0.3, 0.0, 0.0));
+    auto g2 = Group::make_group();
+    g2->set_transform(tf::translation(0.4, 0.0, 0.0));
+    g1->add_child(g2);
+
+    auto s = std::make_shared<Sphere>(Sphere{});
+    s->set_transform(tf::translation(0.3, 0.0, 0.0));
+    g2->add_child(s);
+
+    // All the transforms (parent groups, and the shape itself, and the pattern itself) should add up to x being offset by 1.1.
+    auto pattern = StripePattern{white, black};
+    pattern.set_transform(tf::translation(0.1, 0.1, 0.1));
+
+    // That means we expect the pattern to transition at 0.1, 1.1, 2.1, etc.
+    EXPECT_EQ(pattern.pattern_at_shape(*s, make_point(0.0999, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at_shape(*s, make_point(0.1001, 0.0, 0.0)), black);
+    EXPECT_EQ(pattern.pattern_at_shape(*s, make_point(1.0999, 0.0, 0.0)), black);
+    EXPECT_EQ(pattern.pattern_at_shape(*s, make_point(1.1001, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at_shape(*s, make_point(2.0999, 0.0, 0.0)), white);
+    EXPECT_EQ(pattern.pattern_at_shape(*s, make_point(2.1001, 0.0, 0.0)), black);
 }

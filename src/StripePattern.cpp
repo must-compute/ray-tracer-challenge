@@ -2,8 +2,6 @@
 #include "Shape.h"
 
 
-//StripePattern::StripePattern() : StripePattern{Color{}, Color{}} {}
-
 StripePattern::StripePattern(const Color &a, const Color &b) : Pattern{a, b} {}
 
 Color StripePattern::pattern_at(const Tuple &point) const {
