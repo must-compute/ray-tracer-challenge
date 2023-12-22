@@ -34,13 +34,9 @@ Intersections Shape::intersect(const Ray& ray) {
 }
 
 Tuple Shape::normal_at(const Tuple& point_in_world_space) const {
-    const auto point_in_object_space = transform_.inverse() * point_in_world_space;
+    const auto point_in_object_space = world_to_object(point_in_world_space);
     const auto normal_in_object_space = local_normal_at(point_in_object_space);
-    auto normal_in_world_space = transform_.inverse().transpose() * normal_in_object_space;
-    // NOTE: we reset w to 0 in case the above operations give a non-zero w. Vectors should always have their w set to 0.
-    normal_in_world_space = make_vector(normal_in_world_space.x(), normal_in_world_space.y(),
-                                        normal_in_world_space.z());
-    return normal_in_world_space.normalize();
+    return normal_to_world(normal_in_object_space);
 }
 
 Tuple Shape::world_to_object(const Tuple& point_in_world_space) const {
@@ -55,7 +51,8 @@ Tuple Shape::world_to_object(const Tuple& point_in_world_space) const {
 
 Tuple Shape::normal_to_world(const Tuple& normal_in_object_space) const {
     auto normal = transform_.inverse().transpose() * normal_in_object_space;
-    normal = BaseTuple<TupleOrColor::TUPLE>{normal.x(), normal.y(), normal.z(), 0.0};
+    // NOTE: we reset w to 0 in case the above operations give a non-zero w. Vectors should always have their w set to 0.
+    normal = make_vector(normal.x(), normal.y(), normal.z());
     normal = normal.normalize();
 
     if (parent_ != nullptr) {
