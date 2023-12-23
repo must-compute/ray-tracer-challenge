@@ -12,3 +12,7 @@ Intersections TestShape::local_intersect(const Ray &ray) {
 Ray TestShape::local_ray() const {
     return local_ray_;
 }
+
+Bounds TestShape::make_bounds() const {
+    return {};
+}

@@ -6,12 +6,13 @@
 
 #include "Shape.h"
 
+class Bounds;
+
 class Group final : public Shape, public std::enable_shared_from_this<Group> {
 private:
     Group() = default;
 
 public:
-
     static std::shared_ptr<Group> make_group();
 
     bool operator==(const Group &other) const = delete;
@@ -23,6 +24,8 @@ public:
     [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 
     [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space) const override;
+
+    [[nodiscard]] Bounds make_bounds() const override;
 
 private:
     std::vector<std::shared_ptr<Shape>> children_;

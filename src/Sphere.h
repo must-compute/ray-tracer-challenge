@@ -10,6 +10,8 @@
 
 class Ray;
 
+class Bounds;
+
 class Sphere final : public Shape {
 public:
     bool operator==(const Sphere &other) const = default;
@@ -17,6 +19,8 @@ public:
     [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 
     [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space) const override;
+
+    [[nodiscard]] Bounds make_bounds() const override;
 };
 
 

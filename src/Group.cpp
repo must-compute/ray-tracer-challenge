@@ -28,3 +28,11 @@ Tuple Group::local_normal_at(const Tuple &point_in_object_space) const {
 std::shared_ptr<Group> Group::make_group() {
     return std::make_shared<Group>(Group{});
 }
+
+Bounds Group::make_bounds() const {
+    // First, get the bounds of each child in the group.
+    for (const auto &child: children()) {
+        const auto b = child->make_bounds();
+    }
+    return {};
+}

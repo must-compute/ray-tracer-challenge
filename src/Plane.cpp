@@ -15,3 +15,9 @@ Tuple Plane::local_normal_at(const Tuple &point_in_object_space) const {
 
     return {Intersection{t, std::make_shared<Plane>(*this)}};
 }
+
+Bounds Plane::make_bounds() const {
+    return {make_point(-std::numeric_limits<double>::infinity(), 0.0, -std::numeric_limits<double>::infinity()),
+            make_point(std::numeric_limits<double>::infinity(), 0.0, std::numeric_limits<double>::infinity())
+    };
+}

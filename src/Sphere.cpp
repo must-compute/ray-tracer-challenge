@@ -1,4 +1,3 @@
-
 #include "Sphere.h"
 #include "Tuple.h"
 #include "Ray.h"
@@ -40,6 +39,11 @@ Tuple Sphere::local_normal_at(const Tuple &point_in_object_space) const {
     }
     return {Intersection{t1, copy}, Intersection{t2, copy}};
 }
+
+Bounds Sphere::make_bounds() const {
+    return Bounds{make_point(-1.0, -1.0, -1.0), make_point(1.0, 1.0, 1.0)};
+}
+
 
 [[nodiscard]] Sphere make_glass_sphere() {
     auto sphere = Sphere{};

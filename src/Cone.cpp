@@ -1,4 +1,5 @@
 #include "Cone.h"
+#include <numbers>
 
 [[nodiscard]] bool is_ray_cap_intersecting(const Ray &ray, double t, double cap_y) {
     const auto x = ray.origin().x() + t * ray.direction().x();
@@ -107,4 +108,11 @@ void Cone::intersect_caps(const Ray &ray, Intersections &xs) const {
     if (is_ray_cap_intersecting(ray, t, maximum_)) {
         xs.push_back(Intersection{t, shared_cone});
     }
+}
+
+Bounds Cone::make_bounds() const {
+    const double denom = std::tan(std::numbers::pi / 8.0);
+    const auto min_radius = minimum() / denom;
+    const auto max_radius = maximum() / denom;
+    return {make_point(min_radius, minimum(), min_radius), make_point(max_radius, maximum(), max_radius)};
 }

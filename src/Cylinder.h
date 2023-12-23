@@ -8,8 +8,9 @@
 
 class Ray;
 
-class Cylinder final : public Shape {
+class Bounds;
 
+class Cylinder final : public Shape {
 public:
     bool operator==(const Cylinder &other) const = default;
 
@@ -31,6 +32,8 @@ public:
     [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 
     [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space) const override;
+
+    [[nodiscard]] Bounds make_bounds() const override;
 
 private:
     double minimum_ = -std::numeric_limits<double>::infinity();

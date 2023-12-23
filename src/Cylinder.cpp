@@ -104,3 +104,7 @@ void Cylinder::intersect_caps(const Ray &ray, Intersections &xs) const {
         xs.push_back(Intersection{t, shared_cylinder});
     }
 }
+
+Bounds Cylinder::make_bounds() const {
+    return {make_point(-1.0, minimum(), -1.0), make_point(1.0, maximum(), 1.0)};
+}
