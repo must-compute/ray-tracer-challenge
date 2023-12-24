@@ -89,3 +89,49 @@ TEST(BoundingBox, GroupHasBoundingBoxContainingChildren) {
     EXPECT_EQ(box.minimum(), make_point(-4.5, -3.0, -5.0));
     EXPECT_EQ(box.maximum(), make_point(4.0, 7.0, 4.5));
 }
+
+TEST(BoundingBox, IntersectingRayWithBoundingBoxAtOrigin) {
+    const auto box = BoundingBox{make_point(-1.0, -1.0, -1.0), make_point(1.0, 1.0, 1.0)};
+    const std::vector<std::tuple<Tuple, Tuple, bool>> table = {
+            {make_point(5.0, 0.5, 0.0),  make_vector(-1.0, 0.0, 0.0), true},
+            {make_point(-5.0, 0.5, 0.0), make_vector(1.0, 0.0, 0.0),  true},
+            {make_point(0.5, 5.0, 0.0),  make_vector(0.0, -1.0, 0.0), true},
+            {make_point(0.5, -5.0, 0.0), make_vector(0.0, 1.0, 0.0),  true},
+            {make_point(0.5, 0.0, 5.0),  make_vector(0.0, 0.0, -1.0), true},
+            {make_point(0.5, 0.0, -5.0), make_vector(0.0, 0.0, 1.0),  true},
+            {make_point(0.0, 0.5, 0.0),  make_vector(0.0, 0.0, 1.0),  true},
+            {make_point(-2.0, 0.0, 0.0), make_vector(2.0, 4.0, 6.0),  false},
+            {make_point(0.0, -2.0, 0.0), make_vector(6.0, 2.0, 4.0),  false},
+            {make_point(0.0, 0.0, -2.0), make_vector(4.0, 6.0, 2.0),  false},
+            {make_point(2.0, 0.0, 2.0),  make_vector(0.0, 0.0, -1.0), false},
+            {make_point(0.0, 2.0, 2.0),  make_vector(0.0, -1.0, 0.0), false},
+            {make_point(2.0, 2.0, 0.0),  make_vector(-1.0, 0.0, 0.0), false},
+    };
+    for (const auto &[origin, direction, result]: table) {
+        const auto ray = Ray{origin, direction.normalize()};
+        EXPECT_EQ(box.intersects(ray), result);
+    }
+}
+
+TEST(BoundingBox, IntersectingRayWithNonCubicBoundingBox) {
+    const auto box = BoundingBox{make_point(5.0, -2.0, 0.0), make_point(11.0, 4.0, 7.0)};
+    const std::vector<std::tuple<Tuple, Tuple, bool>> table = {
+            {make_point(15.0, 1.0, 2.0),  make_vector(-1.0, 0.0, 0.0), true},
+            {make_point(-5.0, -1.0, 4.0), make_vector(1.0, 0.0, 0.0),  true},
+            {make_point(7.0, 6.0, 5.0),   make_vector(0.0, -1.0, 0.0), true},
+            {make_point(9.0, -5.0, 6.0),  make_vector(0.0, 1.0, 0.0),  true},
+            {make_point(8.0, 2.0, 12.0),  make_vector(0.0, 0.0, -1.0), true},
+            {make_point(6.0, 0.0, -5.0),  make_vector(0.0, 0.0, 1.0),  true},
+            {make_point(8.0, 1.0, 3.5),   make_vector(0.0, 0.0, 1.0),  true},
+            {make_point(9.0, -1.0, -8.0), make_vector(2.0, 4.0, 6.0),  false},
+            {make_point(8.0, 3.0, -4.0),  make_vector(6.0, 2.0, 4.0),  false},
+            {make_point(9.0, -1.0, -2.0), make_vector(4.0, 6.0, 2.0),  false},
+            {make_point(4.0, 0.0, 9.0),   make_vector(0.0, 0.0, -1.0), false},
+            {make_point(8.0, 6.0, -1.0),  make_vector(0.0, -1.0, 0.0), false},
+            {make_point(12.0, 5.0, 4.0),  make_vector(-1.0, 0.0, 0.0), false},
+    };
+    for (const auto &[origin, direction, result]: table) {
+        const auto ray = Ray{origin, direction.normalize()};
+        EXPECT_EQ(box.intersects(ray), result);
+    }
+}

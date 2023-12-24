@@ -71,3 +71,40 @@ bool BoundingBox::contains_box(const BoundingBox &other) const {
            maximum_.z() >= other.maximum().z();
 }
 
+bool BoundingBox::intersects(const Ray &ray) const {
+    const auto [x_t_min, x_t_max] = check_axis(ray.origin().x(), ray.direction().x(), minimum_.x(), maximum_.x());
+    const auto [y_t_min, y_t_max] = check_axis(ray.origin().y(), ray.direction().y(), minimum_.y(), maximum_.y());
+    const auto [z_t_min, z_t_max] = check_axis(ray.origin().z(), ray.direction().z(), minimum_.z(), maximum_.z());
+
+    const std::vector<double> mins{x_t_min, y_t_min, z_t_min};
+    const std::vector<double> maxs{x_t_max, y_t_max, z_t_max};
+    const auto t_min = *std::max_element(mins.begin(), mins.end());
+    const auto t_max = *std::min_element(maxs.begin(), maxs.end());
+
+    if (t_min > t_max) { // ray miss
+        return false;
+    }
+
+    return true;
+}
+
+std::pair<double, double> BoundingBox::check_axis(double origin, double direction, double min, double max) {
+    const auto t_min_numerator = min - origin;
+    const auto t_max_numerator = max - origin;
+
+    double t_min{};
+    double t_max{};
+    if (std::abs(direction) >= EPSILON) {
+        t_min = t_min_numerator / direction;
+        t_max = t_max_numerator / direction;
+    } else {
+        t_min = t_min_numerator * std::numeric_limits<double>::infinity();
+        t_max = t_max_numerator * std::numeric_limits<double>::infinity();
+    }
+
+    if (t_min > t_max) {
+        std::swap(t_min, t_max);
+    }
+
+    return {t_min, t_max};
+}

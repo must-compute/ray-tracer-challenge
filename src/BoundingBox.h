@@ -5,6 +5,7 @@
 
 #include "Tuple.h"
 #include "Transformations.h"
+#include "Ray.h"
 
 // TODO add a debug-mode render function to show the wireframe bounding box
 class BoundingBox {
@@ -26,6 +27,10 @@ public:
     void add_point(const Tuple &point);
 
     void add_box(const BoundingBox &other);
+
+    [[nodiscard]] bool intersects(const Ray &ray) const;
+
+    [[nodiscard]] static std::pair<double, double> check_axis(double origin, double direction, double min, double max);
 
 private:
     Tuple minimum_{};
