@@ -105,6 +105,6 @@ void Cylinder::intersect_caps(const Ray &ray, Intersections &xs) const {
     }
 }
 
-Bounds Cylinder::make_bounds() const {
+BoundingBox Cylinder::make_bounding_box() const {
     return {make_point(-1.0, minimum(), -1.0), make_point(1.0, maximum(), 1.0)};
 }

@@ -110,9 +110,7 @@ void Cone::intersect_caps(const Ray &ray, Intersections &xs) const {
     }
 }
 
-Bounds Cone::make_bounds() const {
-    const double denom = std::tan(std::numbers::pi / 8.0);
-    const auto min_radius = minimum() / denom;
-    const auto max_radius = maximum() / denom;
-    return {make_point(min_radius, minimum(), min_radius), make_point(max_radius, maximum(), max_radius)};
+BoundingBox Cone::make_bounding_box() const {
+    const auto limit = std::max(std::abs(minimum_), std::abs(maximum_));
+    return {make_point(-limit, minimum_, -limit), make_point(limit, maximum_, limit)};
 }

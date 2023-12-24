@@ -29,10 +29,11 @@ std::shared_ptr<Group> Group::make_group() {
     return std::make_shared<Group>(Group{});
 }
 
-Bounds Group::make_bounds() const {
+BoundingBox Group::make_bounding_box() const {
+    // TODO finish this, use the child bounds
     // First, get the bounds of each child in the group.
     for (const auto &child: children()) {
-        const auto b = child->make_bounds();
+        const auto b = child->make_bounding_box();
     }
     return {};
 }

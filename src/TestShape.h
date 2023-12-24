@@ -11,7 +11,7 @@ public:
 
     [[nodiscard]] Ray local_ray() const;
 
-    [[nodiscard]] Bounds make_bounds() const override;
+    [[nodiscard]] BoundingBox make_bounding_box() const override;
 
 private:
     [[nodiscard]] Intersections local_intersect(const Ray &ray) override;

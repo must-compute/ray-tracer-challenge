@@ -62,6 +62,6 @@ Tuple Cube::local_normal_at(const Tuple &point_in_object_space) const {
     return {Intersection{t_min, cube}, Intersection{t_max, cube}};
 }
 
-Bounds Cube::make_bounds() const {
+BoundingBox Cube::make_bounding_box() const {
     return {make_point(-1.0, -1.0, -1.0), make_point(1.0, 1.0, 1.0)};
 }

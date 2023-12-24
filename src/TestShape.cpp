@@ -13,6 +13,6 @@ Ray TestShape::local_ray() const {
     return local_ray_;
 }
 
-Bounds TestShape::make_bounds() const {
-    return {};
+BoundingBox TestShape::make_bounding_box() const {
+    return BoundingBox{make_point(-1.0, -1.0, -1.0), make_point(1.0, 1.0, 1.0)};
 }

@@ -5,7 +5,7 @@
 
 #include "Shape.h"
 
-class Bounds;
+class BoundingBox;
 
 // A double-napped cone
 class Cone final : public Shape {
@@ -26,7 +26,7 @@ public:
 
     [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space) const override;
 
-    [[nodiscard]] Bounds make_bounds() const override;
+    [[nodiscard]] BoundingBox make_bounding_box() const override;
 
     // TODO might need to be updated to avoid mutating intersections
     void intersect_caps(const Ray &ray, Intersections &xs) const;

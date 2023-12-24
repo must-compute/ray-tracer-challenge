@@ -8,7 +8,7 @@
 #include "Transformations.h"
 #include "Tuple.h"
 #include "Intersection.h"
-#include "Bounds.h"
+#include "BoundingBox.h"
 #include "Ray.h"
 
 
@@ -46,7 +46,7 @@ public:
 
     void set_parent(const std::shared_ptr<Shape> &parent);
 
-    [[nodiscard]] virtual Bounds make_bounds() const = 0;
+    [[nodiscard]] virtual BoundingBox make_bounding_box() const = 0;
 
 protected:
     tf::Transform transform_;

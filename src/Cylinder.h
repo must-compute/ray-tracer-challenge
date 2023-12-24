@@ -8,7 +8,7 @@
 
 class Ray;
 
-class Bounds;
+class BoundingBox;
 
 class Cylinder final : public Shape {
 public:
@@ -33,7 +33,7 @@ public:
 
     [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space) const override;
 
-    [[nodiscard]] Bounds make_bounds() const override;
+    [[nodiscard]] BoundingBox make_bounding_box() const override;
 
 private:
     double minimum_ = -std::numeric_limits<double>::infinity();

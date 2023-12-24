@@ -3,7 +3,7 @@
 
 #include "Shape.h"
 
-class Bounds;
+class BoundingBox;
 
 class Plane final : public Shape {
 public:
@@ -13,7 +13,7 @@ public:
 
     [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space) const override;
 
-    [[nodiscard]] Bounds make_bounds() const override;
+    [[nodiscard]] BoundingBox make_bounding_box() const override;
 };
 
 
