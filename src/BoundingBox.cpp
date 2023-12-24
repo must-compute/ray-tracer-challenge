@@ -22,9 +22,12 @@ void BoundingBox::set_transform(const tf::Transform &transform) {
     const auto p7 = make_point(maximum_.x(), maximum_.y(), minimum_.z());
     const auto p8 = maximum_;
 
+    auto new_bounding_box = BoundingBox{};
     for (const auto &point: {p1, p2, p3, p4, p5, p6, p7, p8}) {
-        add_point(transform * point);
+        new_bounding_box.add_point(transform * point);
     }
+    minimum_ = new_bounding_box.minimum_;
+    maximum_ = new_bounding_box.maximum_;
 }
 
 Tuple BoundingBox::minimum() const {

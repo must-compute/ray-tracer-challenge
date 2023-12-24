@@ -30,10 +30,12 @@ std::shared_ptr<Group> Group::make_group() {
 }
 
 BoundingBox Group::make_bounding_box() const {
-    // TODO finish this, use the child bounds
-    // First, get the bounds of each child in the group.
+    // First, create an empty bounding box.
+    auto box = BoundingBox{};
+    // Then, add each child's bounding box transformed to parent space (our object space) to the bounding box.
     for (const auto &child: children()) {
-        const auto b = child->make_bounding_box();
+        box.add_box(child->make_bounding_box_in_parent_space());
     }
-    return {};
+    // Finally, return the bounding box.
+    return box;
 }

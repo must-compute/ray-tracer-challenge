@@ -2,7 +2,9 @@
 #include <gtest/gtest.h>
 
 #include <numbers>
+#include <memory>
 
+#include "Cylinder.h"
 #include "Group.h"
 #include "Sphere.h"
 #include "Transformations.h"

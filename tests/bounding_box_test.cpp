@@ -3,6 +3,10 @@
 #include <numbers>
 
 #include "BoundingBox.h"
+#include "Sphere.h"
+#include "Transformations.h"
+#include "Cylinder.h"
+#include "Group.h"
 
 TEST(BoundingBox, AddPoint) {
     auto box1 = BoundingBox{make_point(-1.0, -1.0, -1.0), make_point(1.0, 1.0, 1.0)};
@@ -58,4 +62,30 @@ TEST(BoundingBox, TransformingBoundingBox) {
     box.set_transform(tf::rotation_x(std::numbers::pi / 4.0) * tf::rotation_y(std::numbers::pi / 4.0));
     EXPECT_EQ(box.minimum(), make_point(-1.4142, -1.7071, -1.7071));
     EXPECT_EQ(box.maximum(), make_point(1.4142, 1.7071, 1.7071));
+}
+
+TEST(BoundingBox, QueryingSphereBoundingBoxInItsParentSpace) {
+    auto sphere = std::make_shared<Sphere>(Sphere{});
+    sphere->set_transform(tf::translation(1.0, -3.0, 5.0) * tf::scaling(0.5, 2.0, 4.0));
+    const auto box = sphere->make_bounding_box_in_parent_space();
+    EXPECT_EQ(box.minimum(), make_point(0.5, -5.0, 1.0));
+    EXPECT_EQ(box.maximum(), make_point(1.5, -1.0, 9.0));
+}
+
+TEST(BoundingBox, GroupHasBoundingBoxContainingChildren) {
+    auto sphere = std::make_shared<Sphere>(Sphere{});
+    sphere->set_transform(tf::translation(2.0, 5.0, -3.0) * tf::scaling(2.0, 2.0, 2.0));
+
+    auto cylinder = std::make_shared<Cylinder>(Cylinder{});
+    cylinder->set_minimum(-2.0);
+    cylinder->set_maximum(2.0);
+    cylinder->set_transform(tf::translation(-4.0, -1.0, 4.0) * tf::scaling(0.5, 1.0, 0.5));
+
+    auto group = Group::make_group();
+    group->add_child(sphere);
+    group->add_child(cylinder);
+
+    const auto box = group->make_bounding_box();
+    EXPECT_EQ(box.minimum(), make_point(-4.5, -3.0, -5.0));
+    EXPECT_EQ(box.maximum(), make_point(4.0, 7.0, 4.5));
 }

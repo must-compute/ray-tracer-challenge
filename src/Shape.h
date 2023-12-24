@@ -48,6 +48,8 @@ public:
 
     [[nodiscard]] virtual BoundingBox make_bounding_box() const = 0;
 
+    [[nodiscard]] BoundingBox make_bounding_box_in_parent_space() const;
+
 protected:
     tf::Transform transform_;
     Material material_;

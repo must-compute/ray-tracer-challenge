@@ -30,7 +30,6 @@ public:
 private:
     Tuple minimum_{};
     Tuple maximum_{};
-    tf::Transform transform_{};
 };
 
 #endif //BOUNDS_H
