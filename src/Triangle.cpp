@@ -5,13 +5,31 @@ Triangle::Triangle(const Tuple &p1, const Tuple &p2, const Tuple &p3) : p1_{p1},
                                                                         normal_{e2_.cross(e1_).normalize()} {}
 
 Intersections Triangle::local_intersect(const Ray &ray) {
-    const auto determinant = ray.direction().cross(e2_).dot(e1_);
+    const auto direction_cross_e2 = ray.direction().cross(e2_);
+    const auto determinant = direction_cross_e2.dot(e1_);
     if (within_epsilon(std::abs(determinant), 0)) {
         return {};
     }
 
-    // TODO bogus intersection to avoid false-positive results. This function is still a work-in-progress
-    return {Intersection{1.0, this}};
+    const auto f = 1.0 / determinant;
+
+    const auto p1_to_origin = ray.origin() - p1_;
+
+    const auto u = f * p1_to_origin.dot(direction_cross_e2);
+
+    if (u < 0.0 || u > 1.0) { // TODO should this range be inclusive or exclusive?
+        return {};
+    }
+
+    const auto origin_cross_e1 = p1_to_origin.cross(e1_);
+    const auto v = f * ray.direction().dot(origin_cross_e1);
+
+    if (v < 0.0 || (u + v) > 1.0) {
+        return {};
+    }
+
+    const auto t = f * e2_.dot(origin_cross_e1);
+    return {Intersection{t, this}};
 }
 
 Tuple Triangle::local_normal_at(const Tuple &point_in_object_space) const {
