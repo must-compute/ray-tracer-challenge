@@ -9,7 +9,7 @@ Intersections TestShape::local_intersect(const Ray &ray) {
     return {};
 }
 
-Ray TestShape::local_ray() const {
+std::optional<Ray> TestShape::local_ray() const {
     return local_ray_;
 }
 

@@ -36,8 +36,9 @@ TEST(TestShape, IntersectingScaledShapeWithRay) {
     auto test_shape = TestShape{};
     test_shape.set_transform(tf::scaling(2.0, 2.0, 2.0));
     const auto xs = test_shape.intersect(ray);
-    EXPECT_EQ(test_shape.local_ray().origin(), make_point(0.0, 0.0, -2.5));
-    EXPECT_EQ(test_shape.local_ray().direction(), make_vector(0.0, 0.0, 0.5));
+    ASSERT_TRUE(test_shape.local_ray());
+    EXPECT_EQ(test_shape.local_ray()->origin(), make_point(0.0, 0.0, -2.5));
+    EXPECT_EQ(test_shape.local_ray()->direction(), make_vector(0.0, 0.0, 0.5));
 }
 
 TEST(TestShape, IntersectingTranslatedShapeWithRay) {
@@ -45,8 +46,9 @@ TEST(TestShape, IntersectingTranslatedShapeWithRay) {
     auto test_shape = TestShape{};
     test_shape.set_transform(tf::translation(5.0, 0.0, 0.0));
     const auto xs = test_shape.intersect(ray);
-    EXPECT_EQ(test_shape.local_ray().origin(), make_point(-5.0, 0.0, -5.0));
-    EXPECT_EQ(test_shape.local_ray().direction(), make_vector(0.0, 0.0, 1.0));
+    ASSERT_TRUE(test_shape.local_ray());
+    EXPECT_EQ(test_shape.local_ray()->origin(), make_point(-5.0, 0.0, -5.0));
+    EXPECT_EQ(test_shape.local_ray()->direction(), make_vector(0.0, 0.0, 1.0));
 }
 
 TEST(TestShape, ComputingNormalOnATranslatedShape) {

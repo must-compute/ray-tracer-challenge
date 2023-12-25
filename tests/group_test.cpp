@@ -142,3 +142,21 @@ TEST(Group, StripesPatternWithGroupTransformation) {
     EXPECT_EQ(pattern.pattern_at_shape(*s, make_point(2.0999, 0.0, 0.0)), white);
     EXPECT_EQ(pattern.pattern_at_shape(*s, make_point(2.1001, 0.0, 0.0)), black);
 }
+
+TEST(Group, RayDoesNotIntersectChildrenIfBoundingBoxIsMissed) {
+    const auto child = std::make_shared<TestShape>(TestShape{});
+    auto group = Group::make_group();
+    group->add_child(child);
+    const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 1.0, 0.0)};
+    auto xs = group->intersect(ray);
+    EXPECT_FALSE(child->local_ray());
+}
+
+TEST(Group, RayIntersectsChildrenIfBoundingBoxIsHit) {
+    const auto child = std::make_shared<TestShape>(TestShape{});
+    auto group = Group::make_group();
+    group->add_child(child);
+    const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+    auto xs = group->intersect(ray);
+    EXPECT_TRUE(child->local_ray());
+}

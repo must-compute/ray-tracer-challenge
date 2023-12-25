@@ -11,6 +11,10 @@ void Group::add_child(const std::shared_ptr<Shape> &child) {
 }
 
 Intersections Group::local_intersect(const Ray &ray) {
+    if (!make_bounding_box().intersects(ray)) {
+        return {};
+    }
+
     Intersections xs{};
     for (const auto &shape: children_) {
         const auto shape_xs = shape->intersect(ray);
