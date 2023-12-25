@@ -32,8 +32,6 @@ void Cone::set_closed(bool closed) {
 }
 
 Intersections Cone::local_intersect(const Ray &ray) {
-    const auto cone = std::make_shared<Cone>(*this);
-
     const auto a =
             std::pow(ray.direction().x(), 2) - std::pow(ray.direction().y(), 2) + std::pow(ray.direction().z(), 2);
     Intersections xs{};
@@ -51,7 +49,7 @@ Intersections Cone::local_intersect(const Ray &ray) {
             return {};
         } else {
             // Otherwise, we intersect at a single point.
-            xs.push_back(Intersection{-c / (2 * b), cone});
+            xs.push_back(Intersection{-c / (2 * b), this});
             return xs;
         }
     }
@@ -70,11 +68,11 @@ Intersections Cone::local_intersect(const Ray &ray) {
     const auto y1 = ray.origin().y() + (t1 * ray.direction().y());
 
     if (minimum_ < y0 && y0 < maximum_) {
-        xs.push_back(Intersection{t0, cone});
+        xs.push_back(Intersection{t0, this});
     }
 
     if (minimum_ < y1 && y1 < maximum_) {
-        xs.push_back(Intersection{t1, cone});
+        xs.push_back(Intersection{t1, this});
     }
 
     return xs;
@@ -95,18 +93,16 @@ void Cone::intersect_caps(const Ray &ray, Intersections &xs) const {
         return;
     }
 
-    const auto shared_cone = std::make_shared<Cone>(*this);
-
     // check lower cap
     auto t = (minimum_ - ray.origin().y()) / ray.direction().y();
     if (is_ray_cap_intersecting(ray, t, minimum_)) {
-        xs.push_back(Intersection{t, shared_cone});
+        xs.push_back(Intersection{t, this});
     }
 
     // check upper cap
     t = (maximum_ - ray.origin().y()) / ray.direction().y();
     if (is_ray_cap_intersecting(ray, t, maximum_)) {
-        xs.push_back(Intersection{t, shared_cone});
+        xs.push_back(Intersection{t, this});
     }
 }
 

@@ -45,7 +45,7 @@ TEST(World, ShadingAnIntersection) {
     const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
     EXPECT_FALSE(world.objects.empty());
     const auto &shape = world.objects.front();
-    const auto i = Intersection{4.0, shape};
+    const auto i = Intersection{4.0, shape.get()};
     const auto comps = i.prepare_computations(ray);
     EXPECT_EQ(world.shade_hit(comps), make_color(0.38066, 0.47583, 0.2855));
 }
@@ -56,7 +56,7 @@ TEST(World, ShadingAnIntersectionFromTheInside) {
     const auto ray = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 0.0, 1.0)};
     ASSERT_GE(world.objects.size(), 2);
     const auto &shape = world.objects[1];
-    const auto i = Intersection{0.5, shape};
+    const auto i = Intersection{0.5, shape.get()};
     const auto comps = i.prepare_computations(ray);
     EXPECT_EQ(world.shade_hit(comps), make_color(0.90498, 0.90498, 0.90498));
 }
@@ -71,7 +71,7 @@ TEST(World, ShadingWithAnIntersectionInShadow) {
     world.objects.push_back(s2);
 
     const auto ray = Ray{make_point(0.0, 0.0, 5.0), make_vector(0.0, 0.0, 1.0)};
-    const auto i = Intersection{4.0, s2};
+    const auto i = Intersection{4.0, s2.get()};
     const auto comps = i.prepare_computations(ray);
     const auto c = world.shade_hit(comps);
     EXPECT_EQ(c, make_color(0.1, 0.1, 0.1));
@@ -146,7 +146,7 @@ TEST(World, ReflectedColorForNonReflectiveMaterial) {
     material.ambient = 1.0;
     shape->set_material(material);
 
-    const auto intersection = Intersection{1.0, shape};
+    const auto intersection = Intersection{1.0, shape.get()};
     const auto comps = intersection.prepare_computations(ray);
     EXPECT_EQ(world.reflected_color(comps), make_color(0.0, 0.0, 0.0));
 }
@@ -165,7 +165,7 @@ TEST(World, ReflectedColorForReflectiveMaterial) {
 
     const auto loc = std::sqrt(2.0) / 2.0;
     const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
-    const auto intersection = Intersection{std::sqrt(2.0), plane};
+    const auto intersection = Intersection{std::sqrt(2.0), plane.get()};
 
     const auto comps = intersection.prepare_computations(ray);
     EXPECT_EQ(world.reflected_color(comps), make_color(0.19032, 0.2379, 0.14274));
@@ -185,7 +185,7 @@ TEST(World, ShadeHitWithReflectiveMaterial) {
 
     const auto loc = std::sqrt(2.0) / 2.0;
     const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
-    const auto intersection = Intersection{std::sqrt(2.0), plane};
+    const auto intersection = Intersection{std::sqrt(2.0), plane.get()};
 
     const auto comps = intersection.prepare_computations(ray);
     EXPECT_EQ(world.shade_hit(comps), make_color(0.87677, 0.92436, 0.82918));
@@ -228,7 +228,7 @@ TEST(World, ReflectedColorAtMaxRecursiveDepth) {
 
     const auto loc = std::sqrt(2.0) / 2.0;
     const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
-    const auto intersection = Intersection{std::sqrt(2.0), plane};
+    const auto intersection = Intersection{std::sqrt(2.0), plane.get()};
     const auto comps = intersection.prepare_computations(ray);
 
     EXPECT_EQ(world.reflected_color(comps, 0), make_color(0.0, 0.0, 0.0));
@@ -240,7 +240,7 @@ TEST(World, RefractedColorWithAnOpaqueSurface) {
     ASSERT_GT(world.objects.size(), 0);
     const auto &shape = world.objects.front();
     const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
-    const auto xs = Intersections{Intersection{4.0, shape}, Intersection{6.0, shape}};
+    const auto xs = Intersections{Intersection{4.0, shape.get()}, Intersection{6.0, shape.get()}};
     const auto comps = xs[0].prepare_computations(ray, xs);
     EXPECT_EQ(world.refracted_color(comps, 5), make_color(0.0, 0.0, 0.0));
 }
@@ -256,7 +256,7 @@ TEST(World, RefractedColorAtMaxRecursiveDepth) {
     shape->set_material(material);
 
     const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
-    const auto xs = Intersections{Intersection{4.0, shape}, Intersection{6.0, shape}};
+    const auto xs = Intersections{Intersection{4.0, shape.get()}, Intersection{6.0, shape.get()}};
     const auto comps = xs[0].prepare_computations(ray, xs);
     EXPECT_EQ(world.refracted_color(comps, 0), make_color(0.0, 0.0, 0.0));
 }
@@ -273,7 +273,7 @@ TEST(World, RefractedColorUnderTotalInternalReflection) {
 
     const auto loc = std::sqrt(2.0) / 2.0;
     const auto ray = Ray{make_point(0.0, 0.0, loc), make_vector(0.0, 1.0, 0.0)};
-    const auto xs = Intersections{Intersection{-loc, shape}, Intersection{loc, shape}};
+    const auto xs = Intersections{Intersection{-loc, shape.get()}, Intersection{loc, shape.get()}};
     const auto comps = xs[1].prepare_computations(ray, xs);
     EXPECT_EQ(world.refracted_color(comps, 5), make_color(0.0, 0.0, 0.0));
 }
@@ -297,10 +297,10 @@ TEST(World, RefractedColorWithRefractedRay) {
 
     const auto ray = Ray{make_point(0.0, 0.0, 0.1), make_vector(0.0, 1.0, 0.0)};
     const auto xs = Intersections{
-            Intersection{-0.9899, A},
-            Intersection{-0.4899, B},
-            Intersection{0.4899, B},
-            Intersection{0.9899, A},
+            Intersection{-0.9899, A.get()},
+            Intersection{-0.4899, B.get()},
+            Intersection{0.4899, B.get()},
+            Intersection{0.9899, A.get()},
     };
     const auto comps = xs[2].prepare_computations(ray, xs);
     EXPECT_EQ(world.refracted_color(comps, 5), make_color(0.0, 0.99888, 0.04725));
@@ -328,7 +328,7 @@ TEST(World, ShadeHitWithTransparentMaterial) {
 
     const auto loc = std::sqrt(2.0) / 2.0;
     const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
-    const auto xs = Intersections{Intersection{std::sqrt(2.0), floor}};
+    const auto xs = Intersections{Intersection{std::sqrt(2.0), floor.get()}};
     const auto comps = xs[0].prepare_computations(ray, xs);
     EXPECT_EQ(world.shade_hit(comps, 5), make_color(0.93642, 0.68642, 0.68642));
 }
@@ -355,7 +355,7 @@ TEST(World, ShadeHitWithReflectiveTransparentMaterial) {
     ball->set_material(material_b);
     world.objects.push_back(ball);
 
-    const auto xs = Intersections{Intersection{std::sqrt(2.0), floor}};
+    const auto xs = Intersections{Intersection{std::sqrt(2.0), floor.get()}};
     const auto comps = xs[0].prepare_computations(ray, xs);
     EXPECT_EQ(world.shade_hit(comps, 5), make_color(0.93391, 0.69643, 0.69243));
 }

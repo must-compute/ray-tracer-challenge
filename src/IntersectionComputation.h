@@ -8,9 +8,8 @@
 class Shape;
 
 struct IntersectionComputation {
-
     double t{};
-    std::shared_ptr<Shape> object{};
+    const Shape *const object{};
     Tuple point{};
     Tuple eyev{};
     Tuple normalv{};

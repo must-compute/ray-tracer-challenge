@@ -32,12 +32,11 @@ Tuple Sphere::local_normal_at(const Tuple &point_in_object_space) const {
     const auto t1 = (-b - discr_sqrt) / (2 * a);
     const auto t2 = (-b + discr_sqrt) / (2 * a);
 
-    const auto copy = std::make_shared<Sphere>(*this);
     // NOTE: we care about the order of intersections (in ascending order of t).
     if (t1 > t2) {
-        return {Intersection{t2, copy}, Intersection{t1, copy}};
+        return {Intersection{t2, this}, Intersection{t1, this}};
     }
-    return {Intersection{t1, copy}, Intersection{t2, copy}};
+    return {Intersection{t1, this}, Intersection{t2, this}};
 }
 
 BoundingBox Sphere::make_bounding_box() const {

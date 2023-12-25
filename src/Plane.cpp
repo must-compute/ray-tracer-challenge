@@ -13,7 +13,7 @@ Tuple Plane::local_normal_at(const Tuple &point_in_object_space) const {
 
     const auto t = -ray.origin().y() / ray.direction().y();
 
-    return {Intersection{t, std::make_shared<Plane>(*this)}};
+    return {Intersection{t, this}};
 }
 
 BoundingBox Plane::make_bounding_box() const {

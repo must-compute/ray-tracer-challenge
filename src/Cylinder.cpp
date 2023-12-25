@@ -60,17 +60,16 @@ Tuple Cylinder::local_normal_at(const Tuple &point_in_object_space) const {
 
     const auto t0 = (-b - std::sqrt(discriminant)) / (2 * a);
     const auto t1 = (-b + std::sqrt(discriminant)) / (2 * a);
-    const auto cylinder = std::make_shared<Cylinder>(*this);
 
     const auto y0 = ray.origin().y() + (t0 * ray.direction().y());
     const auto y1 = ray.origin().y() + (t1 * ray.direction().y());
 
     if (minimum_ < y0 && y0 < maximum_) {
-        xs.push_back(Intersection{t0, cylinder});
+        xs.push_back(Intersection{t0, this});
     }
 
     if (minimum_ < y1 && y1 < maximum_) {
-        xs.push_back(Intersection{t1, cylinder});
+        xs.push_back(Intersection{t1, this});
     }
 
     return xs;
@@ -90,18 +89,16 @@ void Cylinder::intersect_caps(const Ray &ray, Intersections &xs) const {
         return;
     }
 
-    const auto shared_cylinder = std::make_shared<Cylinder>(*this);
-
     // check lower cap
     auto t = (minimum_ - ray.origin().y()) / ray.direction().y();
     if (is_ray_cap_intersecting(ray, t)) {
-        xs.push_back(Intersection{t, shared_cylinder});
+        xs.push_back(Intersection{t, this});
     }
 
     // check upper cap
     t = (maximum_ - ray.origin().y()) / ray.direction().y();
     if (is_ray_cap_intersecting(ray, t)) {
-        xs.push_back(Intersection{t, shared_cylinder});
+        xs.push_back(Intersection{t, this});
     }
 }
 

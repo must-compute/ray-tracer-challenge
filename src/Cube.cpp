@@ -58,8 +58,7 @@ Tuple Cube::local_normal_at(const Tuple &point_in_object_space) const {
         return {};
     }
 
-    const auto cube = std::make_shared<Cube>(*this);
-    return {Intersection{t_min, cube}, Intersection{t_max, cube}};
+    return {Intersection{t_min, this}, Intersection{t_max, this}};
 }
 
 BoundingBox Cube::make_bounding_box() const {

@@ -5,15 +5,13 @@ Triangle::Triangle(const Tuple &p1, const Tuple &p2, const Tuple &p3) : p1_{p1},
                                                                         normal_{e2_.cross(e1_).normalize()} {}
 
 Intersections Triangle::local_intersect(const Ray &ray) {
-    const auto triangle = std::make_shared<Triangle>(*this); // TODO this is silly. Will refactor in next commit.
-
     const auto determinant = ray.direction().cross(e2_).dot(e1_);
     if (within_epsilon(std::abs(determinant), 0)) {
         return {};
     }
 
     // TODO bogus intersection to avoid false-positive results. This function is still a work-in-progress
-    return {Intersection{1.0, triangle}};
+    return {Intersection{1.0, this}};
 }
 
 Tuple Triangle::local_normal_at(const Tuple &point_in_object_space) const {

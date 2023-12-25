@@ -19,29 +19,29 @@ std::optional<Intersection> hit(const Intersections &intersections) {
 }
 
 IntersectionComputation Intersection::prepare_computations(const Ray &ray, const Intersections &xs) const {
-    auto comps = IntersectionComputation{};
-
     assert(object);
-    comps.t = t;
-    comps.object = object;
-    comps.point = ray.position_at_t(comps.t);
-    comps.eyev = -ray.direction();
-    comps.normalv = comps.object->normal_at(comps.point);
 
-    if (comps.normalv.dot(comps.eyev) < 0) {
-        comps.inside = true;
-        comps.normalv = -comps.normalv;
+    const auto eyev = -ray.direction();
+    const auto point = ray.position_at_t(t);
+
+    auto normalv = object->normal_at(point);
+    bool inside{false};
+    if (normalv.dot(eyev) < 0) {
+        inside = true;
+        normalv = -normalv;
     } else {
-        comps.inside = false;
+        inside = false;
     }
 
-    comps.reflectv = ray.direction().reflect(comps.normalv);
+    const auto reflectv = ray.direction().reflect(normalv);
+    const auto over_point = point + (normalv * EPSILON);
+    const auto under_point = point - (normalv * EPSILON);
 
-    comps.over_point = comps.point + (comps.normalv * EPSILON);
-    comps.under_point = comps.point - (comps.normalv * EPSILON);
+    auto n1 = 0.0;
+    auto n2 = 0.0;
 
     // Compute the refractive indices (n1 and n2).
-    std::vector<std::shared_ptr<Shape>> seen_objects{};
+    std::vector<const Shape *> seen_objects{};
     Intersections xs_to_check{xs};
     if (xs_to_check.empty()) {
         xs_to_check.push_back(*this);
@@ -50,10 +50,10 @@ IntersectionComputation Intersection::prepare_computations(const Ray &ray, const
         // Set n1 if this intersection is the hit.
         if (i == *this) {
             if (seen_objects.empty()) {
-                comps.n1 = 1.0;
+                n1 = 1.0;
             } else {
                 assert(seen_objects.back());
-                comps.n1 = seen_objects.back()->material().refractive_index;
+                n1 = seen_objects.back()->material().refractive_index;
             }
         }
 
@@ -68,15 +68,27 @@ IntersectionComputation Intersection::prepare_computations(const Ray &ray, const
         // Set n2 and break if this intersection is a hit.
         if (i == *this) {
             if (seen_objects.empty()) {
-                comps.n2 = 1.0;
+                n2 = 1.0;
             } else {
                 assert(seen_objects.back());
-                comps.n2 = seen_objects.back()->material().refractive_index;
+                n2 = seen_objects.back()->material().refractive_index;
             }
 
             break;
         }
     }
 
-    return comps;
+    return IntersectionComputation{
+            .t = t,
+            .object = object,
+            .point = point,
+            .eyev = eyev,
+            .normalv = normalv,
+            .inside = inside,
+            .over_point = over_point,
+            .under_point = under_point,
+            .reflectv = reflectv,
+            .n1 = n1,
+            .n2 = n2
+    };
 }

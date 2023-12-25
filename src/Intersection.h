@@ -25,7 +25,7 @@ struct Intersection {
     prepare_computations(const Ray &ray, const Intersections &xs = {}) const;
 
     double t{};
-    std::shared_ptr<Shape> object{};
+    const Shape *object{}; // TODO in a perfect world, we'd want the pointer itself to be const, but that deletes the copy assignment, which makes using the Intersection a pain (see prepare_computations).
 };
 
 std::optional<Intersection> hit(const Intersections &intersections);

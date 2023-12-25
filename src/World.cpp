@@ -117,7 +117,6 @@ bool World::is_shadowed(const Tuple &point) const {
     const auto distance = v.magnitude();
     const auto ray = Ray{light->position(), v.normalize()};
     auto intersections = intersect(ray);
-    const auto size = intersections.size();
     while (!intersections.empty()) {
         const auto maybe_hit = hit(intersections);
         if (!maybe_hit.has_value()) {
