@@ -95,7 +95,7 @@ public:
     }
 
     void to_file(const std::filesystem::path &path) const {
-        std::ofstream outfile(path);
+        std::ofstream outfile{path};
         outfile << to_ppm();
         outfile.close();
     }
