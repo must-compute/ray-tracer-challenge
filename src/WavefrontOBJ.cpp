@@ -43,15 +43,26 @@ WavefrontOBJ WavefrontOBJ::parse_obj_file(const std::filesystem::path &path) {
             ); // TODO handle conversion errors
             vertices.push_back(make_point(vertex_tokens[0], vertex_tokens[1], vertex_tokens[2]));
         } else if (tokens.front() == "f") { // face
-            assert(tokens.size() == 4); // f followed by 3 numbers
-            std::vector<size_t> face_tokens(tokens.size() - 1); // skip the initial f
+            assert(tokens.size() >= 4); // f followed by 3 or more numbers
+
+            std::vector<size_t> face_tokens(tokens.size() - 1); // skip initial f
             std::transform(tokens.begin() + 1, // skip initial f
                            tokens.end(),
                            face_tokens.begin(),
                            [](const std::string &f) { return std::stoi(f); }
             ); // TODO handle conversion errors
-            // TODO handle indexing errors
-            obj.add_triangle(Triangle{vertices[face_tokens[0]], vertices[face_tokens[1]], vertices[face_tokens[2]]});
+
+            // Fan triangulation algorithm.
+            // Given a line like "f 1 2 3 4 5", add these triangles:
+            //  Triangle{ vertices[1], vertices[2], vertices[3] }
+            //  Triangle{ vertices[1], vertices[3], vertices[4] }
+            //  Triangle{ vertices[1], vertices[4], vertices[5] }
+            for (size_t index = 1; index <= face_tokens.size() - 2; ++index) {
+                obj.add_triangle(
+                        Triangle{vertices[face_tokens[0]],
+                                 vertices[face_tokens[index]],
+                                 vertices[face_tokens[index + 1]]});
+            }
         } else {
             ignored_lines.push_back(line);
         }
