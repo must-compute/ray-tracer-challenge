@@ -25,6 +25,8 @@ WavefrontOBJ WavefrontOBJ::parse_obj_file(const std::filesystem::path &path) {
     std::vector<Tuple> vertices{};
     vertices.push_back(make_point(0.0, 0.0, 0.0)); // TODO is there a better way to make vertices index starting at 1?
 
+    std::optional<std::string> current_group{};
+
     std::ifstream input_file{path};
 
     std::string line;
@@ -61,8 +63,12 @@ WavefrontOBJ WavefrontOBJ::parse_obj_file(const std::filesystem::path &path) {
                 obj.add_triangle(
                         Triangle{vertices[face_tokens[0]],
                                  vertices[face_tokens[index]],
-                                 vertices[face_tokens[index + 1]]});
+                                 vertices[face_tokens[index + 1]]},
+                        current_group);
             }
+        } else if (tokens.front() == "g") { // group
+            assert(tokens.size() == 2);
+            current_group = tokens[1];
         } else {
             ignored_lines.push_back(line);
         }
@@ -83,6 +89,10 @@ std::shared_ptr<Group> WavefrontOBJ::default_group() const {
     return default_group_;
 }
 
+std::unordered_map<std::string, std::shared_ptr<Group>> WavefrontOBJ::named_groups() const {
+    return named_groups_;
+}
+
 std::vector<Tuple> WavefrontOBJ::vertices() const {
     return vertices_;
 }
@@ -95,6 +105,20 @@ void WavefrontOBJ::set_vertices(const std::vector<Tuple> &vertices) {
     vertices_ = vertices;
 }
 
-void WavefrontOBJ::add_triangle(const Triangle &triangle) {
-    default_group_->add_child(std::make_shared<Triangle>(triangle));
+void WavefrontOBJ::add_triangle(const Triangle &triangle, const std::optional<std::string> &current_group) {
+    const auto t = std::make_shared<Triangle>(triangle);
+
+    if (!current_group) {
+        default_group_->add_child(t);
+        return;
+    }
+
+    const auto &key = *current_group;
+    if (named_groups_.contains(key)) {
+        named_groups_[key]->add_child(t);
+    } else {
+        auto group = Group::make_group();
+        group->add_child(t);
+        named_groups_[key] = group;
+    }
 }

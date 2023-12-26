@@ -104,3 +104,42 @@ f 1 2 3 4 5)";
     EXPECT_EQ(t3->p2(), obj.vertices()[4]);
     EXPECT_EQ(t3->p3(), obj.vertices()[5]);
 }
+
+TEST(WavefrontObj, TrianglesInGroups) {
+    const std::string text = R"(v -1 1 0
+v -1 0 0
+v 1 0 0
+v 1 1 0
+
+g FirstGroup
+f 1 2 3
+g SecondGroup
+f 1 3 4)";
+
+    const auto filepath = std::filesystem::temp_directory_path() / "triangles.obj";
+    std::ofstream file{filepath};
+    file << text;
+    file.close();
+    const auto obj = WavefrontOBJ::parse_obj_file(filepath);
+
+    EXPECT_TRUE(obj.default_group()->children().empty());
+
+    const auto named_groups = obj.named_groups();
+    ASSERT_EQ(named_groups.size(), 2);
+    const auto g1 = named_groups.at("FirstGroup");
+    const auto g2 = named_groups.at("SecondGroup");
+
+    ASSERT_EQ(g1->children().size(), 1);
+    ASSERT_EQ(g2->children().size(), 1);
+    const auto t1 = std::dynamic_pointer_cast<Triangle>(g1->children()[0]);
+    const auto t2 = std::dynamic_pointer_cast<Triangle>(g2->children()[0]);
+
+    // We're intentionally using a 1-based instead of a 0-based index, per the file format.
+    ASSERT_EQ(obj.vertices().size(), 5);
+    EXPECT_EQ(t1->p1(), obj.vertices()[1]);
+    EXPECT_EQ(t1->p2(), obj.vertices()[2]);
+    EXPECT_EQ(t1->p3(), obj.vertices()[3]);
+    EXPECT_EQ(t2->p1(), obj.vertices()[1]);
+    EXPECT_EQ(t2->p2(), obj.vertices()[3]);
+    EXPECT_EQ(t2->p3(), obj.vertices()[4]);
+}
