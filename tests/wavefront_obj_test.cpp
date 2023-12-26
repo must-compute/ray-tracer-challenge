@@ -143,3 +143,30 @@ f 1 3 4)";
     EXPECT_EQ(t2->p2(), obj.vertices()[3]);
     EXPECT_EQ(t2->p3(), obj.vertices()[4]);
 }
+
+
+TEST(WavefrontObj, ConvertingObjFileToGroup) {
+    const std::string text = R"(v -1 1 0
+v -1 0 0
+v 1 0 0
+v 1 1 0
+
+g FirstGroup
+f 1 2 3
+g SecondGroup
+f 1 3 4)";
+
+    const auto filepath = std::filesystem::temp_directory_path() / "triangles.obj";
+    std::ofstream file{filepath};
+    file << text;
+    file.close();
+    const auto obj = WavefrontOBJ::parse_obj_file(filepath);
+
+    const auto group = obj.to_group();
+
+    const auto first_group = obj.named_groups()["FirstGroup"];
+    const auto second_group = obj.named_groups()["SecondGroup"];
+
+    ASSERT_TRUE(std::find(group->children().begin(), group->children().end(), first_group) != group->children().end());
+    ASSERT_TRUE(std::find(group->children().begin(), group->children().end(), second_group) != group->children().end());
+}

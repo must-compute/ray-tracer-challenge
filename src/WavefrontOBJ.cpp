@@ -122,3 +122,12 @@ void WavefrontOBJ::add_triangle(const Triangle &triangle, const std::optional<st
         named_groups_[key] = group;
     }
 }
+
+std::shared_ptr<Group> WavefrontOBJ::to_group() const {
+    auto result = Group::make_group();
+    for (const auto &[_, group]: named_groups_) {
+        result->add_child(group);
+    }
+    result->add_child(default_group_);
+    return result;
+}

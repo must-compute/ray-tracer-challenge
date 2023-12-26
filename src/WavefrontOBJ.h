@@ -20,6 +20,8 @@ public:
 
     [[nodiscard]] std::unordered_map<std::string, std::shared_ptr<Group>> named_groups() const;
 
+    [[nodiscard]] std::shared_ptr<Group> to_group() const;
+
     void set_ignored_lines(const std::vector<std::string> &ignored_lines);
 
     void set_vertices(const std::vector<Tuple> &vertices);
