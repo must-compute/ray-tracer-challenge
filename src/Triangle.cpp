@@ -37,7 +37,11 @@ Tuple Triangle::local_normal_at(const Tuple &point_in_object_space) const {
 }
 
 BoundingBox Triangle::make_bounding_box() const {
-    return {};
+    BoundingBox box{};
+    box.add_point(p1_);
+    box.add_point(p2_);
+    box.add_point(p3_);
+    return box;
 }
 
 Tuple Triangle::p1() const {
