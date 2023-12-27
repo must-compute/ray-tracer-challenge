@@ -4,6 +4,7 @@ CMakeFiles/
 cmake_install.cmake
 Makefile
 /cmake-build-debug
+/cmake-build-release/
 
 # CMake user files
 CMakeUserPresets.json
