@@ -32,3 +32,6 @@ rules.ninja
 # Libraries
 *.so
 *.
+
+# Mac OS unwanted file
+.DS_Store
