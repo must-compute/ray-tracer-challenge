@@ -26,7 +26,7 @@ std::pair<double, double> Cube::check_axis(double origin, double direction) {
     return {t_min, t_max};
 }
 
-Tuple Cube::local_normal_at(const Tuple &point_in_object_space) const {
+Tuple Cube::local_normal_at(const Tuple &point_in_object_space, const std::optional<Intersection> &intersection) const {
     const std::vector<double> maxs = {std::abs(point_in_object_space.x()),
                                       std::abs(point_in_object_space.y()),
                                       std::abs(point_in_object_space.z())};

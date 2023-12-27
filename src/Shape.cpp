@@ -33,9 +33,9 @@ Intersections Shape::intersect(const Ray &ray) {
     return local_intersect(local_ray);
 }
 
-Tuple Shape::normal_at(const Tuple &point_in_world_space) const {
+Tuple Shape::normal_at(const Tuple &point_in_world_space, const std::optional<Intersection> &intersection) const {
     const auto point_in_object_space = world_to_object(point_in_world_space);
-    const auto normal_in_object_space = local_normal_at(point_in_object_space);
+    const auto normal_in_object_space = local_normal_at(point_in_object_space, intersection);
     return normal_to_world(normal_in_object_space);
 }
 

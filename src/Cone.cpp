@@ -78,7 +78,7 @@ Intersections Cone::local_intersect(const Ray &ray) {
     return xs;
 }
 
-Tuple Cone::local_normal_at(const Tuple &point_in_object_space) const {
+Tuple Cone::local_normal_at(const Tuple &point_in_object_space, const std::optional<Intersection> &intersection) const {
     auto dist = std::sqrt(std::pow(point_in_object_space.x(), 2) + std::pow(point_in_object_space.z(), 2));
 
     if (point_in_object_space.y() > 0.0) {

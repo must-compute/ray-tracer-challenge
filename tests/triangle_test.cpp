@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "Matrix.h"
+#include <optional>
+
 #include "Tuple.h"
 #include "Triangle.h"
 
@@ -23,9 +24,9 @@ TEST(Triangle, FindingNormalOnTriangle) {
     const auto p3 = make_point(1.0, 0.0, 0.0);
     const auto triangle = Triangle{p1, p2, p3};
 
-    EXPECT_EQ(triangle.local_normal_at(make_point(0.0, 0.5, 0.0)), triangle.normal());
-    EXPECT_EQ(triangle.local_normal_at(make_point(-0.5, 0.75, 0.0)), triangle.normal());
-    EXPECT_EQ(triangle.local_normal_at(make_point(0.5, 0.25, 0.0)), triangle.normal());
+    EXPECT_EQ(triangle.local_normal_at(make_point(0.0, 0.5, 0.0), std::nullopt), triangle.normal());
+    EXPECT_EQ(triangle.local_normal_at(make_point(-0.5, 0.75, 0.0), std::nullopt), triangle.normal());
+    EXPECT_EQ(triangle.local_normal_at(make_point(0.5, 0.25, 0.0), std::nullopt), triangle.normal());
 }
 
 TEST(Triangle, IntersectingRayParallelToTriangle) {

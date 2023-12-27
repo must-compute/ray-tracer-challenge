@@ -6,6 +6,7 @@
 #include "Sphere.h"
 #include "Plane.h"
 #include "util.h"
+#include "Triangle.h"
 
 TEST(Intersection, Creation) {
     const auto sphere = Sphere{};
@@ -203,4 +204,13 @@ TEST(Intersection, SchlickApproximationWithSmallAngleAndN2GreaterThanN1) {
     const auto comps = xs[0].prepare_computations(ray, xs);
     const auto reflectance = comps.schlick();
     EXPECT_TRUE(within_epsilon(reflectance, 0.48873));
+}
+
+TEST(Intersection, IntersectionEncapsulatesUAndV) {
+    const auto triangle = Triangle{make_point(0.0, 1.0, 0.0), make_point(-1.0, 0.0, 0.0), make_point(1.0, 0.0, 0.0)};
+    const auto i = Intersection{3.5, &triangle, 0.2, 0.4};
+    ASSERT_TRUE(i.u);
+    ASSERT_TRUE(i.v);
+    EXPECT_EQ(*i.u, 0.2);
+    EXPECT_EQ(*i.v, 0.4);
 }

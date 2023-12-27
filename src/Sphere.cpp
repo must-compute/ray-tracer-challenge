@@ -4,7 +4,7 @@
 
 #include <memory>
 
-Tuple Sphere::local_normal_at(const Tuple &point_in_object_space) const {
+Tuple Sphere::local_normal_at(const Tuple &point_in_object_space, const std::optional<Intersection> &intersection) const {
     const auto normal_in_object_space = make_vector(
             point_in_object_space.x(),
             point_in_object_space.y(),

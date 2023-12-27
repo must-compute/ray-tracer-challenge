@@ -1,11 +1,12 @@
 #ifndef RAY_TRACER_CHALLENGE_TRIANGLE_H
 #define RAY_TRACER_CHALLENGE_TRIANGLE_H
 
+#include <optional>
 
 #include "Shape.h"
 #include "Tuple.h"
 
-class Triangle final : public Shape {
+class Triangle : public Shape {
 public:
     Triangle(const Tuple &p1, const Tuple &p2, const Tuple &p3);
 
@@ -13,7 +14,8 @@ public:
 
     [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 
-    [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space) const override;
+    [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space,
+                                        const std::optional<Intersection> &intersection) const override;
 
     [[nodiscard]] BoundingBox make_bounding_box() const override;
 
@@ -29,7 +31,7 @@ public:
 
     [[nodiscard]] Tuple normal() const;
 
-private:
+protected:
     Tuple p1_{};
     Tuple p2_{};
     Tuple p3_{};

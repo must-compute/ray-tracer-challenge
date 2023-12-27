@@ -1,16 +1,17 @@
 #include <gtest/gtest.h>
 
+#include <optional>
+
 #include "Ray.h"
 #include "Plane.h"
 #include "Tuple.h"
-#include "Transformations.h"
 
 TEST(Plane, NormalIsConstantEverywhere) {
     const auto plane = Plane{};
     const auto expected_normal = make_vector(0.0, 1.0, 0.0);
-    EXPECT_EQ(plane.local_normal_at(make_point(0.0, 0.0, 0.0)), expected_normal);
-    EXPECT_EQ(plane.local_normal_at(make_point(10.0, 0.0, -10.0)), expected_normal);
-    EXPECT_EQ(plane.local_normal_at(make_point(-5.0, 0.0, 150.0)), expected_normal);
+    EXPECT_EQ(plane.local_normal_at(make_point(0.0, 0.0, 0.0), std::nullopt), expected_normal);
+    EXPECT_EQ(plane.local_normal_at(make_point(10.0, 0.0, -10.0), std::nullopt), expected_normal);
+    EXPECT_EQ(plane.local_normal_at(make_point(-5.0, 0.0, 150.0), std::nullopt), expected_normal);
 }
 
 TEST(Plane, IntersectRayParallelToPlane) {

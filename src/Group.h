@@ -1,8 +1,9 @@
 #ifndef RAY_TRACER_CHALLENGE_GROUP_H
 #define RAY_TRACER_CHALLENGE_GROUP_H
 
-#include <vector>
 #include <memory>
+#include <optional>
+#include <vector>
 
 #include "Shape.h"
 
@@ -23,7 +24,8 @@ public:
 
     [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 
-    [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space) const override;
+    [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space,
+                                        const std::optional<Intersection> &intersection) const override;
 
     [[nodiscard]] BoundingBox make_bounding_box() const override;
 

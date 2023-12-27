@@ -23,7 +23,8 @@ void Cylinder::set_maximum(double max) {
     maximum_ = max;
 }
 
-Tuple Cylinder::local_normal_at(const Tuple &point_in_object_space) const {
+Tuple Cylinder::local_normal_at(const Tuple &point_in_object_space,
+                                const std::optional<Intersection> &intersection) const {
     // square of the distance from the y-axis
     const auto dist = std::pow(point_in_object_space.x(), 2) + std::pow(point_in_object_space.z(), 2);
 

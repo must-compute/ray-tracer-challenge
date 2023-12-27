@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <limits>
+#include <optional>
 
 #include "Cylinder.h"
 #include "Ray.h"
@@ -48,7 +49,7 @@ TEST(Cylinder, NormalVectorOnCylinder) {
 
     for (const auto &[point, normal]: test_table) {
         auto cylinder = Cylinder{};
-        EXPECT_EQ(cylinder.local_normal_at(point), normal);
+        EXPECT_EQ(cylinder.local_normal_at(point, std::nullopt), normal);
     }
 }
 
@@ -119,6 +120,6 @@ TEST(Cylinder, NormalVectorOnCylinderEndCaps) {
     cylinder.set_closed(true);
 
     for (const auto &[point, normal]: test_table) {
-        EXPECT_EQ(cylinder.local_normal_at(point), normal);
+        EXPECT_EQ(cylinder.local_normal_at(point, std::nullopt), normal);
     }
 }

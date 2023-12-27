@@ -1,6 +1,6 @@
 #include "Plane.h"
 
-Tuple Plane::local_normal_at(const Tuple &point_in_object_space) const {
+Tuple Plane::local_normal_at(const Tuple &point_in_object_space, const std::optional<Intersection> &intersection) const {
     return make_vector(0.0, 1.0, 0.0);
 }
 

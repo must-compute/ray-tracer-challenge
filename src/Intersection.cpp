@@ -24,7 +24,7 @@ IntersectionComputation Intersection::prepare_computations(const Ray &ray, const
     const auto eyev = -ray.direction();
     const auto point = ray.position_at_t(t);
 
-    auto normalv = object->normal_at(point);
+    auto normalv = object->normal_at(point, *this);
     bool inside{false};
     if (normalv.dot(eyev) < 0) {
         inside = true;

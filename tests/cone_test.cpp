@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <optional>
+
 #include "Cone.h"
 #include "Ray.h"
 #include "Tuple.h"
@@ -60,7 +62,8 @@ TEST(Cone, ComputeNormalVectorOnCone) {
     auto cone = Cone{};
 
     for (const auto &[point, expected_normal]: test_table) {
-        const auto normal = cone.local_normal_at(point);
+
+        const auto normal = cone.local_normal_at(point, std::nullopt);
         EXPECT_EQ(normal, expected_normal);
     }
 }

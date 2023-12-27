@@ -18,7 +18,8 @@ public:
 private:
     [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 
-    [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space) const override;
+    [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space,
+                                        const std::optional<Intersection> &intersection) const override;
 
     std::optional<Ray> local_ray_;
 };

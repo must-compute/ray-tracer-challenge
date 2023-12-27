@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <optional>
+
 #include "Cube.h"
 #include "Ray.h"
 #include "Tuple.h"
@@ -59,6 +61,6 @@ TEST(Cube, NormalOnSurfaceOfCube) {
 
     for (const auto &[input_point, expected_normal]: test_table) {
         auto cube = Cube{};
-        EXPECT_EQ(cube.local_normal_at(input_point), expected_normal);
+        EXPECT_EQ(cube.local_normal_at(input_point, std::nullopt), expected_normal);
     }
 }

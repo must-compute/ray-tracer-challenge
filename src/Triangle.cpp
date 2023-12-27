@@ -29,10 +29,11 @@ Intersections Triangle::local_intersect(const Ray &ray) {
     }
 
     const auto t = f * e2_.dot(origin_cross_e1);
-    return {Intersection{t, this}};
+    return {Intersection{t, this, u, v}};
 }
 
-Tuple Triangle::local_normal_at(const Tuple &point_in_object_space) const {
+Tuple Triangle::local_normal_at(const Tuple &point_in_object_space,
+                                const std::optional<Intersection> &intersection) const {
     return normal_;
 }
 
