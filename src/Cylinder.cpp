@@ -65,11 +65,11 @@ Tuple Cylinder::local_normal_at(const Tuple &point_in_object_space) const {
     const auto y1 = ray.origin().y() + (t1 * ray.direction().y());
 
     if (minimum_ < y0 && y0 < maximum_) {
-        xs.push_back(Intersection{t0, this});
+        xs.emplace_back(t0, this);
     }
 
     if (minimum_ < y1 && y1 < maximum_) {
-        xs.push_back(Intersection{t1, this});
+        xs.emplace_back(t1, this);
     }
 
     return xs;
@@ -92,13 +92,13 @@ void Cylinder::intersect_caps(const Ray &ray, Intersections &xs) const {
     // check lower cap
     auto t = (minimum_ - ray.origin().y()) / ray.direction().y();
     if (is_ray_cap_intersecting(ray, t)) {
-        xs.push_back(Intersection{t, this});
+        xs.emplace_back(t, this);
     }
 
     // check upper cap
     t = (maximum_ - ray.origin().y()) / ray.direction().y();
     if (is_ray_cap_intersecting(ray, t)) {
-        xs.push_back(Intersection{t, this});
+        xs.emplace_back(t, this);
     }
 }
 
