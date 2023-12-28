@@ -16,6 +16,8 @@ public:
 
     [[nodiscard]] std::vector<Tuple> vertices() const;
 
+    [[nodiscard]] std::vector<Tuple> normals() const;
+
     [[nodiscard]] std::shared_ptr<Group> default_group() const;
 
     [[nodiscard]] std::unordered_map<std::string, std::shared_ptr<Group>> named_groups() const;
@@ -26,13 +28,16 @@ public:
 
     void set_vertices(const std::vector<Tuple> &vertices);
 
-    void add_triangle(const Triangle &triangle, const std::optional<std::string> &current_group);
+    void set_normals(const std::vector<Tuple> &normals);
+
+    void add_triangle(const std::shared_ptr<Triangle> &triangle, const std::optional<std::string> &current_group);
 
 private:
     WavefrontOBJ();
 
     std::vector<std::string> ignored_lines_{};
     std::vector<Tuple> vertices_{};
+    std::vector<Tuple> normals_{};
     std::shared_ptr<Group> default_group_;
     std::unordered_map<std::string, std::shared_ptr<Group>> named_groups_;
 };

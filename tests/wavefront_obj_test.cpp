@@ -5,6 +5,7 @@
 
 #include "Matrix.h"
 #include "Triangle.h"
+#include "SmoothTriangle.h"
 #include "Tuple.h"
 #include "WavefrontOBJ.h"
 
@@ -169,4 +170,66 @@ f 1 3 4)";
 
     ASSERT_TRUE(std::find(group->children().begin(), group->children().end(), first_group) != group->children().end());
     ASSERT_TRUE(std::find(group->children().begin(), group->children().end(), second_group) != group->children().end());
+}
+
+TEST(WavefrontObj, VertexNormalRecords) {
+    const std::string text = R"(vn 0 0 1
+vn 0.707 0 -0.707
+vn 1 2 3)";
+
+    const auto filepath = std::filesystem::temp_directory_path() / "normals.obj";
+    std::ofstream file{filepath};
+    file << text;
+    file.close();
+    const auto obj = WavefrontOBJ::parse_obj_file(filepath);
+
+    // NOTE: because this is 1-indexed, there are 4 elements (even though there are 3 normals).
+    ASSERT_EQ(obj.normals().size(), 4);
+    EXPECT_EQ(obj.normals()[1], make_vector(0.0, 0.0, 1.0));
+    EXPECT_EQ(obj.normals()[2], make_vector(0.707, 0.0, -0.707));
+    EXPECT_EQ(obj.normals()[3], make_vector(1.0, 2.0, 3.0));
+}
+
+TEST(WavefrontObj, FacesWithNormals) {
+    const std::string text = R"(v 0 1 0
+v -1 0 0
+v 1 0 0
+
+vn -1 0 0
+vn 1 0 0
+vn 0 1 0
+
+f 1//3 2//1 3//2
+f 1/0/3 2/102/1 3/14/2
+)";
+
+    const auto filepath = std::filesystem::temp_directory_path() / "vertex_normals.obj";
+    std::ofstream file{filepath};
+    file << text;
+    file.close();
+    const auto obj = WavefrontOBJ::parse_obj_file(filepath);
+
+    const auto g = obj.default_group();
+    ASSERT_EQ(g->children().size(), 2);
+    const auto t1 = std::dynamic_pointer_cast<SmoothTriangle>(g->children()[0]);
+    const auto t2 = std::dynamic_pointer_cast<SmoothTriangle>(g->children()[1]);
+
+    ASSERT_TRUE(t1);
+    ASSERT_TRUE(t2);
+
+    // NOTE: because this is 1-indexed, there are 4 elements (even though there are 3 vertices).
+    const auto &vertices = obj.vertices();
+    ASSERT_EQ(vertices.size(), 4);
+    EXPECT_EQ(t1->p1(), vertices[1]);
+    EXPECT_EQ(t1->p2(), vertices[2]);
+    EXPECT_EQ(t1->p3(), vertices[3]);
+
+    // NOTE: because this is 1-indexed, there are 4 elements (even though there are 3 normals).
+    const auto &normals = obj.normals();
+    ASSERT_EQ(normals.size(), 4);
+    EXPECT_EQ(t1->n1(), normals[3]);
+    EXPECT_EQ(t1->n2(), normals[1]);
+    EXPECT_EQ(t1->n3(), normals[2]);
+
+    EXPECT_EQ(*t1, *t2);
 }
