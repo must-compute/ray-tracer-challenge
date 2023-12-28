@@ -15,6 +15,18 @@ std::shared_ptr<CSG> CSG::make_csg(CSGOperation operation,
     return csg;
 }
 
+bool CSG::intersection_allowed(CSGOperation op, bool left_hit, bool inside_left, bool inside_right) {
+    if (op == CSGOperation::Union) {
+        return (left_hit and not inside_right) or (not left_hit and not inside_left);
+    } else if (op == CSGOperation::Intersection) {
+        return (left_hit and inside_right) or (not left_hit and inside_left);
+    } else if (op == CSGOperation::Difference) {
+        return (left_hit and not inside_right) or (not left_hit and inside_left);
+    }
+
+    assert(false); // invalid op, or unreachable
+}
+
 CSGOperation CSG::operation() const {
     return operation_;
 }

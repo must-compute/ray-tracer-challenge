@@ -27,6 +27,8 @@ public:
                                          std::shared_ptr<Shape> left,
                                          std::shared_ptr<Shape> right);
 
+    [[nodiscard]] static bool intersection_allowed(CSGOperation op, bool left_hit, bool inside_left, bool inside_right);
+
     bool operator==(const CSG &other) const = delete;
 
     [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
