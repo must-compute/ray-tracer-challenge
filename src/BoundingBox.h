@@ -10,31 +10,31 @@
 // TODO add a debug-mode render function to show the wireframe bounding box
 class BoundingBox {
 public:
-    BoundingBox();
+  BoundingBox();
 
-    BoundingBox(const Tuple &minimum, const Tuple &maximum);
+  BoundingBox(const Tuple &minimum, const Tuple &maximum);
 
-    void set_transform(const tf::Transform &transform);
+  void set_transform(const tf::Transform &transform);
 
-    [[nodiscard]] Tuple minimum() const;
+  [[nodiscard]] Tuple minimum() const;
 
-    [[nodiscard]] Tuple maximum() const;
+  [[nodiscard]] Tuple maximum() const;
 
-    [[nodiscard]] bool contains_point(const Tuple &point) const;
+  [[nodiscard]] bool contains_point(const Tuple &point) const;
 
-    [[nodiscard]] bool contains_box(const BoundingBox &other) const;
+  [[nodiscard]] bool contains_box(const BoundingBox &other) const;
 
-    void add_point(const Tuple &point);
+  void add_point(const Tuple &point);
 
-    void add_box(const BoundingBox &other);
+  void add_box(const BoundingBox &other);
 
-    [[nodiscard]] bool intersects(const Ray &ray) const;
+  [[nodiscard]] bool intersects(const Ray &ray) const;
 
-    [[nodiscard]] static std::pair<double, double> check_axis(double origin, double direction, double min, double max);
+  [[nodiscard]] static std::pair<double, double> check_axis(double origin, double direction, double min, double max);
 
 private:
-    Tuple minimum_{};
-    Tuple maximum_{};
+  Tuple minimum_{};
+  Tuple maximum_{};
 };
 
 #endif //BOUNDS_H

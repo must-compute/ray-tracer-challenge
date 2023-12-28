@@ -9,31 +9,30 @@ class Shape;
 
 class Pattern {
 public:
-    Pattern();
+  Pattern();
 
-    Pattern(const Color &a, const Color &b);
+  Pattern(const Color &a, const Color &b);
 
-    virtual ~Pattern() = default;
+  virtual ~Pattern() = default;
 
-    bool operator==(const Pattern &other) const = default;
+  bool operator==(const Pattern &other) const = default;
 
-    [[nodiscard]] Color a() const;
+  [[nodiscard]] Color a() const;
 
-    [[nodiscard]] Color b() const;
+  [[nodiscard]] Color b() const;
 
-    [[nodiscard]] tf::Transform transform() const;
+  [[nodiscard]] tf::Transform transform() const;
 
-    void set_transform(const tf::Transform &t);
+  void set_transform(const tf::Transform &t);
 
-    [[nodiscard]] Color pattern_at_shape(const Shape &object, const Tuple &world_point) const;
+  [[nodiscard]] Color pattern_at_shape(const Shape &object, const Tuple &world_point) const;
 
 protected:
-    Color a_;
-    Color b_;
-    tf::Transform transform_;
+  Color a_;
+  Color b_;
+  tf::Transform transform_;
 
-    virtual Color pattern_at(const Tuple &point) const = 0;
+  virtual Color pattern_at(const Tuple &point) const = 0;
 };
-
 
 #endif //RAY_TRACER_CHALLENGE_PATTERN_H

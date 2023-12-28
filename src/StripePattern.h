@@ -10,13 +10,12 @@ class Shape;
 
 class StripePattern final : public Pattern {
 public:
-    StripePattern(const Color &a, const Color &b);
+  StripePattern(const Color &a, const Color &b);
 
-    bool operator==(const StripePattern &other) const = default;
+  bool operator==(const StripePattern &other) const = default;
 
-    [[nodiscard]] Color pattern_at(const Tuple &point) const override;
+  [[nodiscard]] Color pattern_at(const Tuple &point) const override;
 
 };
-
 
 #endif //RAY_TRACER_CHALLENGE_STRIPEPATTERN_H

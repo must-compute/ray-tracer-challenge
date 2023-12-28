@@ -6,17 +6,17 @@ Ray::Ray(const Tuple &origin_in, const Tuple &direction_in) : origin_(origin_in)
 }
 
 Tuple Ray::position_at_t(double t) const {
-    return origin_ + direction_ * t;
+  return origin_ + direction_ * t;
 }
 
 Tuple Ray::origin() const {
-    return origin_;
+  return origin_;
 }
 
 Tuple Ray::direction() const {
-    return direction_;
+  return direction_;
 }
 
 Ray Ray::transform(const tf::Transform &m) const {
-    return {m * origin_, m * direction_};
+  return {m * origin_, m * direction_};
 }

@@ -1,10 +1,10 @@
 #include "PointLight.h"
 
 [[nodiscard]] Color PointLight::intensity() const {
-    return intensity_;
+  return intensity_;
 
 }
 
 [[nodiscard]] Tuple PointLight::position() const {
-    return position_;
+  return position_;
 }

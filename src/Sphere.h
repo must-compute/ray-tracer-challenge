@@ -15,16 +15,15 @@ class BoundingBox;
 
 class Sphere final : public Shape {
 public:
-    bool operator==(const Sphere &other) const = default;
+  bool operator==(const Sphere &other) const = default;
 
-    [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
+  [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 
-    [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space,
-                                        const std::optional<Intersection> &intersection) const override;
+  [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space,
+                                      const std::optional<Intersection> &intersection) const override;
 
-    [[nodiscard]] BoundingBox make_bounding_box() const override;
+  [[nodiscard]] BoundingBox make_bounding_box() const override;
 };
-
 
 [[nodiscard]] Sphere make_glass_sphere();
 

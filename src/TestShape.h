@@ -11,18 +11,17 @@
 class TestShape final : public Shape {
 public:
 
-    [[nodiscard]] std::optional<Ray> local_ray() const;
+  [[nodiscard]] std::optional<Ray> local_ray() const;
 
-    [[nodiscard]] BoundingBox make_bounding_box() const override;
+  [[nodiscard]] BoundingBox make_bounding_box() const override;
 
 private:
-    [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
+  [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 
-    [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space,
-                                        const std::optional<Intersection> &intersection) const override;
+  [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space,
+                                      const std::optional<Intersection> &intersection) const override;
 
-    std::optional<Ray> local_ray_;
+  std::optional<Ray> local_ray_;
 };
-
 
 #endif //RAY_TRACER_CHALLENGE_TESTSHAPE_H
