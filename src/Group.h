@@ -20,7 +20,7 @@ public:
 
     [[nodiscard]] std::vector<std::shared_ptr<Shape>> children() const;
 
-    void add_child(const std::shared_ptr<Shape> &child);
+    void add_child(const std::shared_ptr<Shape> &child); // TODO dont use const & here
 
     [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 
