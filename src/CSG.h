@@ -6,10 +6,9 @@
 #include "Shape.h"
 #include "Tuple.h"
 #include "BoundingBox.h"
+#include "Intersection.h"
 
 class Ray;
-
-class Intersection;
 
 enum class CSGOperation {
   Invalid, Union, Intersection, Difference,
@@ -28,6 +27,8 @@ public:
                                        std::shared_ptr<Shape> right);
 
   [[nodiscard]] static bool intersection_allowed(CSGOperation op, bool left_hit, bool inside_left, bool inside_right);
+
+  [[nodiscard]] Intersections filter_intersections(const Intersections &intersections) const;
 
   bool operator==(const CSG &other) const = delete;
 

@@ -52,3 +52,28 @@ TEST(CSG, EvaluatingRuleForCSGOperation) {
     EXPECT_EQ(CSG::intersection_allowed(op, left_hit, inside_left, inside_right), result);
   }
 }
+
+TEST(CSG, FilteringListOfIntersections) {
+  const std::vector<std::tuple<CSGOperation, size_t, size_t>> test_table = {
+      {CSGOperation::Union, 0, 3},
+      {CSGOperation::Intersection, 1, 2},
+      {CSGOperation::Difference, 0, 1},
+  };
+
+  auto sphere{std::make_shared<Sphere>(Sphere{})};
+  auto cube{std::make_shared<Cube>(Cube{})};
+
+  for (const auto &[op, x0, x1] : test_table) {
+    const auto csg{CSG::make_csg(op, sphere, cube)};
+    const Intersections xs{
+        Intersection{1.0, sphere.get()},
+        Intersection{2.0, cube.get()},
+        Intersection{3.0, sphere.get()},
+        Intersection{4.0, cube.get()},
+    };
+    const auto result = csg->filter_intersections(xs);
+    ASSERT_EQ(result.size(), 2);
+    EXPECT_EQ(result[0], xs[x0]);
+    EXPECT_EQ(result[1], xs[x1]);
+  }
+}
