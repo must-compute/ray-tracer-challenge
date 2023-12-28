@@ -15,22 +15,22 @@
 #include "WavefrontOBJ.h"
 
 int main() {
-    using std::numbers::pi;
+  using std::numbers::pi;
 
-    const size_t width = 100;
-    const size_t height = 100;
-    const Color white = make_color(1.0, 1.0, 1.0);
-    const Color black = make_color(0.0, 0.0, 0.0);
-    auto world = World{};
+  const size_t width = 100;
+  const size_t height = 100;
+  const Color white = make_color(1.0, 1.0, 1.0);
+  const Color black = make_color(0.0, 0.0, 0.0);
+  auto world = World{};
 
-    auto floor = Plane{};
-    auto floor_material = Material{};
-    floor_material.ambient = 0.4;
-    floor_material.diffuse = 0.9;
-    floor_material.pattern = std::make_shared<StripePattern>(
-            StripePattern{make_color(0.7, 0.7, 0.7), make_color(0.3, 0.3, 0.3)});
-    floor.set_material(floor_material);
-    world.objects.push_back(std::make_shared<Plane>(floor));
+  auto floor = Plane{};
+  auto floor_material = Material{};
+  floor_material.ambient = 0.4;
+  floor_material.diffuse = 0.9;
+  floor_material.pattern = std::make_shared<StripePattern>(
+      StripePattern{make_color(0.7, 0.7, 0.7), make_color(0.3, 0.3, 0.3)});
+  floor.set_material(floor_material);
+  world.objects.push_back(std::make_shared<Plane>(floor));
 
 //    auto left_wall_material = Material{};
 //    left_wall_material.color = make_color(0.4, 0.4, 1.0);
@@ -39,7 +39,7 @@ int main() {
 //    auto left_wall = Plane{};
 //    left_wall.set_transform(tf::translation(0.0, 0.0, 5.0) * tf::rotation_y(-pi / 4.0) * tf::rotation_x(pi / 2.0));
 //    left_wall.set_material(left_wall_material);
-    //world.objects.push_back(std::make_shared<Plane>(left_wall));
+  //world.objects.push_back(std::make_shared<Plane>(left_wall));
 
 //    auto dome_material = Material{};
 //    auto dome = Sphere{};
@@ -92,23 +92,23 @@ int main() {
 //    cone->set_material(cone_material);
 //    world.objects.push_back(cone);
 //
-    world.light = PointLight{make_point(-10.0, 10.0, -10.0), white};
+  world.light = PointLight{make_point(-10.0, 10.0, -10.0), white};
 
-    //const auto obj = WavefrontOBJ::parse_obj_file(std::filesystem::path("../assets/test_file.obj"));
-    const auto obj = WavefrontOBJ::parse_obj_file(std::filesystem::path("../assets/another_test.obj"));
-    auto group = obj.to_group();
+  //const auto obj = WavefrontOBJ::parse_obj_file(std::filesystem::path("../assets/test_file.obj"));
+  const auto obj = WavefrontOBJ::parse_obj_file(std::filesystem::path("../assets/another_test.obj"));
+  auto group = obj.to_group();
 
-    group->set_transform(tf::translation(0.0, 5.0, 0.0) * tf::rotation_x(-pi / 2.0) * tf::rotation_z(pi / 6.0));
+  group->set_transform(tf::translation(0.0, 5.0, 0.0) * tf::rotation_x(-pi / 2.0) * tf::rotation_z(pi / 6.0));
 
-    world.objects.push_back(group);
+  world.objects.push_back(group);
 
-    auto camera = Camera<width, height>{pi / 3.0};
-    camera.set_transform(
-            tf::view_transform(make_point(1.0, 5.0, -25.0), make_point(0.0, 1.0, 0.0), make_vector(0.0, 1.0, 0.0)));
+  auto camera = Camera<width, height>{pi / 3.0};
+  camera.set_transform(
+      tf::view_transform(make_point(1.0, 5.0, -25.0), make_point(0.0, 1.0, 0.0), make_vector(0.0, 1.0, 0.0)));
 
-    auto canvas = camera.render(world);
+  auto canvas = camera.render(world);
 
-    std::filesystem::path temp_path = "./output.ppm";
-    canvas.to_file(temp_path);
-    return 0;
+  std::filesystem::path temp_path = "./output.ppm";
+  canvas.to_file(temp_path);
+  return 0;
 }

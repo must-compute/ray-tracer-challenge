@@ -3,6 +3,7 @@
 
 #include <filesystem>
 #include <memory>
+#include <unordered_map>
 
 #include "Group.h"
 #include "Tuple.h"
