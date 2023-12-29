@@ -2,6 +2,7 @@
 #include <numbers>
 #include <memory>
 
+#include "CSG.h"
 #include "Intersection.h"
 #include "Sphere.h"
 #include "Plane.h"
@@ -17,8 +18,8 @@
 int main() {
   using std::numbers::pi;
 
-  const size_t width = 100;
-  const size_t height = 100;
+  const size_t width = 500;
+  const size_t height = 500;
   const Color white = make_color(1.0, 1.0, 1.0);
   const Color black = make_color(0.0, 0.0, 0.0);
   auto world = World{};
@@ -94,6 +95,7 @@ int main() {
 //
   world.light = PointLight{make_point(-10.0, 10.0, -10.0), white};
 
+  /*
   //const auto obj = WavefrontOBJ::parse_obj_file(std::filesystem::path("../assets/test_file.obj"));
   const auto obj = WavefrontOBJ::parse_obj_file(std::filesystem::path("../assets/another_test.obj"));
   auto group = obj.to_group();
@@ -101,10 +103,32 @@ int main() {
   group->set_transform(tf::translation(0.0, 5.0, 0.0) * tf::rotation_x(-pi / 2.0) * tf::rotation_z(pi / 6.0));
 
   world.objects.push_back(group);
+  */
+
+  auto cube = std::make_shared<Cube>(Cube{});
+  auto cube_material = Material{};
+  cube_material.color = make_color(0.0, 1.0, 0.0);
+  cube->set_material(cube_material);
+
+  cube->set_transform(tf::translation(0.0, 1.0, 0.0) * tf::rotation_y(pi / 4.0));
+
+  auto sphere = std::make_shared<Sphere>(Sphere{});
+  sphere->set_transform(tf::translation(0.0, 1.5, -1.0));
+  //sphere->set_transform(tf::translation(1.5, 0.5, 1.5) * tf::scaling(0.5, 0.5, 0.5));
+  auto right_material = Material{};
+  right_material.color = make_color(0.0, 1.0, 0.1);
+  right_material.ambient = 0.1;
+  right_material.diffuse = 0.7;
+  right_material.specular = 0.3;
+  right_material.reflective = 0.1;
+  sphere->set_material(right_material);
+
+  auto csg = CSG::make_csg(CSGOperation::Difference, cube, sphere);
+  world.objects.push_back(csg);
 
   auto camera = Camera<width, height>{pi / 3.0};
   camera.set_transform(
-      tf::view_transform(make_point(1.0, 5.0, -25.0), make_point(0.0, 1.0, 0.0), make_vector(0.0, 1.0, 0.0)));
+      tf::view_transform(make_point(1.0, 5.0, -5.0), make_point(0.0, 1.0, 0.0), make_vector(0.0, 1.0, 0.0)));
 
   auto canvas = camera.render(world);
 
