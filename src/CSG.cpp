@@ -84,16 +84,22 @@ std::shared_ptr<Shape> CSG::right() const {
 }
 
 Intersections CSG::local_intersect(const Ray &ray) {
-  // TODO
-  throw NotImplementedException{};
+  auto left_xs = left_->intersect(ray);
+  const auto right_xs = right_->intersect(ray);
+
+  auto &xs = left_xs;
+  xs.insert(xs.end(), right_xs.begin(), right_xs.end());
+  std::sort(xs.begin(), xs.end(), [](const Intersection &left, const Intersection &right) { return left.t < right.t; });
+
+  return filter_intersections(xs);
 }
 
 Tuple CSG::local_normal_at(const Tuple &point_in_object_space, const std::optional<Intersection> &intersection) const {
-  // TODO
+  // Intentionally throw so we detect if we call this function (not supposed to).
   throw NotImplementedException{};
 }
 
 BoundingBox CSG::make_bounding_box() const {
-  // TODO
+  // TODO implement this
   throw NotImplementedException{};
 }

@@ -77,3 +77,27 @@ TEST(CSG, FilteringListOfIntersections) {
     EXPECT_EQ(result[1], xs[x1]);
   }
 }
+
+TEST(CSG, RayMissesCSGObject) {
+  auto sphere{std::make_shared<Sphere>(Sphere{})};
+  auto cube{std::make_shared<Cube>(Cube{})};
+  const auto csg{CSG::make_csg(CSGOperation::Union, sphere, cube)};
+  const auto ray{Ray{make_point(0.0, 2.0, -5.0), make_vector(0.0, 0.0, 1.0)}};
+  EXPECT_TRUE(csg->local_intersect(ray).empty());
+}
+
+TEST(CSG, RayHitsCSGObject) {
+  auto sphere1{std::make_shared<Sphere>(Sphere{})};
+  auto sphere2{std::make_shared<Sphere>(Sphere{})};
+  sphere2->set_transform(tf::translation(0.0, 0.0, 0.5));
+
+  const auto csg{CSG::make_csg(CSGOperation::Union, sphere1, sphere2)};
+  const auto ray{Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)}};
+  const auto xs = csg->local_intersect(ray);
+
+  ASSERT_EQ(xs.size(), 2);
+  EXPECT_EQ(xs[0].t, 4.0);
+  EXPECT_EQ(xs[0].object, sphere1.get());
+  EXPECT_EQ(xs[1].t, 6.5);
+  EXPECT_EQ(xs[1].object, sphere2.get());
+}
