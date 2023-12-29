@@ -85,6 +85,10 @@ std::shared_ptr<Shape> CSG::right() const {
 }
 
 Intersections CSG::local_intersect(const Ray &ray) {
+  if (!make_bounding_box().intersects(ray)) {
+    return {};
+  }
+
   auto left_xs = left_->intersect(ray);
   const auto right_xs = right_->intersect(ray);
 
@@ -101,6 +105,9 @@ Tuple CSG::local_normal_at(const Tuple &point_in_object_space, const std::option
 }
 
 BoundingBox CSG::make_bounding_box() const {
-  // TODO implement this
-  throw NotImplementedException{};
+  BoundingBox box{};
+  for (const auto &child : {left_, right_}) {
+    box.add_box(child->make_bounding_box_in_parent_space());
+  }
+  return box;
 }

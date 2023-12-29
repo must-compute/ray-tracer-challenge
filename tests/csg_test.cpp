@@ -3,6 +3,7 @@
 #include "CSG.h"
 #include "Cube.h"
 #include "Sphere.h"
+#include "TestShape.h"
 
 TEST(CSG, CSGCreatedWithAnOperationAndTwoShapes) {
   const auto sphere{std::make_shared<Sphere>(Sphere{})};
@@ -100,4 +101,35 @@ TEST(CSG, RayHitsCSGObject) {
   EXPECT_EQ(xs[0].object, sphere1.get());
   EXPECT_EQ(xs[1].t, 6.5);
   EXPECT_EQ(xs[1].object, sphere2.get());
+}
+
+TEST(CSG, CSGHasBoundingBoxThatContainsItsChildren) {
+  auto left{std::make_shared<Sphere>(Sphere{})};
+  auto right{std::make_shared<Sphere>(Sphere{})};
+  right->set_transform(tf::translation(2.0, 3.0, 4.0));
+
+  const auto csg = CSG::make_csg(CSGOperation::Difference, left, right);
+  const auto box = csg->make_bounding_box();
+  EXPECT_EQ(box.minimum(), make_point(-1.0, -1.0, -1.0));
+  EXPECT_EQ(box.maximum(), make_point(3.0, 4.0, 5.0));
+}
+
+TEST(CSG, RayDoesNotIntersectChildrenIfBoundingBoxIsMissed) {
+  const auto left = std::make_shared<TestShape>(TestShape{});
+  const auto right = std::make_shared<TestShape>(TestShape{});
+  const auto csg = CSG::make_csg(CSGOperation::Difference, left, right);
+  const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 1.0, 0.0)};
+  auto xs = csg->intersect(ray);
+  EXPECT_FALSE(left->local_ray());
+  EXPECT_FALSE(right->local_ray());
+}
+
+TEST(CSG, RayIntersectsChildrenIfBoundingBoxIsHit) {
+  const auto left = std::make_shared<TestShape>(TestShape{});
+  const auto right = std::make_shared<TestShape>(TestShape{});
+  const auto csg = CSG::make_csg(CSGOperation::Difference, left, right);
+  const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+  auto xs = csg->intersect(ray);
+  EXPECT_TRUE(left->local_ray());
+  EXPECT_TRUE(right->local_ray());
 }
