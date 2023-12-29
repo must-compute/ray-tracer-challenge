@@ -104,9 +104,9 @@ TEST(Matrix, MulTuple) {
   const auto m = Matrix<h, w>{std::array<std::array<double, w>, h>{
       {{1.0, 2.0, 3.0, 4.0}, {2.0, 4.0, 4.0, 2.0}, {8.0, 6.0, 4.0, 1.0}, {0.0, 0.0, 0.0, 1.0}}
   }};
-  const auto t = BaseTuple<TupleOrColor::TUPLE>(1.0, 2.0, 3.0, 1.0);
+  const auto t = Tuple(1.0, 2.0, 3.0, 1.0);
 
-  const auto expected_tuple = BaseTuple<TupleOrColor::TUPLE>(18.0, 24.0, 33.0, 1.0);
+  const auto expected_tuple = Tuple(18.0, 24.0, 33.0, 1.0);
 
   EXPECT_EQ(m * t, expected_tuple);
 }

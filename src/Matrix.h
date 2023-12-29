@@ -7,7 +7,7 @@
 #include <string>
 #include <ostream>
 #include "util.h"
-#include "BaseTuple.h"
+#include "Tuple.h"
 
 // TODO we don't actually need this to be a struct. Consider just making the Matrix be an alias to the std array data
 // and writing free functions to define the operations.
@@ -41,9 +41,9 @@ struct Matrix {
     return result;
   }
 
-  BaseTuple<TupleOrColor::TUPLE>
-  operator*(const BaseTuple<TupleOrColor::TUPLE> &other) const requires (ROWS == 4 && COLS == 4) {
-    BaseTuple<TupleOrColor::TUPLE> result{};
+  Tuple
+  operator*(const Tuple &other) const requires (ROWS == 4 && COLS == 4) {
+    Tuple result{};
     for (size_t r = 0; r < ROWS; ++r) {
       result[r] = cells[r][0] * other.x() +
           cells[r][1] * other.y() +
