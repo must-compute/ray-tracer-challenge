@@ -3,10 +3,10 @@
 
 [[nodiscard]] World make_default_world() {
   auto world = World{};
-  const auto light = PointLight{make_point(-10.0, 10.0, -10.0), make_color(1.0, 1.0, 1.0)};
+  const auto light = PointLight{make_point(-10.0, 10.0, -10.0), Color{1.0, 1.0, 1.0}};
   auto material = Material{};
 
-  material.color = make_color(0.8, 1.0, 0.6);
+  material.color = Color{0.8, 1.0, 0.6};
   material.diffuse = 0.7;
   material.specular = 0.2;
 
@@ -82,7 +82,7 @@ Color World::reflected_color(const IntersectionComputation &comps, size_t remain
     const auto ray = Ray{comps.over_point, comps.reflectv};
     return color_at(ray, remaining - 1) * reflectivity;
   } else {
-    return make_color(0.0, 0.0, 0.0);
+    return Color{0.0, 0.0, 0.0};
   }
 }
 
@@ -94,7 +94,7 @@ Color World::refracted_color(const IntersectionComputation &comps, size_t remain
     const auto sin2_t = std::pow(n_ratio, 2) * (1 - std::pow(cos_i, 2));
 
     if (sin2_t > 1.0) { // total internal reflection
-      return make_color(0.0, 0.0, 0.0);
+      return Color{0.0, 0.0, 0.0};
     }
 
     const auto cos_t = std::sqrt(1.0 - sin2_t);
@@ -103,7 +103,7 @@ Color World::refracted_color(const IntersectionComputation &comps, size_t remain
 
     return color_at(refracted_ray, remaining - 1) * comps.object->material().transparency;
   } else {
-    return make_color(0.0, 0.0, 0.0);
+    return Color{0.0, 0.0, 0.0};
   }
 }
 

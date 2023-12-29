@@ -106,7 +106,7 @@ public:
 
   // For pretty printing in GTEST.
   friend std::ostream &operator<<(std::ostream &os, const Tuple &tup) {
-    os << "Tuple<" << "TUPLE>\n";
+    os << "Tuple: ";
     os << "{x: " << std::to_string(tup.x_) << ", y:" << std::to_string(tup.y_) << ", z:";
     os << std::to_string(tup.z_) << ", w:" << std::to_string(tup.w_) << "}";
     return os;

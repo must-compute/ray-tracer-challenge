@@ -10,8 +10,8 @@
 
 class PatternFixture : public ::testing::Test {
 protected:
-  const Color black = make_color(0.0, 0.0, 0.0);
-  const Color white = make_color(1.0, 1.0, 1.0);
+  const Color black = Color{0.0, 0.0, 0.0};
+  const Color white = Color{1.0, 1.0, 1.0};
 };
 
 TEST_F(PatternFixture, CreateStripePattern) {
@@ -78,7 +78,7 @@ TEST_F(PatternFixture, PatternWithObjectTransformation) {
 
   const auto pattern = TestPattern{};
 
-  EXPECT_EQ(pattern.pattern_at_shape(object, make_point(2.0, 3.0, 4.0)), make_color(1.0, 1.5, 2.0));
+  EXPECT_EQ(pattern.pattern_at_shape(object, make_point(2.0, 3.0, 4.0)), (Color{1.0, 1.5, 2.0}));
 }
 
 TEST_F(PatternFixture, PatternWithPatternTransformation) {
@@ -87,7 +87,7 @@ TEST_F(PatternFixture, PatternWithPatternTransformation) {
   auto pattern = TestPattern{};
   pattern.set_transform(tf::scaling(2.0, 2.0, 2.0));
 
-  EXPECT_EQ(pattern.pattern_at_shape(object, make_point(2.0, 3.0, 4.0)), make_color(1.0, 1.5, 2.0));
+  EXPECT_EQ(pattern.pattern_at_shape(object, make_point(2.0, 3.0, 4.0)), (Color{1.0, 1.5, 2.0}));
 }
 
 TEST_F(PatternFixture, PatternWithObjectAndPatternTransformation) {
@@ -97,16 +97,16 @@ TEST_F(PatternFixture, PatternWithObjectAndPatternTransformation) {
   auto pattern = TestPattern{};
   pattern.set_transform(tf::translation(0.5, 1.0, 1.5));
 
-  EXPECT_EQ(pattern.pattern_at_shape(object, make_point(2.5, 3.0, 3.5)), make_color(0.75, 0.5, 0.25));
+  EXPECT_EQ(pattern.pattern_at_shape(object, make_point(2.5, 3.0, 3.5)), (Color{0.75, 0.5, 0.25}));
 }
 
 TEST_F(PatternFixture, GradientLinearlyInterpolatesBetweenColors) {
   auto pattern = GradientPattern{white, black};
 
   EXPECT_EQ(pattern.pattern_at(make_point(0.0, 0.0, 0.0)), white);
-  EXPECT_EQ(pattern.pattern_at(make_point(0.25, 0.0, 0.0)), make_color(0.75, 0.75, 0.75));
-  EXPECT_EQ(pattern.pattern_at(make_point(0.5, 0.0, 0.0)), make_color(0.5, 0.5, 0.5));
-  EXPECT_EQ(pattern.pattern_at(make_point(0.75, 0.0, 0.0)), make_color(0.25, 0.25, 0.25));
+  EXPECT_EQ(pattern.pattern_at(make_point(0.25, 0.0, 0.0)), (Color{0.75, 0.75, 0.75}));
+  EXPECT_EQ(pattern.pattern_at(make_point(0.5, 0.0, 0.0)), (Color{0.5, 0.5, 0.5}));
+  EXPECT_EQ(pattern.pattern_at(make_point(0.75, 0.0, 0.0)), (Color{0.25, 0.25, 0.25}));
 }
 
 TEST_F(PatternFixture, RingGradientShouldExtendInBothXAndZ) {

@@ -20,8 +20,8 @@ int main() {
 
   const size_t width = 500;
   const size_t height = 500;
-  const Color white = make_color(1.0, 1.0, 1.0);
-  const Color black = make_color(0.0, 0.0, 0.0);
+  const Color white{1.0, 1.0, 1.0};
+  const Color black{0.0, 0.0, 0.0};
   auto world = World{};
 
   auto floor = Plane{};
@@ -29,12 +29,12 @@ int main() {
   floor_material.ambient = 0.4;
   floor_material.diffuse = 0.9;
   floor_material.pattern = std::make_shared<StripePattern>(
-      StripePattern{make_color(0.7, 0.7, 0.7), make_color(0.3, 0.3, 0.3)});
+      StripePattern{Color{0.7, 0.7, 0.7}, Color{0.3, 0.3, 0.3}});
   floor.set_material(floor_material);
   world.objects.push_back(std::make_shared<Plane>(floor));
 
 //    auto left_wall_material = Material{};
-//    left_wall_material.color = make_color(0.4, 0.4, 1.0);
+//    left_wall_material.color = Color{0.4, 0.4, 1.0};
 //    left_wall_material.diffuse = 0.9;
 //    left_wall_material.ambient = 0.9;
 //    auto left_wall = Plane{};
@@ -50,7 +50,7 @@ int main() {
 //    auto middle_sphere = Sphere{};
 //    middle_sphere.set_transform(tf::translation(-0.5, 1.0, 0.5));
 //    auto middle_material = Material{};
-//    middle_material.color = make_color(0.9, 0.1, 0.1);
+//    middle_material.color = Color{0.9, 0.1, 0.1};
 //    middle_material.ambient = 0.1;
 //    middle_material.diffuse = 0.1;
 //    middle_material.specular = 1.0;
@@ -63,7 +63,7 @@ int main() {
 //
 //    auto cube = Cube{};
 //    auto cube_material = Material{};
-//    cube_material.color = make_color(0.0, 1.0, 0.0);
+//    cube_material.color = Color{0.0, 1.0, 0.0};
 //    cube.set_material(cube_material);
 //
 //    cube.set_transform(tf::translation(-2.0, 0.5, 1.5) * tf::rotation_y(pi / 8.0));
@@ -72,7 +72,7 @@ int main() {
 //    auto right_sphere = Sphere{};
 //    right_sphere.set_transform(tf::translation(1.5, 0.5, 1.5) * tf::scaling(0.5, 0.5, 0.5));
 //    auto right_material = Material{};
-//    right_material.color = make_color(0.0, 1.0, 0.1);
+//    right_material.color = Color{0.0, 1.0, 0.1};
 //    right_material.ambient = 0.1;
 //    right_material.diffuse = 0.7;
 //    right_material.specular = 0.3;
@@ -85,7 +85,7 @@ int main() {
 //    cone->set_maximum(1.0);
 //    cone->set_transform(tf::translation(2.0, 0.0, 0.0) * tf::scaling(0.4, 1.5, 0.4));
 //    auto cone_material = Material{};
-//    cone_material.color = make_color(1.0, 1.0, 0.0);
+//    cone_material.color = Color{1.0, 1.0, 0.0};
 //    cone_material.ambient = 0.3;
 //    cone_material.diffuse = 0.6;
 //    cone_material.specular = 0.3;
@@ -107,7 +107,7 @@ int main() {
 
   auto cube = std::make_shared<Cube>(Cube{});
   auto cube_material = Material{};
-  cube_material.color = make_color(1.0, 0.0, 0.0);
+  cube_material.color = Color{1.0, 0.0, 0.0};
   cube->set_material(cube_material);
 
   cube->set_transform(tf::translation(0.0, 1.0, 0.0) * tf::rotation_y(pi / 4.0));
@@ -116,7 +116,7 @@ int main() {
   sphere->set_transform(tf::translation(0.0, 1.5, -1.0));
   //sphere->set_transform(tf::translation(1.5, 0.5, 1.5) * tf::scaling(0.5, 0.5, 0.5));
   auto right_material = Material{};
-  right_material.color = make_color(0.0, 1.0, 0.1);
+  right_material.color = Color{0.0, 1.0, 0.1};
   right_material.ambient = 0.1;
   right_material.diffuse = 0.7;
   right_material.specular = 0.3;

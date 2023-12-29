@@ -1,7 +1,6 @@
 #ifndef RAY_TRACER_CHALLENGE_COLOR_H
 #define RAY_TRACER_CHALLENGE_COLOR_H
 
-#include <tuple>
 #include <array>
 #include <cassert>
 #include <ostream>
@@ -10,79 +9,74 @@
 
 class Color {
 private:
-  double x_, y_, z_, w_;
+  double r_, g_, b_;
 public:
 
   // TODO should w always be either 1.0 or 0.0? Might wanna guarantee during construction
-  Color(double x, double y, double z, double w) : x_(x), y_(y), z_(z), w_(w) {};
+  Color(double r, double g, double b) : r_(r), g_(g), b_(b) {};
 
-  Color() : x_(0.0), y_(0.0), z_(0.0), w_(0.0) {};
+  Color() : r_(0.0), g_(0.0), b_(0.0) {};
 
   bool operator==(const Color &other) const {
-    return within_epsilon(x_, other.x_)
-        && within_epsilon(y_, other.y_)
-        && within_epsilon(z_, other.z_)
-        && within_epsilon(w_, other.w_);
+    return within_epsilon(r_, other.r_)
+        && within_epsilon(g_, other.g_)
+        && within_epsilon(b_, other.b_);
   }
 
   Color operator+(const Color &other) const {
-    return {x_ + other.x_, y_ + other.y_, z_ + other.z_, w_ + other.w_};
+    return {r_ + other.r_, g_ + other.g_, b_ + other.b_};
   }
 
   Color operator-(const Color &other) const {
-    return {x_ - other.x_, y_ - other.y_, z_ - other.z_, w_ - other.w_};
+    return {r_ - other.r_, g_ - other.g_, b_ - other.b_};
   }
 
   Color operator*(const double &scalar) const {
-    return {x_ * scalar, y_ * scalar, z_ * scalar, w_ * scalar};
+    return {r_ * scalar, g_ * scalar, b_ * scalar};
   }
 
   Color operator/(const double &scalar) const {
-    return {x_ / scalar, y_ / scalar, z_ / scalar, w_ / scalar};
+    return {r_ / scalar, g_ / scalar, b_ / scalar};
   }
 
   double &operator[](size_t i) {
     switch (i) {
-    case 0:return x_;
-    case 1:return y_;
-    case 2:return z_;
-    case 3:return w_;
+    case 0:return r_;
+    case 1:return g_;
+    case 2:return b_;
     default:assert(false);
     }
     // unreachable
     assert(false);
-    return w_;
+    return b_;
   }
 
   [[nodiscard]] double red() const {
-    return x_;
+    return r_;
   }
 
   [[nodiscard]] double green() const {
-    return y_;
+    return g_;
   }
 
   [[nodiscard]] double blue() const {
-    return z_;
+    return b_;
   }
 
   [[nodiscard]] std::array<double, 3> rgb() const {
-    return {x_, y_, z_};
+    return {r_, g_, b_};
   }
 
   [[nodiscard]] Color operator*(const Color &other) const {
-    // TODO assuming alpha is not needed
-    return {red() * other.red(), green() * other.green(), blue() * other.blue(), 0.0};
+    return {red() * other.red(), green() * other.green(), blue() * other.blue()};
   }
 
   // For pretty printing in GTEST.
-  friend std::ostream &operator<<(std::ostream &os, const Color &tup) {
-    os << "Color<" << "COLOR>\n";
-    os << "{red: " << std::to_string(tup.x_) << ", green:" << std::to_string(tup.y_) << ", blue:";
-    os << std::to_string(tup.z_) << "}";
+  friend std::ostream &operator<<(std::ostream &os, const Color &color) {
+    os << "Color: ";
+    os << "{red: " << std::to_string(color.r_) << ", green:" << std::to_string(color.g_) << ", blue:";
+    os << std::to_string(color.b_) << "}";
     return os;
   }
 };
-[[nodiscard]] Color make_color(double red, double green, double blue);
-
 #endif //RAY_TRACER_CHALLENGE_COLOR_H

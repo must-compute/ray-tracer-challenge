@@ -116,8 +116,8 @@ TEST(Group, FindingTheNormalOnAChildObject) {
 }
 
 TEST(Group, StripesPatternWithGroupTransformation) {
-  const auto white = make_color(1.0, 1.0, 1.0);
-  const auto black = make_color(0.0, 0.0, 0.0);
+  const auto white = Color{1.0, 1.0, 1.0};
+  const auto black = Color{0.0, 0.0, 0.0};
 
   auto g1 = Group::make_group();
   g1->set_transform(tf::translation(0.3, 0.0, 0.0));
