@@ -57,6 +57,9 @@ public:
     case 3:return w_;
     default:assert(false);
     }
+    // unreachable
+    assert(false);
+    return w_;
   }
 
   // Tuple-specific methods

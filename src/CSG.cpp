@@ -43,6 +43,7 @@ bool CSG::intersection_allowed(CSGOperation op, bool left_hit, bool inside_left,
   }
 
   assert(false); // invalid op, or unreachable
+  return {};
 }
 
 Intersections CSG::filter_intersections(const Intersections &intersections) const {

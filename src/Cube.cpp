@@ -41,6 +41,7 @@ Tuple Cube::local_normal_at(const Tuple &point_in_object_space, const std::optio
   }
 
   assert(false); // unreachable
+  return {};
 }
 
 [[nodiscard]] Intersections Cube::local_intersect(const Ray &ray) {

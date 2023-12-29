@@ -107,7 +107,7 @@ int main() {
 
   auto cube = std::make_shared<Cube>(Cube{});
   auto cube_material = Material{};
-  cube_material.color = make_color(0.0, 1.0, 0.0);
+  cube_material.color = make_color(1.0, 0.0, 0.0);
   cube->set_material(cube_material);
 
   cube->set_transform(tf::translation(0.0, 1.0, 0.0) * tf::rotation_y(pi / 4.0));
