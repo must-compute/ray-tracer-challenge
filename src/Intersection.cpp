@@ -5,6 +5,8 @@
 #include <algorithm>
 
 std::optional<Intersection> hit(const Intersections &intersections) {
+  // TODO this can be rewritten to avoid making any intermediate copies of intersections. Also we can just return a pointer to the intersection, since it's one of the input intersections (no ownership involved).
+
   // Return the intersection with the smallest non-negative t. Negative ts don't count because they're behind the ray origin.
   Intersections nonnegative{};
   std::copy_if(intersections.begin(), intersections.end(), std::back_inserter(nonnegative),

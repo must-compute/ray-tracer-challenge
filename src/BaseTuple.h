@@ -13,7 +13,6 @@ enum class TupleOrColor {
 };
 
 // TODO consider placing runtime checks against illegal w values (especially points).
-// negation, magnitude, normalize, dot and cross-product.
 template<TupleOrColor t>
 class BaseTuple {
 private:
