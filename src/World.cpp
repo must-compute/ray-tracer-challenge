@@ -36,7 +36,7 @@ Intersections World::intersect(const Ray &ray) const {
   return all_xs;
 }
 
-// NOTE: These three functions (shade_hit, color_at, and reflected_color) have infinite recursion, but we break it by passing a decrementing "remaining" argument.
+// NOTE: These three functions (shade_hit, color_at, and reflected_color) are recursive.
 // We use these pragmas to get clang-tidy to suppress the infinite recursion warning.
 
 Color World::shade_hit(const IntersectionComputation &comps, size_t remaining) const { // NOLINT
