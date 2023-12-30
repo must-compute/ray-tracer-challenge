@@ -16,7 +16,6 @@ class Tuple;
 using Point = Tuple<TupleKind::Point>;
 using Vector = Tuple<TupleKind::Vector>;
 
-// TODO maybe split into Point and Vector classes (or use templating), so we limit invalid operations.
 template<TupleKind t>
 class Tuple {
 private:
@@ -27,7 +26,8 @@ public:
   Tuple(double x, double y, double z) requires (t == TupleKind::Point): x_{x}, y_{y}, z_{z}, w_{1.0} {}
   Tuple(double x, double y, double z) requires (t == TupleKind::Vector): x_{x}, y_{y}, z_{z}, w_{0.0} {}
 
-  Tuple() : x_(0.0), y_(0.0), z_(0.0), w_(0.0) {}
+  Tuple() requires (t == TupleKind::Point): x_(0.0), y_(0.0), z_(0.0), w_(1.0) {}
+  Tuple() requires (t == TupleKind::Vector): x_(0.0), y_(0.0), z_(0.0), w_(0.0) {}
 
   [[nodiscard]] bool operator==(const Tuple &other) const {
     return within_epsilon(x_, other.x_)
@@ -49,14 +49,10 @@ public:
   }
 
   [[nodiscard]] Vector operator-(const Point &other) const requires (t == TupleKind::Point) {
-    // TODO revisit me
-//    return {x_ - other.x(), y_ - other.y_, z_ - other.z_, w_ - other.w_};
     return Vector{x_ - other.x(), y_ - other.y(), z_ - other.z()};
   }
 
   [[nodiscard]] Point operator-(const Vector &other) const requires (t == TupleKind::Point) {
-    // TODO revisit me
-//    return {x_ - other.x_, y_ - other.y_, z_ - other.z_, w_ - other.w_};
     return Point{x_ - other.x(), y_ - other.y(), z_ - other.z()};
   }
 
@@ -101,34 +97,36 @@ public:
     return z_;
   }
 
-  [[nodiscard]] double w() const {
-    return w_;
+  // TODO turns out maybe we don't need w_ at all?
+  [[nodiscard]] constexpr double w() const {
+    if constexpr (t == TupleKind::Vector) {
+      return 0.0;
+    } else {
+      return 1.0;
+    }
   }
 
-  [[nodiscard]] double magnitude() const {
+  [[nodiscard]] double magnitude() const requires (t == TupleKind::Vector) {
     return std::sqrt(x_ * x_ + y_ * y_ + z_ * z_ + w_ * w_);
   }
 
-  // TODO can a point be normalized?
   Vector normalize() const requires (t == TupleKind::Vector) {
     const double mag = this->magnitude();
     return {x_ / mag, y_ / mag, z_ / mag, w_ / mag};
   }
 
-  double dot(const Tuple &other) const {
+  double dot(const Tuple &other) const requires (t == TupleKind::Vector) {
     return (x_ * other.x_) + (y_ * other.y_) + (z_ * other.z_) + (w_ * other.w_);
   }
 
-  Tuple cross(const Tuple &other) const {
-    // TODO throw if Point
+  Vector cross(const Vector &other) const requires (t == TupleKind::Vector) {
     return {y_ * other.z_ - z_ * other.y_,
             z_ * other.x_ - x_ * other.z_,
-            x_ * other.y_ - y_ * other.x_,
-            0.0};
+            x_ * other.y_ - y_ * other.x_};
   }
 
   // Return the current vector reflected about the given normal.
-  Tuple reflect(const Tuple &normal) const {
+  Vector reflect(const Vector &normal) const requires (t == TupleKind::Vector) {
     return *this - (normal * 2.0 * this->dot(normal));
   }
 
