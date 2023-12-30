@@ -34,8 +34,7 @@ void Cone::set_closed(bool closed) {
 Intersections Cone::local_intersect(const Ray &ray) {
   const auto a =
       std::pow(ray.direction().x(), 2) - std::pow(ray.direction().y(), 2) + std::pow(ray.direction().z(), 2);
-  Intersections xs{};
-  intersect_caps(ray, xs);
+  Intersections xs{intersect_caps(ray)};
 
   const auto b = 2 * ray.origin().x() * ray.direction().x() -
       2 * ray.origin().y() * ray.direction().y() +
@@ -89,9 +88,11 @@ Vector Cone::local_normal_at(const Point &point_in_object_space,
   return make_vector(point_in_object_space.x(), dist, point_in_object_space.z());
 }
 
-void Cone::intersect_caps(const Ray &ray, Intersections &xs) const {
+Intersections Cone::intersect_caps(const Ray &ray) const {
+  Intersections xs{};
+
   if (!closed_) {
-    return;
+    return xs;
   }
 
   // check lower cap
@@ -105,6 +106,8 @@ void Cone::intersect_caps(const Ray &ray, Intersections &xs) const {
   if (is_ray_cap_intersecting(ray, t, maximum_)) {
     xs.emplace_back(t, this);
   }
+
+  return xs;
 }
 
 BoundingBox Cone::make_bounding_box() const {

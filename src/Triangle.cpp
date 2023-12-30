@@ -17,7 +17,7 @@ Intersections Triangle::local_intersect(const Ray &ray) {
 
   const auto u = f * p1_to_origin.dot(direction_cross_e2);
 
-  if (u < 0.0 || u > 1.0) { // TODO should this range be inclusive or exclusive?
+  if (u < 0.0 || u > 1.0) {
     return {};
   }
 

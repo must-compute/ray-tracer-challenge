@@ -9,8 +9,6 @@
 #include "util.h"
 #include "Tuple.h"
 
-// TODO we don't actually need this to be a struct. Consider just making the Matrix be an alias to the std array data
-// and writing free functions to define the operations.
 template<size_t ROWS, size_t COLS>
 struct Matrix {
 

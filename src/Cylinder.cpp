@@ -39,8 +39,7 @@ Vector Cylinder::local_normal_at(const Point &point_in_object_space,
 
 [[nodiscard]] Intersections Cylinder::local_intersect(const Ray &ray) {
   const auto a = std::pow(ray.direction().x(), 2) + std::pow(ray.direction().z(), 2);
-  Intersections xs{};
-  intersect_caps(ray, xs);
+  Intersections xs{intersect_caps(ray)};
 
   // Ray is parallel to the y-axis, so we only need to check intersections on caps;
   if (std::abs(a) < EPSILON) {
@@ -83,10 +82,12 @@ void Cylinder::set_closed(bool closed) {
   closed_ = closed;
 }
 
-void Cylinder::intersect_caps(const Ray &ray, Intersections &xs) const {
+Intersections Cylinder::intersect_caps(const Ray &ray) const {
+  Intersections xs{};
+
   // caps only matter if the cylinder is closed and might be intersected by the ray (i.e. ray not parallel to the cap)
   if ((!closed_) || within_epsilon(ray.direction().y(), 0.0)) {
-    return;
+    return xs;
   }
 
   // check lower cap
@@ -100,6 +101,8 @@ void Cylinder::intersect_caps(const Ray &ray, Intersections &xs) const {
   if (is_ray_cap_intersecting(ray, t)) {
     xs.emplace_back(t, this);
   }
+
+  return xs;
 }
 
 BoundingBox Cylinder::make_bounding_box() const {

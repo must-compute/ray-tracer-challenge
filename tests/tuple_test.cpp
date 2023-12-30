@@ -56,22 +56,21 @@ TEST(Tuple, Negation) {
   }
 }
 
-// TODO fix me
-//TEST(Tuple, ScalarMultiply) {
-//  {
-//    const Tuple t = Tuple(1.0, -2.0, 3.0, -4.0);
-//    EXPECT_EQ(t * 3.5, Tuple(3.5, -7.0, 10.5, -14.0));
-//  }
-//  {
-//    const Tuple t = Tuple(1.0, -2.0, 3.0, -4.0);
-//    EXPECT_EQ(t * 0.5, Tuple(0.5, -1.0, 1.5, -2.0));
-//  }
-//}
-//
-//TEST(Tuple, ScalarDivide) {
-//  const Tuple t = Tuple(1.0, -2.0, 3.0, -4.0);
-//  EXPECT_EQ(t / 2.0, Tuple(0.5, -1.0, 1.5, -2.0));
-//}
+TEST(Tuple, ScalarMultiply) {
+  {
+    const Vector t = Vector(1.0, -2.0, 3.0);
+    EXPECT_EQ(t * 3.5, Vector(3.5, -7.0, 10.5));
+  }
+  {
+    const Vector t = Vector(1.0, -2.0, 3.0);
+    EXPECT_EQ(t * 0.5, Vector(0.5, -1.0, 1.5));
+  }
+}
+
+TEST(Tuple, ScalarDivide) {
+  const Vector t = Vector(1.0, -2.0, 3.0);
+  EXPECT_EQ(t / 2.0, Vector(0.5, -1.0, 1.5));
+}
 
 TEST(Tuple, Magnitude) {
   {

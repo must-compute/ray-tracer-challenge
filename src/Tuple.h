@@ -60,11 +60,11 @@ public:
     return {x_ - other.x(), y_ - other.y(), z_ - other.z(), w_ - other.w_};
   }
 
-  [[nodiscard]] Tuple operator*(const double &scalar) const {
+  [[nodiscard]] Vector operator*(const double &scalar) const requires (t == TupleKind::Vector) {
     return {x_ * scalar, y_ * scalar, z_ * scalar, w_ * scalar};
   }
 
-  [[nodiscard]] Tuple operator/(const double &scalar) const {
+  [[nodiscard]] Vector operator/(const double &scalar) const requires (t == TupleKind::Vector) {
     return {x_ / scalar, y_ / scalar, z_ / scalar, w_ / scalar};
   }
 

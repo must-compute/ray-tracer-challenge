@@ -27,8 +27,7 @@ public:
 
   void set_closed(bool closed);
 
-  // TODO might need to be updated to avoid mutating intersections
-  void intersect_caps(const Ray &ray, Intersections &xs) const;
+  Intersections intersect_caps(const Ray &ray) const;
 
   [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 

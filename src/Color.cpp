@@ -1,6 +1,5 @@
 #include "Color.h"
 
-// TODO should w always be either 1.0 or 0.0? Might wanna guarantee during construction
 Color::Color(double r, double g, double b) : r_(r), g_(g), b_(b) {}
 
 Color::Color() : r_(0.0), g_(0.0), b_(0.0) {}

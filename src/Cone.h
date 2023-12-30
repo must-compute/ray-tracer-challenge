@@ -30,8 +30,7 @@ public:
 
   [[nodiscard]] BoundingBox make_bounding_box() const override;
 
-  // TODO might need to be updated to avoid mutating intersections
-  void intersect_caps(const Ray &ray, Intersections &xs) const;
+  Intersections intersect_caps(const Ray &ray) const;
 
 private:
   double minimum_ = -std::numeric_limits<double>::infinity();
