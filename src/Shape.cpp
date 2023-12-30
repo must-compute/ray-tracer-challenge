@@ -12,7 +12,7 @@ bool Shape::casts_shadow() const {
   return material_.casts_shadow;
 }
 
-[[nodiscard]] std::shared_ptr<Shape> Shape::parent() const {
+std::shared_ptr<Shape> Shape::parent() const {
   return parent_;
 }
 

@@ -75,6 +75,8 @@ public:
 
   [[nodiscard]] Canvas<WIDTH, HEIGHT> render(const World &world) const {
     auto image = Canvas<WIDTH, HEIGHT>{};
+    // TODO use an appropriate number of threads (based on hardware).
+    // TODO consider using a thread pool.
     std::vector<std::thread> threads;
 
     for (size_t y = 0; y < HEIGHT; ++y) {

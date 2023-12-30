@@ -1,23 +1,25 @@
-
 #include "Intersection.h"
+
+#include <algorithm>
+#include <optional>
+
 #include "Ray.h"
 #include "Shape.h"
-#include <algorithm>
 
 std::optional<Intersection> hit(const Intersections &intersections) {
-  // TODO this can be rewritten to avoid making any intermediate copies of intersections. Also we can just return a pointer to the intersection, since it's one of the input intersections (no ownership involved).
-
-  // Return the intersection with the smallest non-negative t. Negative ts don't count because they're behind the ray origin.
-  Intersections nonnegative{};
-  std::copy_if(intersections.begin(), intersections.end(), std::back_inserter(nonnegative),
-               [](const Intersection &i) { return i.t >= 0.0; });
-
-  const auto iter = std::min_element(nonnegative.begin(), nonnegative.end(),
-                                     [](const Intersection &a, const Intersection &b) { return a.t < b.t; });
-  if (iter != nonnegative.end()) {
-    return *iter;
+  if (intersections.empty()) {
+    return std::nullopt;
   }
-  return std::nullopt;
+
+  std::optional<Intersections::const_iterator> min_intersection;
+  for (auto iter = intersections.begin(); iter < intersections.end(); ++iter) {
+    if (iter->t >= 0.0) {
+      if (!min_intersection || iter->t < min_intersection.value()->t) {
+        min_intersection = iter;
+      }
+    }
+  }
+  return min_intersection ? std::make_optional(*min_intersection.value()) : std::nullopt;
 }
 
 IntersectionComputation Intersection::prepare_computations(const Ray &ray, const Intersections &xs) const {

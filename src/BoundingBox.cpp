@@ -1,4 +1,5 @@
 #include "BoundingBox.h"
+#include "Intersection.h"
 
 BoundingBox::BoundingBox() :
     minimum_(make_point(std::numeric_limits<double>::infinity(),
