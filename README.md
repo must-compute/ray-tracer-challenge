@@ -1,7 +1,7 @@
 # ray tracer challenge
 
-This is a C++20 implementation of (The Ray Tracer
-Challenge)[https://pragprog.com/titles/jbtracer/the-ray-tracer-challenge/].
+This is a C++20 implementation of [The Ray Tracer
+Challenge](https://pragprog.com/titles/jbtracer/the-ray-tracer-challenge/).
 
 ## Contributors
 
