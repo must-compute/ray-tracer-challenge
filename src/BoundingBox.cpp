@@ -9,7 +9,7 @@ BoundingBox::BoundingBox() :
                         -std::numeric_limits<double>::infinity())) {
 }
 
-BoundingBox::BoundingBox(const Tuple &minimum, const Tuple &maximum) : minimum_(minimum), maximum_(maximum) {
+BoundingBox::BoundingBox(const Point &minimum, const Point &maximum) : minimum_(minimum), maximum_(maximum) {
 }
 
 void BoundingBox::set_transform(const tf::Transform &transform) {
@@ -30,15 +30,15 @@ void BoundingBox::set_transform(const tf::Transform &transform) {
   maximum_ = new_bounding_box.maximum_;
 }
 
-Tuple BoundingBox::minimum() const {
+Point BoundingBox::minimum() const {
   return minimum_;
 }
 
-Tuple BoundingBox::maximum() const {
+Point BoundingBox::maximum() const {
   return maximum_;
 }
 
-void BoundingBox::add_point(const Tuple &point) {
+void BoundingBox::add_point(const Point &point) {
   // Adjust the bounding box to contain the given point.
   minimum_ = make_point(
       std::min(point.x(), minimum_.x()),
@@ -56,7 +56,7 @@ void BoundingBox::add_box(const BoundingBox &other) {
   add_point(other.maximum());
 }
 
-bool BoundingBox::contains_point(const Tuple &point) const {
+bool BoundingBox::contains_point(const Point &point) const {
   return minimum_.x() <= point.x() && point.x() <= maximum_.x() &&
       minimum_.y() <= point.y() && point.y() <= maximum_.y() &&
       minimum_.z() <= point.z() && point.z() <= maximum_.z();

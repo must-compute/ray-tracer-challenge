@@ -21,8 +21,8 @@ std::vector<std::string> split(const std::string &str, const char delimiter) {
 }
 
 std::vector<std::shared_ptr<Triangle>> parse_f_line(const std::vector<std::string> &tokens,
-                                                    const std::vector<Tuple> &vertices,
-                                                    const std::vector<Tuple> &normals) {
+                                                    const std::vector<Point> &vertices,
+                                                    const std::vector<Vector> &normals) {
   // Handle interpolated triangle case. Returns a single SmoothTriangle (shared_ptr).
   // Example input:
   // f 1/2/3 4/5/6 7//8
@@ -83,10 +83,10 @@ WavefrontOBJ::WavefrontOBJ() : default_group_{Group::make_group()} {}
 WavefrontOBJ WavefrontOBJ::parse_obj_file(const std::filesystem::path &path) {
   WavefrontOBJ obj{};
   std::vector<std::string> ignored_lines{};
-  std::vector<Tuple> vertices{};
+  std::vector<Point> vertices{};
   vertices.push_back(make_point(0.0, 0.0, 0.0)); // TODO is there a better way to make vertices index starting at 1?
-  std::vector<Tuple> normals{};
-  normals.push_back(make_point(0.0, 0.0, 0.0)); // TODO is there a better way to make normals index starting at 1?
+  std::vector<Vector> normals{};
+  normals.push_back(make_vector(0.0, 0.0, 0.0)); // TODO is there a better way to make normals index starting at 1?
 
   std::optional<std::string> current_group{};
 
@@ -146,11 +146,11 @@ std::unordered_map<std::string, std::shared_ptr<Group>> WavefrontOBJ::named_grou
   return named_groups_;
 }
 
-std::vector<Tuple> WavefrontOBJ::vertices() const {
+std::vector<Point> WavefrontOBJ::vertices() const {
   return vertices_;
 }
 
-std::vector<Tuple> WavefrontOBJ::normals() const {
+std::vector<Vector> WavefrontOBJ::normals() const {
   return normals_;
 }
 
@@ -158,11 +158,11 @@ void WavefrontOBJ::set_ignored_lines(const std::vector<std::string> &ignored_lin
   ignored_lines_ = ignored_lines;
 }
 
-void WavefrontOBJ::set_vertices(const std::vector<Tuple> &vertices) {
+void WavefrontOBJ::set_vertices(const std::vector<Point> &vertices) {
   vertices_ = vertices;
 }
 
-void WavefrontOBJ::set_normals(const std::vector<Tuple> &normals) {
+void WavefrontOBJ::set_normals(const std::vector<Vector> &normals) {
   normals_ = normals;
 }
 

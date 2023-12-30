@@ -24,8 +24,8 @@ Intersections Group::local_intersect(const Ray &ray) {
   return xs;
 }
 
-Tuple Group::local_normal_at(const Tuple &point_in_object_space,
-                             const std::optional<Intersection> &intersection) const {
+Vector Group::local_normal_at(const Point &point_in_object_space,
+                              const std::optional<Intersection> &intersection) const {
   // Intentionally throw so we detect if we call this function (not supposed to).
   throw NotImplementedException{};
 }

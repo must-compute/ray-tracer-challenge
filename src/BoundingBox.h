@@ -12,19 +12,19 @@ class BoundingBox {
 public:
   BoundingBox();
 
-  BoundingBox(const Tuple &minimum, const Tuple &maximum);
+  BoundingBox(const Point &minimum, const Point &maximum);
 
   void set_transform(const tf::Transform &transform);
 
-  [[nodiscard]] Tuple minimum() const;
+  [[nodiscard]] Point minimum() const;
 
-  [[nodiscard]] Tuple maximum() const;
+  [[nodiscard]] Point maximum() const;
 
-  [[nodiscard]] bool contains_point(const Tuple &point) const;
+  [[nodiscard]] bool contains_point(const Point &point) const;
 
   [[nodiscard]] bool contains_box(const BoundingBox &other) const;
 
-  void add_point(const Tuple &point);
+  void add_point(const Point &point);
 
   void add_box(const BoundingBox &other);
 
@@ -33,8 +33,8 @@ public:
   [[nodiscard]] static std::pair<double, double> check_axis(double origin, double direction, double min, double max);
 
 private:
-  Tuple minimum_{};
-  Tuple maximum_{};
+  Point minimum_{};
+  Point maximum_{};
 };
 
 #endif //BOUNDS_H

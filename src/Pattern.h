@@ -25,14 +25,14 @@ public:
 
   void set_transform(const tf::Transform &t);
 
-  [[nodiscard]] Color pattern_at_shape(const Shape &object, const Tuple &world_point) const;
+  [[nodiscard]] Color pattern_at_shape(const Shape &object, const Point &world_point) const;
 
 protected:
   Color a_;
   Color b_;
   tf::Transform transform_;
 
-  virtual Color pattern_at(const Tuple &point) const = 0;
+  virtual Color pattern_at(const Point &point) const = 0;
 };
 
 #endif //RAY_TRACER_CHALLENGE_PATTERN_H

@@ -20,7 +20,7 @@ struct World {
 
   [[nodiscard]] Color color_at(const Ray &ray, size_t remaining = 5) const;
 
-  [[nodiscard]] bool is_shadowed(const Tuple &point) const;
+  [[nodiscard]] bool is_shadowed(const Point &point) const;
 
   [[nodiscard]] Color reflected_color(const IntersectionComputation &comps, size_t remaining = 5) const;
 

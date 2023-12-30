@@ -26,12 +26,12 @@ public:
   // NOTE: intersect() is non-const only because the TestShape test requires it to mutate an internal member.
   [[nodiscard]] Intersections intersect(const Ray &ray);
 
-  [[nodiscard]] Tuple normal_at(const Tuple &point_in_world_space,
-                                const std::optional<Intersection> &intersection = std::nullopt) const;
+  [[nodiscard]] Vector normal_at(const Point &point_in_world_space,
+                                 const std::optional<Intersection> &intersection = std::nullopt) const;
 
-  [[nodiscard]] Tuple world_to_object(const Tuple &point_in_world_space) const;
+  [[nodiscard]] Point world_to_object(const Point &point_in_world_space) const;
 
-  [[nodiscard]] Tuple normal_to_world(const Tuple &normal_in_object_space) const;
+  [[nodiscard]] Vector normal_to_world(const Vector &normal_in_object_space) const;
 
   [[nodiscard]] tf::Transform transform() const;
 
@@ -60,8 +60,8 @@ protected:
 
   // NOTE: intersection is only used by SmoothTriangle derived class. All other classes use nullopt (can't use
   // default args for virtual functions because it's confusing).
-  [[nodiscard]] virtual Tuple local_normal_at(const Tuple &point_in_object_space,
-                                              const std::optional<Intersection> &intersection) const = 0;
+  [[nodiscard]] virtual Vector local_normal_at(const Point &point_in_object_space,
+                                               const std::optional<Intersection> &intersection) const = 0;
 };
 
 #endif //RAY_TRACER_CHALLENGE_SHAPE_H

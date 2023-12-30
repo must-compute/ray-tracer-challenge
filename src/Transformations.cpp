@@ -73,7 +73,7 @@ Matrix<4, 4> shearing(double x_y, double x_z, double y_x, double y_z, double z_x
   };
 }
 
-[[nodiscard]] Transform view_transform(const Tuple &from, const Tuple &to, const Tuple &up) {
+[[nodiscard]] Transform view_transform(const Point &from, const Point &to, const Vector &up) {
   const auto forward = (to - from).normalize();
   const auto left = forward.cross(up.normalize());
   const auto true_up = left.cross(forward);

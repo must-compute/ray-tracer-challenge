@@ -1,6 +1,6 @@
 #include "Triangle.h"
 
-Triangle::Triangle(const Tuple &p1, const Tuple &p2, const Tuple &p3) : p1_{p1}, p2_{p2}, p3_{p3}, e1_{p2_ - p1_},
+Triangle::Triangle(const Point &p1, const Point &p2, const Point &p3) : p1_{p1}, p2_{p2}, p3_{p3}, e1_{p2_ - p1_},
                                                                         e2_{p3_ - p1_},
                                                                         normal_{e2_.cross(e1_).normalize()} {}
 
@@ -32,8 +32,8 @@ Intersections Triangle::local_intersect(const Ray &ray) {
   return {Intersection{t, this, u, v}};
 }
 
-Tuple Triangle::local_normal_at(const Tuple &point_in_object_space,
-                                const std::optional<Intersection> &intersection) const {
+Vector Triangle::local_normal_at(const Point &point_in_object_space,
+                                 const std::optional<Intersection> &intersection) const {
   return normal_;
 }
 
@@ -45,26 +45,26 @@ BoundingBox Triangle::make_bounding_box() const {
   return box;
 }
 
-Tuple Triangle::p1() const {
+Point Triangle::p1() const {
   return p1_;
 }
 
-Tuple Triangle::p2() const {
+Point Triangle::p2() const {
   return p2_;
 }
 
-Tuple Triangle::p3() const {
+Point Triangle::p3() const {
   return p3_;
 }
 
-Tuple Triangle::e1() const {
+Vector Triangle::e1() const {
   return e1_;
 }
 
-Tuple Triangle::e2() const {
+Vector Triangle::e2() const {
   return e2_;
 }
 
-Tuple Triangle::normal() const {
+Vector Triangle::normal() const {
   return normal_;
 }

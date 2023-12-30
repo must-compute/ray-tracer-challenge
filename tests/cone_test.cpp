@@ -7,7 +7,7 @@
 #include "Tuple.h"
 
 TEST(Cone, IntersectingConeWithRay) {
-  const std::vector<std::tuple<Tuple, Tuple, double, double>> test_table = {
+  const std::vector<std::tuple<Point, Vector, double, double>> test_table = {
       {make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0), 5.0, 5.0},
       {make_point(0.0, 0.0, -5.0), make_vector(1.0, 1.0, 1.0), 8.66025, 8.66025},
       {make_point(1.0, 1.0, -5.0), make_vector(-0.5, -1.0, 1.0), 4.55006, 49.44994},
@@ -34,7 +34,7 @@ TEST(Cone, InterrsectingConeWithRayParallelToOneOfItsHalves) {
 }
 
 TEST(Cone, IntersectingConeEndCaps) {
-  const std::vector<std::tuple<Tuple, Tuple, size_t>> test_table = {
+  const std::vector<std::tuple<Point, Vector, size_t>> test_table = {
       {make_point(0.0, 0.0, -5.0), make_vector(0.0, 1.0, 0.0), 0},
       {make_point(0.0, 0.0, -0.25), make_vector(0.0, 1.0, 1.0), 2},
       {make_point(0.0, 0.0, -0.25), make_vector(0.0, 1.0, 0.0), 4},
@@ -53,7 +53,7 @@ TEST(Cone, IntersectingConeEndCaps) {
 }
 
 TEST(Cone, ComputeNormalVectorOnCone) {
-  const std::vector<std::tuple<Tuple, Tuple>> test_table = {
+  const std::vector<std::tuple<Point, Vector>> test_table = {
       {make_point(0.0, 0.0, 0.0), make_vector(0.0, 0.0, 0.0)},
       {make_point(1.0, 1.0, 1.0), make_vector(1.0, -std::sqrt(2.0), 1.0)},
       {make_point(-1.0, -1.0, 0.0), make_vector(-1.0, 1.0, 0.0)},

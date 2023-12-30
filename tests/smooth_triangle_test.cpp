@@ -14,12 +14,12 @@ protected:
       n3{make_vector(1.0, 0.0, 0.0)},
       tri{SmoothTriangle{p1, p2, p3, n1, n2, n3}} {}
 
-  const Tuple p1;
-  const Tuple p2;
-  const Tuple p3;
-  const Tuple n1;
-  const Tuple n2;
-  const Tuple n3;
+  const Point p1;
+  const Point p2;
+  const Point p3;
+  const Vector n1;
+  const Vector n2;
+  const Vector n3;
   SmoothTriangle tri;
 };
 

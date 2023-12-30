@@ -34,8 +34,8 @@ public:
 
   [[nodiscard]] Intersections local_intersect(const Ray &ray) override;
 
-  [[nodiscard]] Tuple local_normal_at(const Tuple &point_in_object_space,
-                                      const std::optional<Intersection> &intersection) const override;
+  [[nodiscard]] Vector local_normal_at(const Point &point_in_object_space,
+                                       const std::optional<Intersection> &intersection) const override;
 
   [[nodiscard]] BoundingBox make_bounding_box() const override;
 

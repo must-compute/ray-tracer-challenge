@@ -7,7 +7,7 @@
 #include "Tuple.h"
 
 TEST(Cube, RayIntersectsCube) {
-  const std::vector<std::tuple<std::string, Tuple, Tuple, double, double>> expected_results = {
+  const std::vector<std::tuple<std::string, Point, Vector, double, double>> expected_results = {
       {"+x", make_point(5.0, 0.5, 0.0), make_vector(-1.0, 0.0, 0.0), 4.0, 6.0},
       {"-x", make_point(-5.0, 0.5, 0.0), make_vector(1.0, 0.0, 0.0), 4.0, 6.0},
       {"+y", make_point(0.5, 5.0, 0.0), make_vector(0.0, -1.0, 0.0), 4.0, 6.0},
@@ -29,7 +29,7 @@ TEST(Cube, RayIntersectsCube) {
 }
 
 TEST(Cube, RayMissesCube) {
-  const std::vector<std::tuple<Tuple, Tuple>> expected_results = {
+  const std::vector<std::tuple<Point, Vector>> expected_results = {
       {make_point(-2.0, 0.0, 0.0), make_vector(0.2673, 0.5345, 0.8018)},
       {make_point(0.0, -2.0, 0.0), make_vector(0.8018, 0.2673, 0.5345)},
       {make_point(0.0, 0.0, -2.0), make_vector(0.5345, 0.8018, 0.2673)},
@@ -48,7 +48,7 @@ TEST(Cube, RayMissesCube) {
 }
 
 TEST(Cube, NormalOnSurfaceOfCube) {
-  const std::vector<std::tuple<Tuple, Tuple>> test_table = {
+  const std::vector<std::tuple<Point, Vector>> test_table = {
       {make_point(1.0, 0.5, -0.8), make_vector(1.0, 0.0, 0.0)},
       {make_point(-1.0, -0.2, 0.9), make_vector(-1.0, 0.0, 0.0)},
       {make_point(-0.4, 1.0, -0.1), make_vector(0.0, 1.0, 0.0)},

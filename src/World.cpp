@@ -107,7 +107,7 @@ Color World::refracted_color(const IntersectionComputation &comps, size_t remain
   }
 }
 
-bool World::is_shadowed(const Tuple &point) const {
+bool World::is_shadowed(const Point &point) const {
 
   if (!light.has_value()) {
     return true;

@@ -1,7 +1,7 @@
 #include "TestShape.h"
 
-Tuple
-TestShape::local_normal_at(const Tuple &point_in_object_space, const std::optional<Intersection> &intersection) const {
+Vector
+TestShape::local_normal_at(const Point &point_in_object_space, const std::optional<Intersection> &intersection) const {
   return make_vector(point_in_object_space.x(), point_in_object_space.y(), point_in_object_space.z());
 }
 

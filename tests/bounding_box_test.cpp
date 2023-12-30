@@ -25,7 +25,7 @@ TEST(BoundingBox, AddingOneBoundingBoxToAnother) {
 
 TEST(BoundingBox, BoxContainsGivenPoint) {
   const auto box = BoundingBox{make_point(5.0, -2.0, 0.0), make_point(11.0, 4.0, 7.0)};
-  const std::vector<std::tuple<Tuple, bool>> table = {
+  const std::vector<std::tuple<Point, bool>> table = {
       {make_point(5.0, -2.0, 0.0), true},
       {make_point(11.0, 4.0, 7.0), true},
       {make_point(8.0, 1.0, 3.0), true},
@@ -44,7 +44,7 @@ TEST(BoundingBox, BoxContainsGivenPoint) {
 
 TEST(BoundingBox, BoxContainsAnotherBox) {
   const auto box1 = BoundingBox{make_point(5.0, -2.0, 0.0), make_point(11.0, 4.0, 7.0)};
-  const std::vector<std::tuple<Tuple, Tuple, bool>> table = {
+  const std::vector<std::tuple<Point, Point, bool>> table = {
       {make_point(5.0, -2.0, 0.0), make_point(11.0, 4.0, 7.0), true},
       {make_point(6.0, -1.0, 1.0), make_point(10.0, 3.0, 6.0), true},
       {make_point(4.0, -3.0, -1.0), make_point(10.0, 3.0, 6.0), false},
@@ -92,7 +92,7 @@ TEST(BoundingBox, GroupHasBoundingBoxContainingChildren) {
 
 TEST(BoundingBox, IntersectingRayWithBoundingBoxAtOrigin) {
   const auto box = BoundingBox{make_point(-1.0, -1.0, -1.0), make_point(1.0, 1.0, 1.0)};
-  const std::vector<std::tuple<Tuple, Tuple, bool>> table = {
+  const std::vector<std::tuple<Point, Vector, bool>> table = {
       {make_point(5.0, 0.5, 0.0), make_vector(-1.0, 0.0, 0.0), true},
       {make_point(-5.0, 0.5, 0.0), make_vector(1.0, 0.0, 0.0), true},
       {make_point(0.5, 5.0, 0.0), make_vector(0.0, -1.0, 0.0), true},
@@ -115,7 +115,7 @@ TEST(BoundingBox, IntersectingRayWithBoundingBoxAtOrigin) {
 
 TEST(BoundingBox, IntersectingRayWithNonCubicBoundingBox) {
   const auto box = BoundingBox{make_point(5.0, -2.0, 0.0), make_point(11.0, 4.0, 7.0)};
-  const std::vector<std::tuple<Tuple, Tuple, bool>> table = {
+  const std::vector<std::tuple<Point, Vector, bool>> table = {
       {make_point(15.0, 1.0, 2.0), make_vector(-1.0, 0.0, 0.0), true},
       {make_point(-5.0, -1.0, 4.0), make_vector(1.0, 0.0, 0.0), true},
       {make_point(7.0, 6.0, 5.0), make_vector(0.0, -1.0, 0.0), true},

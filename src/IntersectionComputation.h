@@ -10,14 +10,19 @@ class Shape;
 struct IntersectionComputation {
   double t{};
   const Shape *const object{};
-  Tuple point{};
-  Tuple eyev{};
-  Tuple normalv{};
+  Point point{};
+  Vector eyev{};
+  Vector normalv{};
   bool inside{};
-  Tuple over_point
-      {}; // The point, slightly nudged in the direction of normalv so we guarantee we don't self-intersect due to floating-point imprecision.
-  Tuple under_point{}; // The point, slightly nudged in the direction of -normalv, to be used by refracted rays.
-  Tuple reflectv{};
+
+  // The point, slightly nudged in the direction of normalv so we guarantee we don't self-intersect due to
+  // floating-point imprecision.
+  Point over_point{};
+
+  // The point, slightly nudged in the direction of -normalv, to be used by refracted rays.
+  Point under_point{};
+  Vector reflectv{};
+
   // Refractive indices (entering and exiting).
   double n1{};
   double n2{};

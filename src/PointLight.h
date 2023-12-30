@@ -6,17 +6,17 @@
 
 class PointLight {
 public:
-  PointLight(const Tuple &position, const Color &intensity) : intensity_{intensity}, position_{position} {}
+  PointLight(const Point &position, const Color &intensity) : intensity_{intensity}, position_{position} {}
 
   [[nodiscard]] Color intensity() const;
 
-  [[nodiscard]] Tuple position() const;
+  [[nodiscard]] Point position() const;
 
   bool operator==(const PointLight &other) const = default;
 
 private:
   Color intensity_;
-  Tuple position_;
+  Point position_;
 };
 
 #endif //RAY_TRACER_CHALLENGE_POINTLIGHT_H

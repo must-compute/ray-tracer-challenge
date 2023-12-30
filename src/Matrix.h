@@ -41,9 +41,9 @@ struct Matrix {
     return result;
   }
 
-  Tuple
-  operator*(const Tuple &other) const requires (ROWS == 4 && COLS == 4) {
-    Tuple result{};
+  template<TupleKind t>
+  Tuple<t> operator*(const Tuple<t> &other) const requires (ROWS == 4 && COLS == 4) {
+    Tuple<t> result{};
     for (size_t r = 0; r < ROWS; ++r) {
       result[r] = cells[r][0] * other.x() +
           cells[r][1] * other.y() +

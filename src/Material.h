@@ -30,9 +30,9 @@ struct Material {
   [[nodiscard]] Color lighting(
       const Shape &object,
       const PointLight &light,
-      const Tuple &point,
-      const Tuple &eyev,
-      const Tuple &normalv,
+      const Point &point,
+      const Vector &eyev,
+      const Vector &normalv,
       bool in_shadow) const;
 };
 

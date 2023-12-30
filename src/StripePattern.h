@@ -14,7 +14,7 @@ public:
 
   bool operator==(const StripePattern &other) const = default;
 
-  [[nodiscard]] Color pattern_at(const Tuple &point) const override;
+  [[nodiscard]] Color pattern_at(const Point &point) const override;
 
 };
 

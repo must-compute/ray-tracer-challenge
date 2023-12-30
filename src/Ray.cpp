@@ -2,18 +2,18 @@
 
 Ray::Ray() : origin_(make_point(0.0, 0.0, 0.0)), direction_(make_vector(0.0, 0.0, 0.0)) {}
 
-Ray::Ray(const Tuple &origin_in, const Tuple &direction_in) : origin_(origin_in), direction_(direction_in) {
+Ray::Ray(const Point &origin_in, const Vector &direction_in) : origin_(origin_in), direction_(direction_in) {
 }
 
-Tuple Ray::position_at_t(double t) const {
+Point Ray::position_at_t(double t) const {
   return origin_ + direction_ * t;
 }
 
-Tuple Ray::origin() const {
+Point Ray::origin() const {
   return origin_;
 }
 
-Tuple Ray::direction() const {
+Vector Ray::direction() const {
   return direction_;
 }
 

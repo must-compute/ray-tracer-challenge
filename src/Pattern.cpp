@@ -22,7 +22,7 @@ void Pattern::set_transform(const tf::Transform &t) {
   transform_ = t;
 }
 
-Color Pattern::pattern_at_shape(const Shape &object, const Tuple &world_point) const {
+Color Pattern::pattern_at_shape(const Shape &object, const Point &world_point) const {
   const auto object_point = object.world_to_object(world_point);
   const auto pattern_point = transform_.inverse() * object_point;
   return pattern_at(pattern_point);

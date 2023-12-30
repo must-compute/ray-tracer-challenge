@@ -5,6 +5,6 @@
 
 }
 
-[[nodiscard]] Tuple PointLight::position() const {
+[[nodiscard]] Point PointLight::position() const {
   return position_;
 }

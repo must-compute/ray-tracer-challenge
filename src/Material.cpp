@@ -4,8 +4,8 @@ Material::Material() : color{Color{1.0, 1.0, 1.0}}, ambient{0.1}, diffuse{0.9}, 
                        shininess{200.0}, reflective{0.0}, transparency{0.0}, refractive_index{1.0},
                        casts_shadow{true} {}
 
-Color Material::lighting(const Shape &object, const PointLight &light, const Tuple &point, const Tuple &eyev,
-                         const Tuple &normalv,
+Color Material::lighting(const Shape &object, const PointLight &light, const Point &point, const Vector &eyev,
+                         const Vector &normalv,
                          const bool in_shadow) const {
   const auto color_to_use = pattern ? pattern->pattern_at_shape(object, point) : color;
 

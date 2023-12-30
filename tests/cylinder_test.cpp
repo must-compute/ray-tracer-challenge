@@ -8,7 +8,7 @@
 #include "Tuple.h"
 
 TEST(Cylinder, RayMissesCylinder) {
-  const std::vector<std::tuple<Tuple, Tuple>> test_table = {
+  const std::vector<std::tuple<Point, Vector>> test_table = {
       {make_point(1.0, 0.0, 0.0), make_vector(0.0, 1.0, 0.0)},
       {make_point(0.0, 0.0, 0.0), make_vector(0.0, 1.0, 0.0)},
       {make_point(0.0, 0.0, -5.0), make_vector(1.0, 1.0, 0.0)},
@@ -23,7 +23,7 @@ TEST(Cylinder, RayMissesCylinder) {
 }
 
 TEST(Cylinder, RayHitsCylinder) {
-  const std::vector<std::tuple<Tuple, Tuple, double, double>> test_table = {
+  const std::vector<std::tuple<Point, Vector, double, double>> test_table = {
       {make_point(1.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0), 5.0, 5.0},
       {make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0), 4.0, 6.0},
       {make_point(0.5, 0.0, -5.0), make_vector(0.1, 1.0, 1.0), 6.80798, 7.08872},
@@ -40,7 +40,7 @@ TEST(Cylinder, RayHitsCylinder) {
 }
 
 TEST(Cylinder, NormalVectorOnCylinder) {
-  const std::vector<std::tuple<Tuple, Tuple>> test_table = {
+  const std::vector<std::tuple<Point, Vector>> test_table = {
       {make_point(1.0, 0.0, 0.0), make_vector(1.0, 0.0, 0.0)},
       {make_point(0.0, 5.0, -1.0), make_vector(0.0, 0.0, -1.0)},
       {make_point(0.0, -2.0, 1.0), make_vector(0.0, 0.0, 1.0)},
@@ -60,7 +60,7 @@ TEST(Cylinder, DefaultMinimumAndMaximumForCylinder) {
 }
 
 TEST(Cylinder, IntersectingConstrainedCylinder) {
-  const std::vector<std::tuple<Tuple, Tuple, size_t>> test_table = {
+  const std::vector<std::tuple<Point, Vector, size_t>> test_table = {
       {make_point(0.0, 1.5, 0.0), make_vector(0.1, 1.0, 0.0), 0},
       {make_point(0.0, 3.0, -5.0), make_vector(0.0, 0.0, 1.0), 0},
       {make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0), 0},
@@ -85,7 +85,7 @@ TEST(Cylinder, DefaultClosedValueForCylinder) {
 }
 
 TEST(Cylinder, IntersectingCapsOfClosedCylinder) {
-  const std::vector<std::tuple<Tuple, Tuple, size_t>> test_table = {
+  const std::vector<std::tuple<Point, Vector, size_t>> test_table = {
       {make_point(0.0, 3.0, 0.0), make_vector(0.0, -1.0, 0.0), 2},
       {make_point(0.0, 3.0, -2.0), make_vector(0.0, -1.0, 2.0), 2},
       {make_point(0.0, 4.0, -2.0), make_vector(0.0, -1.0, 1.0), 2},
@@ -105,7 +105,7 @@ TEST(Cylinder, IntersectingCapsOfClosedCylinder) {
 }
 
 TEST(Cylinder, NormalVectorOnCylinderEndCaps) {
-  const std::vector<std::tuple<Tuple, Tuple>> test_table = {
+  const std::vector<std::tuple<Point, Vector>> test_table = {
       {make_point(0.0, 1.0, 0.0), make_vector(0.0, -1.0, 0.0)},
       {make_point(0.5, 1.0, 0.0), make_vector(0.0, -1.0, 0.0)},
       {make_point(0.0, 1.0, 0.5), make_vector(0.0, -1.0, 0.0)},

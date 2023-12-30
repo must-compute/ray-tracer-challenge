@@ -8,63 +8,149 @@
 
 #include "util.h"
 
+enum class TupleKind { Point, Vector };
+
+template<TupleKind t>
+class Tuple;
+
+using Point = Tuple<TupleKind::Point>;
+using Vector = Tuple<TupleKind::Vector>;
+
 // TODO maybe split into Point and Vector classes (or use templating), so we limit invalid operations.
+template<TupleKind t>
 class Tuple {
 private:
   double x_, y_, z_, w_;
+  Tuple(double x, double y, double z, double w) : x_{x}, y_{y}, z_{z}, w_{w} {}
+
 public:
+  Tuple(double x, double y, double z) requires (t == TupleKind::Point): x_{x}, y_{y}, z_{z}, w_{1.0} {}
+  Tuple(double x, double y, double z) requires (t == TupleKind::Vector): x_{x}, y_{y}, z_{z}, w_{0.0} {}
 
-  Tuple(double x, double y, double z, double w);
-  Tuple();
+  Tuple() : x_(0.0), y_(0.0), z_(0.0), w_(0.0) {}
 
-  [[nodiscard]] bool operator==(const Tuple &other) const;
+  [[nodiscard]] bool operator==(const Tuple &other) const {
+    return within_epsilon(x_, other.x_)
+        && within_epsilon(y_, other.y_)
+        && within_epsilon(z_, other.z_)
+        && within_epsilon(w_, other.w_);
+  }
 
-  [[nodiscard]] Tuple operator+(const Tuple &other) const;
+  [[nodiscard]] Vector operator+(const Vector &other) const requires (t == TupleKind::Vector) {
+    return {x_ + other.x(), y_ + other.y(), z_ + other.z(), w_ + other.w()};
+  }
 
-  [[nodiscard]] Tuple operator-(const Tuple &other) const;
+  [[nodiscard]] Point operator+(const Point &other) const requires (t == TupleKind::Vector) {
+    return {x_ + other.x(), y_ + other.y(), z_ + other.z(), w_ + other.w()};
+  }
 
-  [[nodiscard]] Tuple operator*(const double &scalar) const;
+  [[nodiscard]] Point operator+(const Vector &other) const requires (t == TupleKind::Point) {
+    return {x_ + other.x(), y_ + other.y(), z_ + other.z(), w_ + other.w()};
+  }
 
-  [[nodiscard]] Tuple operator/(const double &scalar) const;
+  [[nodiscard]] Vector operator-(const Point &other) const requires (t == TupleKind::Point) {
+    // TODO revisit me
+//    return {x_ - other.x(), y_ - other.y_, z_ - other.z_, w_ - other.w_};
+    return Vector{x_ - other.x(), y_ - other.y(), z_ - other.z()};
+  }
 
-  double &operator[](size_t i);
+  [[nodiscard]] Point operator-(const Vector &other) const requires (t == TupleKind::Point) {
+    // TODO revisit me
+//    return {x_ - other.x_, y_ - other.y_, z_ - other.z_, w_ - other.w_};
+    return Point{x_ - other.x(), y_ - other.y(), z_ - other.z()};
+  }
 
-  [[nodiscard]] Tuple operator-() const;
+  [[nodiscard]] Vector operator-(const Vector &other) const requires (t == TupleKind::Vector) {
+    return {x_ - other.x(), y_ - other.y(), z_ - other.z(), w_ - other.w_};
+  }
 
-  [[nodiscard]] double x() const;
+  [[nodiscard]] Tuple operator*(const double &scalar) const {
+    return {x_ * scalar, y_ * scalar, z_ * scalar, w_ * scalar};
+  }
 
-  [[nodiscard]] double y() const;
+  [[nodiscard]] Tuple operator/(const double &scalar) const {
+    return {x_ / scalar, y_ / scalar, z_ / scalar, w_ / scalar};
+  }
 
-  [[nodiscard]] double z() const;
+  double &operator[](size_t i) {
+    switch (i) {
+    case 0:return x_;
+    case 1:return y_;
+    case 2:return z_;
+    case 3:return w_;
+    default:assert(false);
+    }
+    // unreachable
+    assert(false);
+    return w_;
+  }
 
-  [[nodiscard]] double w() const;
+  [[nodiscard]] Tuple operator-() const {
+    return {-x_, -y_, -z_, -w_};
+  }
 
-  [[nodiscard]] bool is_point() const;
+  [[nodiscard]] double x() const {
+    return x_;
+  }
 
-  [[nodiscard]] bool is_vector() const;
+  [[nodiscard]] double y() const {
+    return y_;
+  }
 
-  [[nodiscard]] double magnitude() const;
+  [[nodiscard]] double z() const {
+    return z_;
+  }
 
-  Tuple normalize() const;
+  [[nodiscard]] double w() const {
+    return w_;
+  }
 
-  double dot(const Tuple &other) const;
+  [[nodiscard]] double magnitude() const {
+    return std::sqrt(x_ * x_ + y_ * y_ + z_ * z_ + w_ * w_);
+  }
 
-  Tuple cross(const Tuple &other) const;
+  // TODO can a point be normalized?
+  Vector normalize() const requires (t == TupleKind::Vector) {
+    const double mag = this->magnitude();
+    return {x_ / mag, y_ / mag, z_ / mag, w_ / mag};
+  }
+
+  double dot(const Tuple &other) const {
+    return (x_ * other.x_) + (y_ * other.y_) + (z_ * other.z_) + (w_ * other.w_);
+  }
+
+  Tuple cross(const Tuple &other) const {
+    // TODO throw if Point
+    return {y_ * other.z_ - z_ * other.y_,
+            z_ * other.x_ - x_ * other.z_,
+            x_ * other.y_ - y_ * other.x_,
+            0.0};
+  }
 
   // Return the current vector reflected about the given normal.
-  Tuple reflect(const Tuple &normal) const;
+  Tuple reflect(const Tuple &normal) const {
+    return *this - (normal * 2.0 * this->dot(normal));
+  }
 
   // For pretty printing in GTEST.
-  friend std::ostream &operator<<(std::ostream &os, const Tuple &tup) {
-    os << "Tuple: ";
-    os << "{x: " << std::to_string(tup.x_) << ", y:" << std::to_string(tup.y_) << ", z:";
-    os << std::to_string(tup.z_) << ", w:" << std::to_string(tup.w_) << "}";
+  friend std::ostream &operator<<(std::ostream &os, const Tuple &tuple) {
+    if constexpr (t == TupleKind::Point) {
+      os << "Point: ";
+    } else if constexpr (t == TupleKind::Vector) {
+      os << "Vector: ";
+    } else {
+      os << "<<unimplemented pretty print of tuple kind>>";
+    }
+
+    os << "{x: " << std::to_string(tuple.x_) << ", y:" << std::to_string(tuple.y_) << ", z:";
+    os << std::to_string(tuple.z_) << "}";
     return os;
   }
+
 };
 
-Tuple make_point(double x, double y, double z);
+Point make_point(double x, double y, double z);
 
-Tuple make_vector(double x, double y, double z);
+Vector make_vector(double x, double y, double z);
 
 #endif //RAY_TRACER_CHALLENGE_TUPLE_H
