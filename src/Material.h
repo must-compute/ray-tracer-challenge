@@ -16,7 +16,7 @@ struct Material {
 
   bool operator==(const Material &other) const = default;
 
-  Color color;
+  Color color{};
   double ambient{}; // non-negative, typically between 0 and 1
   double diffuse{}; // non-negative, typically between 0 and 1
   double specular{}; // non-negative, typically between 0 and 1

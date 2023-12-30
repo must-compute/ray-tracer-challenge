@@ -75,22 +75,26 @@ public:
 
   [[nodiscard]] Canvas<WIDTH, HEIGHT> render(const World &world) const {
     auto image = Canvas<WIDTH, HEIGHT>{};
-    // TODO use an appropriate number of threads (based on hardware).
-    // TODO consider using a thread pool.
-    std::vector<std::thread> threads;
+    size_t n_threads = std::thread::hardware_concurrency();
 
-    for (size_t y = 0; y < HEIGHT; ++y) {
-      threads.emplace_back([&, y] {
-        for (size_t x = 0; x < WIDTH; ++x) {
-          const auto ray = ray_for_pixel(x, y);
-          const auto color = world.color_at(ray);
-          image.write_pixel(x, y, color);
+    std::vector<std::thread> threads(n_threads);
+
+    for (size_t i = 0; i < n_threads; ++i) {
+      threads[i] = std::thread([&, i] {
+        for (size_t y = i; y < HEIGHT; y += n_threads) {
+          for (size_t x = 0; x < WIDTH; ++x) {
+            const auto ray = ray_for_pixel(x, y);
+            const auto color = world.color_at(ray);
+            image.write_pixel(x, y, color);
+          }
         }
       });
     }
 
     for (auto &thread : threads) {
-      thread.join();
+      if (thread.joinable()) {
+        thread.join();
+      }
     }
 
     return image;
