@@ -37,6 +37,8 @@ public:
 
   [[nodiscard]] Material material() const;
 
+  [[nodiscard]] const Material &material_cref() const;
+
   [[nodiscard]] bool casts_shadow() const;
 
   [[nodiscard]] std::shared_ptr<Shape> parent() const;

@@ -44,9 +44,6 @@ public:
         .append(std::to_string(HEIGHT))
         .append("\n255\n");
 
-    // De-sugared operator+
-    //return ppm_body().insert(0, header);
-
     return header + ppm_body();
   }
 

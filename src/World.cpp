@@ -28,6 +28,9 @@ Intersections World::intersect(const Ray &ray) const {
   for (const auto &obj : objects) {
     assert(obj);
     auto obj_xs = obj->intersect(ray);
+
+    // We could have moved the elements instead of copying, but Intersection is trivially copyable.
+    //all_xs.insert(all_xs.end(), std::make_move_iterator(obj_xs.begin()), std::make_move_iterator(obj_xs.end()));
     all_xs.insert(all_xs.end(), obj_xs.begin(), obj_xs.end());
   }
 
@@ -46,14 +49,14 @@ Color World::shade_hit(const IntersectionComputation &comps, size_t remaining) c
 
   if (light.has_value()) {
     assert(comps.object);
-    const auto surface = comps.object->material().lighting(*comps.object, *light, comps.point, comps.eyev,
-                                                           comps.normalv,
-                                                           in_shadow);
+    const auto surface = comps.object->material_cref().lighting(*comps.object, *light, comps.point, comps.eyev,
+                                                                comps.normalv,
+                                                                in_shadow);
     const auto reflected = reflected_color(comps, remaining);
     const auto refracted = refracted_color(comps, remaining);
 
     // Account for Fresnel effect using Schlick approximation
-    const auto &material = comps.object->material();
+    const auto &material = comps.object->material_cref();
     if (material.reflective > 0.0 && material.transparency > 0.0) {
       const auto reflectance = comps.schlick();
       return surface + (reflected * reflectance) + (refracted * (1 - reflectance));
@@ -78,7 +81,7 @@ Color World::shade_hit(const IntersectionComputation &comps, size_t remaining) c
 
 Color World::reflected_color(const IntersectionComputation &comps, size_t remaining) const { // NOLINT
   assert(comps.object);
-  if (const auto reflectivity = comps.object->material().reflective; reflectivity > 0.0 && remaining > 0) {
+  if (const auto reflectivity = comps.object->material_cref().reflective; reflectivity > 0.0 && remaining > 0) {
     const auto ray = Ray{comps.over_point, comps.reflectv};
     return color_at(ray, remaining - 1) * reflectivity;
   } else {
@@ -88,7 +91,7 @@ Color World::reflected_color(const IntersectionComputation &comps, size_t remain
 
 Color World::refracted_color(const IntersectionComputation &comps, size_t remaining) const {
   assert(comps.object);
-  if (const auto transparency = comps.object->material().transparency; transparency > 0.0 && remaining > 0) {
+  if (const auto transparency = comps.object->material_cref().transparency; transparency > 0.0 && remaining > 0) {
     const auto n_ratio = comps.n1 / comps.n2;
     const auto cos_i = comps.eyev.dot(comps.normalv);
     const auto sin2_t = std::pow(n_ratio, 2) * (1 - std::pow(cos_i, 2));
@@ -101,7 +104,7 @@ Color World::refracted_color(const IntersectionComputation &comps, size_t remain
     const auto refracted_ray_direction = comps.normalv * (n_ratio * cos_i - cos_t) - (comps.eyev * n_ratio);
     const auto refracted_ray = Ray{comps.under_point, refracted_ray_direction};
 
-    return color_at(refracted_ray, remaining - 1) * comps.object->material().transparency;
+    return color_at(refracted_ray, remaining - 1) * comps.object->material_cref().transparency;
   } else {
     return Color{0.0, 0.0, 0.0};
   }

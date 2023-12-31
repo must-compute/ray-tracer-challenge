@@ -57,7 +57,7 @@ IntersectionComputation Intersection::prepare_computations(const Ray &ray, const
         n1 = 1.0;
       } else {
         assert(seen_objects.back());
-        n1 = seen_objects.back()->material().refractive_index;
+        n1 = seen_objects.back()->material_cref().refractive_index;
       }
     }
 
@@ -75,7 +75,7 @@ IntersectionComputation Intersection::prepare_computations(const Ray &ray, const
         n2 = 1.0;
       } else {
         assert(seen_objects.back());
-        n2 = seen_objects.back()->material().refractive_index;
+        n2 = seen_objects.back()->material_cref().refractive_index;
       }
 
       break;

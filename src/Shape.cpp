@@ -8,6 +8,10 @@ Material Shape::material() const {
   return material_;
 }
 
+const Material &Shape::material_cref() const {
+  return material_;
+}
+
 bool Shape::casts_shadow() const {
   return material_.casts_shadow;
 }
