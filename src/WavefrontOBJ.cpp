@@ -84,9 +84,9 @@ WavefrontOBJ WavefrontOBJ::parse_obj_file(const std::filesystem::path &path) {
   WavefrontOBJ obj{};
   std::vector<std::string> ignored_lines{};
   std::vector<Point> vertices{};
-  vertices.push_back(Point(0.0, 0.0, 0.0)); // TODO is there a better way to make vertices index starting at 1?
+  vertices.push_back(Point{0.0, 0.0, 0.0}); // TODO is there a better way to make vertices index starting at 1?
   std::vector<Vector> normals{};
-  normals.push_back(Vector(0.0, 0.0, 0.0)); // TODO is there a better way to make normals index starting at 1?
+  normals.push_back(Vector{0.0, 0.0, 0.0}); // TODO is there a better way to make normals index starting at 1?
 
   std::optional<std::string> current_group{};
 
@@ -108,10 +108,10 @@ WavefrontOBJ WavefrontOBJ::parse_obj_file(const std::filesystem::path &path) {
     }
     if (tokens.front() == "v") { // Case 2: vertex
       assert(tokens.size() == 4); // v followed by 3 numbers
-      vertices.push_back(Point(std::stod(tokens[1]), std::stod(tokens[2]), std::stod(tokens[3])));
+      vertices.push_back(Point{std::stod(tokens[1]), std::stod(tokens[2]), std::stod(tokens[3])});
     } else if (tokens.front() == "vn") { // Case 3: vertex normal (vn)
       assert(tokens.size() == 4); // vn followed by 3 numbers
-      normals.push_back(Vector(std::stod(tokens[1]), std::stod(tokens[2]), std::stod(tokens[3])));
+      normals.push_back(Vector{std::stod(tokens[1]), std::stod(tokens[2]), std::stod(tokens[3])});
     } else if (tokens.front() == "g") { // Case 4: group
       assert(tokens.size() == 2);
       current_group = tokens[1];

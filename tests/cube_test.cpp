@@ -8,13 +8,13 @@
 
 TEST(Cube, RayIntersectsCube) {
   const std::vector<std::tuple<std::string, Point, Vector, double, double>> expected_results = {
-      {"+x", Point(5.0, 0.5, 0.0), Vector(-1.0, 0.0, 0.0), 4.0, 6.0},
-      {"-x", Point(-5.0, 0.5, 0.0), Vector(1.0, 0.0, 0.0), 4.0, 6.0},
-      {"+y", Point(0.5, 5.0, 0.0), Vector(0.0, -1.0, 0.0), 4.0, 6.0},
-      {"-y", Point(0.5, -5.0, 0.0), Vector(0.0, 1.0, 0.0), 4.0, 6.0},
-      {"+z", Point(0.5, 0.0, 5.0), Vector(0.0, 0.0, -1.0), 4.0, 6.0},
-      {"-z", Point(0.5, 0.0, -5.0), Vector(0.0, 0.0, 1.0), 4.0, 6.0},
-      {"inside", Point(0.0, 0.5, 0.0), Vector(0.0, 0.0, 1.0), -1.0, 1.0},
+      {"+x", Point{5.0, 0.5, 0.0}, Vector{-1.0, 0.0, 0.0}, 4.0, 6.0},
+      {"-x", Point{-5.0, 0.5, 0.0}, Vector{1.0, 0.0, 0.0}, 4.0, 6.0},
+      {"+y", Point{0.5, 5.0, 0.0}, Vector{0.0, -1.0, 0.0}, 4.0, 6.0},
+      {"-y", Point{0.5, -5.0, 0.0}, Vector{0.0, 1.0, 0.0}, 4.0, 6.0},
+      {"+z", Point{0.5, 0.0, 5.0}, Vector{0.0, 0.0, -1.0}, 4.0, 6.0},
+      {"-z", Point{0.5, 0.0, -5.0}, Vector{0.0, 0.0, 1.0}, 4.0, 6.0},
+      {"inside", Point{0.0, 0.5, 0.0}, Vector{0.0, 0.0, 1.0}, -1.0, 1.0},
   };
 
   for (const auto &expected_result : expected_results) {
@@ -30,12 +30,12 @@ TEST(Cube, RayIntersectsCube) {
 
 TEST(Cube, RayMissesCube) {
   const std::vector<std::tuple<Point, Vector>> expected_results = {
-      {Point(-2.0, 0.0, 0.0), Vector(0.2673, 0.5345, 0.8018)},
-      {Point(0.0, -2.0, 0.0), Vector(0.8018, 0.2673, 0.5345)},
-      {Point(0.0, 0.0, -2.0), Vector(0.5345, 0.8018, 0.2673)},
-      {Point(2.0, 0.0, 2.0), Vector(0.0, 0.0, -1.0)},
-      {Point(0.0, 2.0, 2.0), Vector(0.0, -1.0, 0.0)},
-      {Point(2.0, 2.0, 0.0), Vector(-1.0, 0.0, 0.0)},
+      {Point{-2.0, 0.0, 0.0}, Vector{0.2673, 0.5345, 0.8018}},
+      {Point{0.0, -2.0, 0.0}, Vector{0.8018, 0.2673, 0.5345}},
+      {Point{0.0, 0.0, -2.0}, Vector{0.5345, 0.8018, 0.2673}},
+      {Point{2.0, 0.0, 2.0}, Vector{0.0, 0.0, -1.0}},
+      {Point{0.0, 2.0, 2.0}, Vector{0.0, -1.0, 0.0}},
+      {Point{2.0, 2.0, 0.0}, Vector{-1.0, 0.0, 0.0}},
   };
 
   for (const auto &expected_result : expected_results) {
@@ -49,14 +49,14 @@ TEST(Cube, RayMissesCube) {
 
 TEST(Cube, NormalOnSurfaceOfCube) {
   const std::vector<std::tuple<Point, Vector>> test_table = {
-      {Point(1.0, 0.5, -0.8), Vector(1.0, 0.0, 0.0)},
-      {Point(-1.0, -0.2, 0.9), Vector(-1.0, 0.0, 0.0)},
-      {Point(-0.4, 1.0, -0.1), Vector(0.0, 1.0, 0.0)},
-      {Point(0.3, -1.0, -0.7), Vector(0.0, -1.0, 0.0)},
-      {Point(-0.6, 0.3, 1.0), Vector(0.0, 0.0, 1.0)},
-      {Point(0.4, 0.4, -1.0), Vector(0.0, 0.0, -1.0)},
-      {Point(1.0, 1.0, 1.0), Vector(1.0, 0.0, 0.0)},
-      {Point(-1.0, -1.0, -1.0), Vector(-1.0, 0.0, 0.0)},
+      {Point{1.0, 0.5, -0.8}, Vector{1.0, 0.0, 0.0}},
+      {Point{-1.0, -0.2, 0.9}, Vector{-1.0, 0.0, 0.0}},
+      {Point{-0.4, 1.0, -0.1}, Vector{0.0, 1.0, 0.0}},
+      {Point{0.3, -1.0, -0.7}, Vector{0.0, -1.0, 0.0}},
+      {Point{-0.6, 0.3, 1.0}, Vector{0.0, 0.0, 1.0}},
+      {Point{0.4, 0.4, -1.0}, Vector{0.0, 0.0, -1.0}},
+      {Point{1.0, 1.0, 1.0}, Vector{1.0, 0.0, 0.0}},
+      {Point{-1.0, -1.0, -1.0}, Vector{-1.0, 0.0, 0.0}},
   };
 
   for (const auto &[input_point, expected_normal] : test_table) {

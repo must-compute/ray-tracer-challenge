@@ -15,7 +15,7 @@ Vector Sphere::local_normal_at(const Point &point_in_object_space,
 }
 
 [[nodiscard]] Intersections Sphere::local_intersect(const Ray &ray) {
-  const auto sphere_to_ray = ray.origin() - Point(0.0, 0.0, 0.0);
+  const auto sphere_to_ray = ray.origin() - Point{0.0, 0.0, 0.0};
 
   const auto a = ray.direction().dot(ray.direction());
   const auto b = 2 * ray.direction().dot(sphere_to_ray);
@@ -40,7 +40,7 @@ Vector Sphere::local_normal_at(const Point &point_in_object_space,
 }
 
 BoundingBox Sphere::make_bounding_box() const {
-  return BoundingBox{Point(-1.0, -1.0, -1.0), Point(1.0, 1.0, 1.0)};
+  return BoundingBox{Point{-1.0, -1.0, -1.0}, Point{1.0, 1.0, 1.0}};
 }
 
 [[nodiscard]] Sphere make_glass_sphere() {

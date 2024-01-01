@@ -109,14 +109,14 @@ TEST(Matrix, MulTuple) {
   }};
 
   {
-    const auto t = Point(1.0, 2.0, 3.0);
-    const auto expected_tuple = Point(18.0, 24.0, 33.0);
+    const auto t = Point{1.0, 2.0, 3.0};
+    const auto expected_tuple = Point{18.0, 24.0, 33.0};
     EXPECT_EQ(m * t, expected_tuple);
   }
 
   {
-    const auto t = Vector(1.0, 2.0, 3.0);
-    const auto expected_tuple = Vector(14.0, 22.0, 32.0);
+    const auto t = Vector{1.0, 2.0, 3.0};
+    const auto expected_tuple = Vector{14.0, 22.0, 32.0};
     EXPECT_EQ(m * t, expected_tuple);
   }
 }

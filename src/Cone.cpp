@@ -85,7 +85,7 @@ Vector Cone::local_normal_at(const Point &point_in_object_space,
     dist = -dist;
   }
 
-  return Vector(point_in_object_space.x(), dist, point_in_object_space.z());
+  return Vector{point_in_object_space.x(), dist, point_in_object_space.z()};
 }
 
 Intersections Cone::intersect_caps(const Ray &ray) const {
@@ -112,5 +112,5 @@ Intersections Cone::intersect_caps(const Ray &ray) const {
 
 BoundingBox Cone::make_bounding_box() const {
   const auto limit = std::max(std::abs(minimum_), std::abs(maximum_));
-  return {Point(-limit, minimum_, -limit), Point(limit, maximum_, limit)};
+  return {Point{-limit, minimum_, -limit}, Point{limit, maximum_, limit}};
 }

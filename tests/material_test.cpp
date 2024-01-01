@@ -20,11 +20,11 @@ TEST(Material, DefaultMaterial) {
 TEST(Material, LightingWithEyeBetweenLightAndSurface) {
   const auto s = Sphere{};
   const auto m = Material{};
-  const auto position = Point(0, 0, 0);
+  const auto position = Point{0, 0, 0};
 
-  const auto eyev = Vector(0.0, 0.0, -1.0);
-  const auto normalv = Vector(0.0, 0.0, -1.0);
-  const auto light = PointLight{Point(0.0, 0.0, -10.0), Color{1.0, 1.0, 1.0}};
+  const auto eyev = Vector{0.0, 0.0, -1.0};
+  const auto normalv = Vector{0.0, 0.0, -1.0};
+  const auto light = PointLight{Point{0.0, 0.0, -10.0}, Color{1.0, 1.0, 1.0}};
   const bool in_shadow = false;
 
   const auto result = m.lighting(s, light, position, eyev, normalv, in_shadow);
@@ -34,12 +34,12 @@ TEST(Material, LightingWithEyeBetweenLightAndSurface) {
 TEST(Material, LightingWithEyeBetweenLightAndSurfaceWithEyeOffest45) {
   const auto s = Sphere{};
   const auto m = Material{};
-  const auto position = Point(0, 0, 0);
+  const auto position = Point{0, 0, 0};
 
   const auto loc = std::sqrt(2.0) / 2.0;
-  const auto eyev = Vector(0.0, loc, loc);
-  const auto normalv = Vector(0.0, 0.0, -1.0);
-  const auto light = PointLight{Point(0.0, 0.0, -10.0), Color{1.0, 1.0, 1.0}};
+  const auto eyev = Vector{0.0, loc, loc};
+  const auto normalv = Vector{0.0, 0.0, -1.0};
+  const auto light = PointLight{Point{0.0, 0.0, -10.0}, Color{1.0, 1.0, 1.0}};
   const bool in_shadow = false;
 
   const auto result = m.lighting(s, light, position, eyev, normalv, in_shadow);
@@ -49,11 +49,11 @@ TEST(Material, LightingWithEyeBetweenLightAndSurfaceWithEyeOffest45) {
 TEST(Material, LightingWithEyeOppositeSurfaceWithLightOffset45) {
   const auto s = Sphere{};
   const auto m = Material{};
-  const auto position = Point(0, 0, 0);
+  const auto position = Point{0, 0, 0};
 
-  const auto eyev = Vector(0.0, 0.0, -1.0);
-  const auto normalv = Vector(0.0, 0.0, -1.0);
-  const auto light = PointLight{Point(0.0, 10.0, -10.0), Color{1.0, 1.0, 1.0}};
+  const auto eyev = Vector{0.0, 0.0, -1.0};
+  const auto normalv = Vector{0.0, 0.0, -1.0};
+  const auto light = PointLight{Point{0.0, 10.0, -10.0}, Color{1.0, 1.0, 1.0}};
   const bool in_shadow = false;
 
   const auto result = m.lighting(s, light, position, eyev, normalv, in_shadow);
@@ -63,12 +63,12 @@ TEST(Material, LightingWithEyeOppositeSurfaceWithLightOffset45) {
 TEST(Material, LightingWithEyeInPathOfReflection) {
   const auto s = Sphere{};
   const auto m = Material{};
-  const auto position = Point(0, 0, 0);
+  const auto position = Point{0, 0, 0};
 
   const auto loc = -std::sqrt(2.0) / 2.0;
-  const auto eyev = Vector(0.0, loc, loc);
-  const auto normalv = Vector(0.0, 0.0, -1.0);
-  const auto light = PointLight{Point(0.0, 10.0, -10.0), Color{1.0, 1.0, 1.0}};
+  const auto eyev = Vector{0.0, loc, loc};
+  const auto normalv = Vector{0.0, 0.0, -1.0};
+  const auto light = PointLight{Point{0.0, 10.0, -10.0}, Color{1.0, 1.0, 1.0}};
   const bool in_shadow = false;
 
   const auto result = m.lighting(s, light, position, eyev, normalv, in_shadow);
@@ -78,11 +78,11 @@ TEST(Material, LightingWithEyeInPathOfReflection) {
 TEST(Material, LightBehindSurface) {
   const auto s = Sphere{};
   const auto m = Material{};
-  const auto position = Point(0, 0, 0);
+  const auto position = Point{0, 0, 0};
 
-  const auto eyev = Vector(0.0, 0.0, -1.0);
-  const auto normalv = Vector(0.0, 0.0, -1.0);
-  const auto light = PointLight{Point(0.0, 0.0, 10.0), Color{1.0, 1.0, 1.0}};
+  const auto eyev = Vector{0.0, 0.0, -1.0};
+  const auto normalv = Vector{0.0, 0.0, -1.0};
+  const auto light = PointLight{Point{0.0, 0.0, 10.0}, Color{1.0, 1.0, 1.0}};
   const bool in_shadow = false;
 
   const auto result = m.lighting(s, light, position, eyev, normalv, in_shadow);
@@ -92,11 +92,11 @@ TEST(Material, LightBehindSurface) {
 TEST(Material, LightingWithSurfaceInShadow) {
   const auto s = Sphere{};
   const auto m = Material{};
-  const auto position = Point(0, 0, 0);
+  const auto position = Point{0, 0, 0};
 
-  const auto eyev = Vector(0.0, 0.0, -1.0);
-  const auto normalv = Vector(0.0, 0.0, -1.0);
-  const auto light = PointLight{Point(0.0, 0.0, -10.0), Color{1.0, 1.0, 1.0}};
+  const auto eyev = Vector{0.0, 0.0, -1.0};
+  const auto normalv = Vector{0.0, 0.0, -1.0};
+  const auto light = PointLight{Point{0.0, 0.0, -10.0}, Color{1.0, 1.0, 1.0}};
   const bool in_shadow = true;
 
   EXPECT_EQ(m.lighting(s, light, position, eyev, normalv, in_shadow), (Color{0.1, 0.1, 0.1}));
@@ -110,13 +110,13 @@ TEST(Material, LightingWithPatternApplied) {
   m.diffuse = 0.0;
   m.specular = 0.0;
 
-  const auto eyev = Vector(0.0, 0.0, -1.0);
-  const auto normalv = Vector(0.0, 0.0, -1.0);
-  const auto light = PointLight{Point(0.0, 0.0, -10.0), Color{1.0, 1.0, 1.0}};
+  const auto eyev = Vector{0.0, 0.0, -1.0};
+  const auto normalv = Vector{0.0, 0.0, -1.0};
+  const auto light = PointLight{Point{0.0, 0.0, -10.0}, Color{1.0, 1.0, 1.0}};
 
   const bool in_shadow = false;
-  const auto c1 = m.lighting(s, light, Point(0.9, 0.0, 0.0), eyev, normalv, in_shadow);
-  const auto c2 = m.lighting(s, light, Point(1.1, 0.0, 0.0), eyev, normalv, in_shadow);
+  const auto c1 = m.lighting(s, light, Point{0.9, 0.0, 0.0}, eyev, normalv, in_shadow);
+  const auto c2 = m.lighting(s, light, Point{1.1, 0.0, 0.0}, eyev, normalv, in_shadow);
 
   EXPECT_EQ(c1, (Color{1.0, 1.0, 1.0}));
   EXPECT_EQ(c2, (Color{0.0, 0.0, 0.0}));

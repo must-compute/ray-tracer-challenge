@@ -9,9 +9,9 @@
 
 TEST(Cylinder, RayMissesCylinder) {
   const std::vector<std::tuple<Point, Vector>> test_table = {
-      {Point(1.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0)},
-      {Point(0.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0)},
-      {Point(0.0, 0.0, -5.0), Vector(1.0, 1.0, 0.0)},
+      {Point{1.0, 0.0, 0.0}, Vector{0.0, 1.0, 0.0}},
+      {Point{0.0, 0.0, 0.0}, Vector{0.0, 1.0, 0.0}},
+      {Point{0.0, 0.0, -5.0}, Vector{1.0, 1.0, 0.0}},
   };
 
   for (const auto &[origin, direction] : test_table) {
@@ -24,9 +24,9 @@ TEST(Cylinder, RayMissesCylinder) {
 
 TEST(Cylinder, RayHitsCylinder) {
   const std::vector<std::tuple<Point, Vector, double, double>> test_table = {
-      {Point(1.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0), 5.0, 5.0},
-      {Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0), 4.0, 6.0},
-      {Point(0.5, 0.0, -5.0), Vector(0.1, 1.0, 1.0), 6.80798, 7.08872},
+      {Point{1.0, 0.0, -5.0}, Vector{0.0, 0.0, 1.0}, 5.0, 5.0},
+      {Point{0.0, 0.0, -5.0}, Vector{0.0, 0.0, 1.0}, 4.0, 6.0},
+      {Point{0.5, 0.0, -5.0}, Vector{0.1, 1.0, 1.0}, 6.80798, 7.08872},
   };
 
   for (const auto &[origin, direction, t0, t1] : test_table) {
@@ -41,10 +41,10 @@ TEST(Cylinder, RayHitsCylinder) {
 
 TEST(Cylinder, NormalVectorOnCylinder) {
   const std::vector<std::tuple<Point, Vector>> test_table = {
-      {Point(1.0, 0.0, 0.0), Vector(1.0, 0.0, 0.0)},
-      {Point(0.0, 5.0, -1.0), Vector(0.0, 0.0, -1.0)},
-      {Point(0.0, -2.0, 1.0), Vector(0.0, 0.0, 1.0)},
-      {Point(-1.0, 1.0, 0.0), Vector(-1.0, 0.0, 0.0)},
+      {Point{1.0, 0.0, 0.0}, Vector{1.0, 0.0, 0.0}},
+      {Point{0.0, 5.0, -1.0}, Vector{0.0, 0.0, -1.0}},
+      {Point{0.0, -2.0, 1.0}, Vector{0.0, 0.0, 1.0}},
+      {Point{-1.0, 1.0, 0.0}, Vector{-1.0, 0.0, 0.0}},
   };
 
   for (const auto &[point, normal] : test_table) {
@@ -61,12 +61,12 @@ TEST(Cylinder, DefaultMinimumAndMaximumForCylinder) {
 
 TEST(Cylinder, IntersectingConstrainedCylinder) {
   const std::vector<std::tuple<Point, Vector, size_t>> test_table = {
-      {Point(0.0, 1.5, 0.0), Vector(0.1, 1.0, 0.0), 0},
-      {Point(0.0, 3.0, -5.0), Vector(0.0, 0.0, 1.0), 0},
-      {Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0), 0},
-      {Point(0.0, 2.0, -5.0), Vector(0.0, 0.0, 1.0), 0},
-      {Point(0.0, 1.0, -5.0), Vector(0.0, 0.0, 1.0), 0},
-      {Point(0.0, 1.5, -2.0), Vector(0.0, 0.0, 1.0), 2},
+      {Point{0.0, 1.5, 0.0}, Vector{0.1, 1.0, 0.0}, 0},
+      {Point{0.0, 3.0, -5.0}, Vector{0.0, 0.0, 1.0}, 0},
+      {Point{0.0, 0.0, -5.0}, Vector{0.0, 0.0, 1.0}, 0},
+      {Point{0.0, 2.0, -5.0}, Vector{0.0, 0.0, 1.0}, 0},
+      {Point{0.0, 1.0, -5.0}, Vector{0.0, 0.0, 1.0}, 0},
+      {Point{0.0, 1.5, -2.0}, Vector{0.0, 0.0, 1.0}, 2},
   };
 
   auto cylinder = Cylinder{};
@@ -86,11 +86,11 @@ TEST(Cylinder, DefaultClosedValueForCylinder) {
 
 TEST(Cylinder, IntersectingCapsOfClosedCylinder) {
   const std::vector<std::tuple<Point, Vector, size_t>> test_table = {
-      {Point(0.0, 3.0, 0.0), Vector(0.0, -1.0, 0.0), 2},
-      {Point(0.0, 3.0, -2.0), Vector(0.0, -1.0, 2.0), 2},
-      {Point(0.0, 4.0, -2.0), Vector(0.0, -1.0, 1.0), 2},
-      {Point(0.0, 0.0, -2.0), Vector(0.0, 1.0, 2.0), 2},
-      {Point(0.0, -1.0, -2.0), Vector(0.0, 1.0, 1.0), 2},
+      {Point{0.0, 3.0, 0.0}, Vector{0.0, -1.0, 0.0}, 2},
+      {Point{0.0, 3.0, -2.0}, Vector{0.0, -1.0, 2.0}, 2},
+      {Point{0.0, 4.0, -2.0}, Vector{0.0, -1.0, 1.0}, 2},
+      {Point{0.0, 0.0, -2.0}, Vector{0.0, 1.0, 2.0}, 2},
+      {Point{0.0, -1.0, -2.0}, Vector{0.0, 1.0, 1.0}, 2},
   };
 
   auto cylinder = Cylinder{};
@@ -106,12 +106,12 @@ TEST(Cylinder, IntersectingCapsOfClosedCylinder) {
 
 TEST(Cylinder, NormalVectorOnCylinderEndCaps) {
   const std::vector<std::tuple<Point, Vector>> test_table = {
-      {Point(0.0, 1.0, 0.0), Vector(0.0, -1.0, 0.0)},
-      {Point(0.5, 1.0, 0.0), Vector(0.0, -1.0, 0.0)},
-      {Point(0.0, 1.0, 0.5), Vector(0.0, -1.0, 0.0)},
-      {Point(0.0, 2.0, 0.0), Vector(0.0, 1.0, 0.0)},
-      {Point(0.5, 2.0, 0.0), Vector(0.0, 1.0, 0.0)},
-      {Point(0.0, 2.0, 0.5), Vector(0.0, 1.0, 0.0)},
+      {Point{0.0, 1.0, 0.0}, Vector{0.0, -1.0, 0.0}},
+      {Point{0.5, 1.0, 0.0}, Vector{0.0, -1.0, 0.0}},
+      {Point{0.0, 1.0, 0.5}, Vector{0.0, -1.0, 0.0}},
+      {Point{0.0, 2.0, 0.0}, Vector{0.0, 1.0, 0.0}},
+      {Point{0.5, 2.0, 0.0}, Vector{0.0, 1.0, 0.0}},
+      {Point{0.0, 2.0, 0.5}, Vector{0.0, 1.0, 0.0}},
   };
 
   auto cylinder = Cylinder{};

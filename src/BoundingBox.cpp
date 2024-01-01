@@ -4,12 +4,12 @@
 #include "Intersection.h"
 
 BoundingBox::BoundingBox() :
-    minimum_(Point(std::numeric_limits<double>::infinity(),
-                        std::numeric_limits<double>::infinity(),
-                        std::numeric_limits<double>::infinity())),
-    maximum_(Point(-std::numeric_limits<double>::infinity(),
-                        -std::numeric_limits<double>::infinity(),
-                        -std::numeric_limits<double>::infinity())) {
+    minimum_(Point{std::numeric_limits<double>::infinity(),
+                   std::numeric_limits<double>::infinity(),
+                   std::numeric_limits<double>::infinity()}),
+    maximum_(Point{-std::numeric_limits<double>::infinity(),
+                   -std::numeric_limits<double>::infinity(),
+                   -std::numeric_limits<double>::infinity()}) {
 }
 
 BoundingBox::BoundingBox(const Point &minimum, const Point &maximum) : minimum_(minimum), maximum_(maximum) {
@@ -17,12 +17,12 @@ BoundingBox::BoundingBox(const Point &minimum, const Point &maximum) : minimum_(
 
 void BoundingBox::set_transform(const tf::Transform &transform) {
   const auto p1 = minimum_;
-  const auto p2 = Point(minimum_.x(), minimum_.y(), maximum_.z());
-  const auto p3 = Point(minimum_.x(), maximum_.y(), minimum_.z());
-  const auto p4 = Point(minimum_.x(), maximum_.y(), maximum_.z());
-  const auto p5 = Point(maximum_.x(), minimum_.y(), minimum_.z());
-  const auto p6 = Point(maximum_.x(), minimum_.y(), maximum_.z());
-  const auto p7 = Point(maximum_.x(), maximum_.y(), minimum_.z());
+  const auto p2 = Point{minimum_.x(), minimum_.y(), maximum_.z()};
+  const auto p3 = Point{minimum_.x(), maximum_.y(), minimum_.z()};
+  const auto p4 = Point{minimum_.x(), maximum_.y(), maximum_.z()};
+  const auto p5 = Point{maximum_.x(), minimum_.y(), minimum_.z()};
+  const auto p6 = Point{maximum_.x(), minimum_.y(), maximum_.z()};
+  const auto p7 = Point{maximum_.x(), maximum_.y(), minimum_.z()};
   const auto p8 = maximum_;
 
   auto new_bounding_box = BoundingBox{};
@@ -43,14 +43,14 @@ Point BoundingBox::maximum() const {
 
 void BoundingBox::add_point(const Point &point) {
   // Adjust the bounding box to contain the given point.
-  minimum_ = Point(
+  minimum_ = Point{
       std::min(point.x(), minimum_.x()),
       std::min(point.y(), minimum_.y()),
-      std::min(point.z(), minimum_.z()));
-  maximum_ = Point(
+      std::min(point.z(), minimum_.z())};
+  maximum_ = Point{
       std::max(point.x(), maximum_.x()),
       std::max(point.y(), maximum_.y()),
-      std::max(point.z(), maximum_.z()));
+      std::max(point.z(), maximum_.z())};
 }
 
 void BoundingBox::add_box(const BoundingBox &other) {

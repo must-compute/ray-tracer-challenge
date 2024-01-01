@@ -3,7 +3,6 @@
 #include <filesystem>
 #include <fstream>
 
-#include "Matrix.h"
 #include "Triangle.h"
 #include "SmoothTriangle.h"
 #include "Tuple.h"
@@ -36,10 +35,10 @@ v 1 1 0)";
 
   // We're intentionally using a 1-based instead of a 0-based index, per the file format.
   ASSERT_EQ(obj.vertices().size(), 5);
-  EXPECT_EQ(obj.vertices()[1], Point(-1.0, 1.0, 0.0));
-  EXPECT_EQ(obj.vertices()[2], Point(-1.0, 0.5, 0.0));
-  EXPECT_EQ(obj.vertices()[3], Point(1.0, 0.0, 0.0));
-  EXPECT_EQ(obj.vertices()[4], Point(1.0, 1.0, 0.0));
+  EXPECT_EQ(obj.vertices()[1], (Point{-1.0, 1.0, 0.0}));
+  EXPECT_EQ(obj.vertices()[2], (Point{-1.0, 0.5, 0.0}));
+  EXPECT_EQ(obj.vertices()[3], (Point{1.0, 0.0, 0.0}));
+  EXPECT_EQ(obj.vertices()[4], (Point{1.0, 1.0, 0.0}));
 }
 
 TEST(WavefrontObj, ParsingTriangleFaces) {
@@ -184,9 +183,9 @@ vn 1 2 3)";
 
   // NOTE: because this is 1-indexed, there are 4 elements (even though there are 3 normals).
   ASSERT_EQ(obj.normals().size(), 4);
-  EXPECT_EQ(obj.normals()[1], Vector(0.0, 0.0, 1.0));
-  EXPECT_EQ(obj.normals()[2], Vector(0.707, 0.0, -0.707));
-  EXPECT_EQ(obj.normals()[3], Vector(1.0, 2.0, 3.0));
+  EXPECT_EQ(obj.normals()[1], (Vector{0.0, 0.0, 1.0}));
+  EXPECT_EQ(obj.normals()[2], (Vector{0.707, 0.0, -0.707}));
+  EXPECT_EQ(obj.normals()[3], (Vector{1.0, 2.0, 3.0}));
 }
 
 TEST(WavefrontObj, FacesWithNormals) {

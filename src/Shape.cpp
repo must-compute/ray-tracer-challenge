@@ -56,7 +56,7 @@ Point Shape::world_to_object(const Point &point_in_world_space) const {
 Vector Shape::normal_to_world(const Vector &normal_in_object_space) const {
   auto normal = transform_.inverse().transpose() * normal_in_object_space;
   // NOTE: we reset w to 0 in case the above operations give a non-zero w. Vectors should always have their w set to 0.
-  normal = Vector(normal.x(), normal.y(), normal.z());
+  normal = Vector{normal.x(), normal.y(), normal.z()};
   normal = normal.normalize();
 
   if (parent_ != nullptr) {

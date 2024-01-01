@@ -93,7 +93,7 @@ int main() {
 //    cone->set_material(cone_material);
 //    world.objects.push_back(cone);
 //
-  world.light = PointLight{Point(-10.0, 10.0, -10.0), white};
+  world.light = PointLight{Point{-10.0, 10.0, -10.0}, white};
 
   /*
   //const auto obj = WavefrontOBJ::parse_obj_file(std::filesystem::path("../assets/test_file.obj"));
@@ -128,7 +128,7 @@ int main() {
 
   auto camera = Camera<width, height>{pi / 3.0};
   camera.set_transform(
-      tf::view_transform(Point(1.0, 5.0, -5.0), Point(0.0, 1.0, 0.0), Vector(0.0, 1.0, 0.0)));
+      tf::view_transform(Point{1.0, 5.0, -5.0}, Point{0.0, 1.0, 0.0}, Vector{0.0, 1.0, 0.0}));
 
   auto canvas = camera.render(world);
 

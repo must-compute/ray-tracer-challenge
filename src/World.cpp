@@ -3,7 +3,7 @@
 
 [[nodiscard]] World make_default_world() {
   auto world = World{};
-  const auto light = PointLight{Point(-10.0, 10.0, -10.0), Color{1.0, 1.0, 1.0}};
+  const auto light = PointLight{Point{-10.0, 10.0, -10.0}, Color{1.0, 1.0, 1.0}};
   auto material = Material{};
 
   material.color = Color{0.8, 1.0, 0.6};

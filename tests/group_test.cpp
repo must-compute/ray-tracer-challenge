@@ -30,7 +30,7 @@ TEST(Group, AddingChildToGroup) {
 
 TEST(Group, IntersectingRayWithEmptyGroup) {
   auto g = Group::make_group();
-  const auto r = Ray{Point(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0)};
+  const auto r = Ray{Point{0.0, 0.0, 0.0}, Vector{0.0, 0.0, 1.0}};
   EXPECT_EQ(g->local_intersect(r).size(), 0);
 }
 
@@ -45,7 +45,7 @@ TEST(Group, IntersectingRayWithNonEmptyGroup) {
   g->add_child(s2);
   g->add_child(s3);
 
-  const auto r = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)};
+  const auto r = Ray{Point{0.0, 0.0, -5.0}, Vector{0.0, 0.0, 1.0}};
   const auto xs = g->local_intersect(r);
   ASSERT_EQ(xs.size(), 4);
   ASSERT_TRUE(xs[0].object);
@@ -67,7 +67,7 @@ TEST(Group, IntersectingTransformedGroup) {
 
   g->add_child(s1);
 
-  const auto r = Ray{Point(10.0, 0.0, -10.0), Vector(0.0, 0.0, 1.0)};
+  const auto r = Ray{Point{10.0, 0.0, -10.0}, Vector{0.0, 0.0, 1.0}};
   const auto xs = g->intersect(r);
   EXPECT_EQ(xs.size(), 2);
 }
@@ -83,7 +83,7 @@ TEST(Group, ConvertingPointToWorldSpaceToObjectSpace) {
   s->set_transform(tf::translation(5.0, 0.0, 0.0));
   g2->add_child(s);
 
-  EXPECT_EQ(s->world_to_object(Point(-2.0, 0.0, -10.0)), Point(0.0, 0.0, -1.0));
+  EXPECT_EQ(s->world_to_object(Point{-2.0, 0.0, -10.0}), (Point{0.0, 0.0, -1.0}));
 }
 
 TEST(Group, ConvertingNormalFromObjectSpaceToWorldSpace) {
@@ -98,7 +98,7 @@ TEST(Group, ConvertingNormalFromObjectSpaceToWorldSpace) {
   g2->add_child(s);
 
   const auto loc = std::sqrt(3.0) / 3.0;
-  EXPECT_EQ(s->normal_to_world(Vector(loc, loc, loc)), Vector(0.2857, 0.4286, -0.8571));
+  EXPECT_EQ(s->normal_to_world(Vector{loc, loc, loc}), (Vector{0.2857, 0.4286, -0.8571}));
 }
 
 TEST(Group, FindingTheNormalOnAChildObject) {
@@ -112,7 +112,7 @@ TEST(Group, FindingTheNormalOnAChildObject) {
   s->set_transform(tf::translation(5.0, 0.0, 0.0));
   g2->add_child(s);
 
-  EXPECT_EQ(s->normal_at(Point(1.7321, 1.1547, -5.5774)), Vector(0.2857, 0.4286, -0.8571));
+  EXPECT_EQ(s->normal_at(Point{1.7321, 1.1547, -5.5774}), (Vector{0.2857, 0.4286, -0.8571}));
 }
 
 TEST(Group, StripesPatternWithGroupTransformation) {
@@ -134,19 +134,19 @@ TEST(Group, StripesPatternWithGroupTransformation) {
   pattern.set_transform(tf::translation(0.1, 0.1, 0.1));
 
   // That means we expect the pattern to transition at 0.1, 1.1, 2.1, etc.
-  EXPECT_EQ(pattern.pattern_at_shape(*s, Point(0.0999, 0.0, 0.0)), white);
-  EXPECT_EQ(pattern.pattern_at_shape(*s, Point(0.1001, 0.0, 0.0)), black);
-  EXPECT_EQ(pattern.pattern_at_shape(*s, Point(1.0999, 0.0, 0.0)), black);
-  EXPECT_EQ(pattern.pattern_at_shape(*s, Point(1.1001, 0.0, 0.0)), white);
-  EXPECT_EQ(pattern.pattern_at_shape(*s, Point(2.0999, 0.0, 0.0)), white);
-  EXPECT_EQ(pattern.pattern_at_shape(*s, Point(2.1001, 0.0, 0.0)), black);
+  EXPECT_EQ(pattern.pattern_at_shape(*s, (Point{0.0999, 0.0, 0.0})), white);
+  EXPECT_EQ(pattern.pattern_at_shape(*s, (Point{0.1001, 0.0, 0.0})), black);
+  EXPECT_EQ(pattern.pattern_at_shape(*s, (Point{1.0999, 0.0, 0.0})), black);
+  EXPECT_EQ(pattern.pattern_at_shape(*s, (Point{1.1001, 0.0, 0.0})), white);
+  EXPECT_EQ(pattern.pattern_at_shape(*s, (Point{2.0999, 0.0, 0.0})), white);
+  EXPECT_EQ(pattern.pattern_at_shape(*s, (Point{2.1001, 0.0, 0.0})), black);
 }
 
 TEST(Group, RayDoesNotIntersectChildrenIfBoundingBoxIsMissed) {
   const auto child = std::make_shared<TestShape>(TestShape{});
   auto group = Group::make_group();
   group->add_child(child);
-  const auto ray = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 1.0, 0.0)};
+  const auto ray = Ray{Point{0.0, 0.0, -5.0}, Vector{0.0, 1.0, 0.0}};
   auto xs = group->intersect(ray);
   EXPECT_FALSE(child->local_ray());
 }
@@ -155,7 +155,7 @@ TEST(Group, RayIntersectsChildrenIfBoundingBoxIsHit) {
   const auto child = std::make_shared<TestShape>(TestShape{});
   auto group = Group::make_group();
   group->add_child(child);
-  const auto ray = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point{0.0, 0.0, -5.0}, Vector{0.0, 0.0, 1.0}};
   auto xs = group->intersect(ray);
   EXPECT_TRUE(child->local_ray());
 }
