@@ -35,11 +35,11 @@ Vector Cube::local_normal_at(const Point &point_in_object_space,
   const auto max_c = *std::ranges::max_element(maxs);
 
   if (max_c == std::abs(point_in_object_space.x())) {
-    return make_vector(point_in_object_space.x(), 0.0, 0.0);
+    return Vector(point_in_object_space.x(), 0.0, 0.0);
   } else if (max_c == std::abs(point_in_object_space.y())) {
-    return make_vector(0.0, point_in_object_space.y(), 0.0);
+    return Vector(0.0, point_in_object_space.y(), 0.0);
   } else if (max_c == std::abs(point_in_object_space.z())) {
-    return make_vector(0.0, 0.0, point_in_object_space.z());
+    return Vector(0.0, 0.0, point_in_object_space.z());
   }
 
   assert(false); // unreachable
@@ -64,5 +64,5 @@ Vector Cube::local_normal_at(const Point &point_in_object_space,
 }
 
 BoundingBox Cube::make_bounding_box() const {
-  return {make_point(-1.0, -1.0, -1.0), make_point(1.0, 1.0, 1.0)};
+  return {Point(-1.0, -1.0, -1.0), Point(1.0, 1.0, 1.0)};
 }

@@ -15,7 +15,7 @@ TEST(World, CreatingWorld) {
 }
 
 TEST(World, CreatingDefaultWorld) {
-  const auto light = PointLight{make_point(-10.0, 10.0, -10.0), Color{1.0, 1.0, 1.0}};
+  const auto light = PointLight{Point(-10.0, 10.0, -10.0), Color{1.0, 1.0, 1.0}};
   auto material = Material{};
   material.color = Color{0.8, 1.0, 0.6};
   material.diffuse = 0.7;
@@ -31,7 +31,7 @@ TEST(World, CreatingDefaultWorld) {
 
 TEST(World, IntersectWorldWithRay) {
   const auto world = make_default_world();
-  const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)};
   const auto xs = world.intersect(ray);
   ASSERT_EQ(xs.size(), 4);
   EXPECT_EQ(xs[0].t, 4);
@@ -42,7 +42,7 @@ TEST(World, IntersectWorldWithRay) {
 
 TEST(World, ShadingAnIntersection) {
   const auto world = make_default_world();
-  const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)};
   EXPECT_FALSE(world.objects.empty());
   const auto &shape = world.objects.front();
   const auto i = Intersection{4.0, shape.get()};
@@ -52,8 +52,8 @@ TEST(World, ShadingAnIntersection) {
 
 TEST(World, ShadingAnIntersectionFromTheInside) {
   auto world = make_default_world();
-  world.light = PointLight{make_point(0.0, 0.25, 0.0), Color{1.0, 1.0, 1.0}};
-  const auto ray = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 0.0, 1.0)};
+  world.light = PointLight{Point(0.0, 0.25, 0.0), Color{1.0, 1.0, 1.0}};
+  const auto ray = Ray{Point(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0)};
   ASSERT_GE(world.objects.size(), 2);
   const auto &shape = world.objects[1];
   const auto i = Intersection{0.5, shape.get()};
@@ -63,14 +63,14 @@ TEST(World, ShadingAnIntersectionFromTheInside) {
 
 TEST(World, ShadingWithAnIntersectionInShadow) {
   auto world = World{};
-  world.light = PointLight{make_point(0.0, 0.0, -10.0), Color{1.0, 1.0, 1.0}};
+  world.light = PointLight{Point(0.0, 0.0, -10.0), Color{1.0, 1.0, 1.0}};
   const auto s1 = std::make_shared<Sphere>(Sphere{});
   auto s2 = std::make_shared<Sphere>(Sphere{});
   s2->set_transform(tf::translation(0.0, 0.0, 10.0));
   world.objects.push_back(s1);
   world.objects.push_back(s2);
 
-  const auto ray = Ray{make_point(0.0, 0.0, 5.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(0.0, 0.0, 5.0), Vector(0.0, 0.0, 1.0)};
   const auto i = Intersection{4.0, s2.get()};
   const auto comps = i.prepare_computations(ray);
   const auto c = world.shade_hit(comps);
@@ -79,13 +79,13 @@ TEST(World, ShadingWithAnIntersectionInShadow) {
 
 TEST(World, ColorWhenRayMisses) {
   auto world = make_default_world();
-  const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 1.0, 0.0)};
+  const auto ray = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 1.0, 0.0)};
   EXPECT_EQ(world.color_at(ray), Color{});
 }
 
 TEST(World, ColorWhenRayHits) {
   auto world = make_default_world();
-  const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)};
   EXPECT_EQ(world.color_at(ray), (Color{0.38066, 0.47583, 0.2855}));
 }
 
@@ -107,37 +107,37 @@ TEST(World, ColorWithIntersectionBehindTheRay) {
   inner_m.ambient = 1.0;
   inner->set_material(inner_m);
 
-  const auto ray = Ray{make_point(0.0, 0.0, 0.75), make_vector(0.0, 0.0, -1.0)};
+  const auto ray = Ray{Point(0.0, 0.0, 0.75), Vector(0.0, 0.0, -1.0)};
   EXPECT_EQ(world.color_at(ray), inner_m.color);
 }
 
 TEST(World, NoShadowWhenNothingIsColinearWithPointAndLight) {
   const auto w = make_default_world();
-  const auto p = make_point(0.0, 10.0, 0.0);
+  const auto p = Point(0.0, 10.0, 0.0);
   EXPECT_FALSE(w.is_shadowed(p));
 }
 
 TEST(World, ShadowWhenAnObjectIsBetweenThePointAndTheLight) {
   const auto w = make_default_world();
-  const auto p = make_point(10.0, -10.0, 10.0);
+  const auto p = Point(10.0, -10.0, 10.0);
   EXPECT_TRUE(w.is_shadowed(p));
 }
 
 TEST(World, NoShadowWhenObjectIsBehindTheLight) {
   const auto w = make_default_world();
-  const auto p = make_point(-20.0, 20.0, -20.0);
+  const auto p = Point(-20.0, 20.0, -20.0);
   EXPECT_FALSE(w.is_shadowed(p));
 }
 
 TEST(World, NoShadowWhenObjectIsBehindThePoint) {
   const auto w = make_default_world();
-  const auto p = make_point(-2.0, 2.0, -2.0);
+  const auto p = Point(-2.0, 2.0, -2.0);
   EXPECT_FALSE(w.is_shadowed(p));
 }
 
 TEST(World, ReflectedColorForNonReflectiveMaterial) {
   const auto world = make_default_world();
-  const auto ray = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0)};
 
   ASSERT_GE(world.objects.size(), 2);
   auto shape = world.objects[1];
@@ -164,7 +164,7 @@ TEST(World, ReflectedColorForReflectiveMaterial) {
   world.objects.push_back(plane);
 
   const auto loc = std::sqrt(2.0) / 2.0;
-  const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
+  const auto ray = Ray{Point(0.0, 0.0, -3.0), Vector(0.0, -loc, loc)};
   const auto intersection = Intersection{std::sqrt(2.0), plane.get()};
 
   const auto comps = intersection.prepare_computations(ray);
@@ -184,7 +184,7 @@ TEST(World, ShadeHitWithReflectiveMaterial) {
   world.objects.push_back(plane);
 
   const auto loc = std::sqrt(2.0) / 2.0;
-  const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
+  const auto ray = Ray{Point(0.0, 0.0, -3.0), Vector(0.0, -loc, loc)};
   const auto intersection = Intersection{std::sqrt(2.0), plane.get()};
 
   const auto comps = intersection.prepare_computations(ray);
@@ -193,7 +193,7 @@ TEST(World, ShadeHitWithReflectiveMaterial) {
 
 TEST(World, ColorAtWithMutuallyReflectiveSurfaces) {
   auto world = World{};
-  world.light = PointLight{make_point(0.0, 0.0, 0.0), Color{1.0, 1.0, 1.0}};
+  world.light = PointLight{Point(0.0, 0.0, 0.0), Color{1.0, 1.0, 1.0}};
 
   auto plane_material = Material{};
   plane_material.reflective = 1.0;
@@ -209,7 +209,7 @@ TEST(World, ColorAtWithMutuallyReflectiveSurfaces) {
   world.objects.push_back(lower_plane);
   world.objects.push_back(upper_plane);
 
-  const auto ray = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 1.0, 0.0)};
+  const auto ray = Ray{Point(0.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0)};
 
   std::ignore = world.color_at(ray);
 }
@@ -227,7 +227,7 @@ TEST(World, ReflectedColorAtMaxRecursiveDepth) {
   world.objects.push_back(plane);
 
   const auto loc = std::sqrt(2.0) / 2.0;
-  const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
+  const auto ray = Ray{Point(0.0, 0.0, -3.0), Vector(0.0, -loc, loc)};
   const auto intersection = Intersection{std::sqrt(2.0), plane.get()};
   const auto comps = intersection.prepare_computations(ray);
 
@@ -239,7 +239,7 @@ TEST(World, RefractedColorWithAnOpaqueSurface) {
 
   ASSERT_GT(world.objects.size(), 0);
   const auto &shape = world.objects.front();
-  const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)};
   const auto xs = Intersections{Intersection{4.0, shape.get()}, Intersection{6.0, shape.get()}};
   const auto comps = xs[0].prepare_computations(ray, xs);
   EXPECT_EQ(world.refracted_color(comps, 5), (Color{0.0, 0.0, 0.0}));
@@ -255,7 +255,7 @@ TEST(World, RefractedColorAtMaxRecursiveDepth) {
   material.refractive_index = 1.5;
   shape->set_material(material);
 
-  const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)};
   const auto xs = Intersections{Intersection{4.0, shape.get()}, Intersection{6.0, shape.get()}};
   const auto comps = xs[0].prepare_computations(ray, xs);
   EXPECT_EQ(world.refracted_color(comps, 0), (Color{0.0, 0.0, 0.0}));
@@ -272,7 +272,7 @@ TEST(World, RefractedColorUnderTotalInternalReflection) {
   shape->set_material(material);
 
   const auto loc = std::sqrt(2.0) / 2.0;
-  const auto ray = Ray{make_point(0.0, 0.0, loc), make_vector(0.0, 1.0, 0.0)};
+  const auto ray = Ray{Point(0.0, 0.0, loc), Vector(0.0, 1.0, 0.0)};
   const auto xs = Intersections{Intersection{-loc, shape.get()}, Intersection{loc, shape.get()}};
   const auto comps = xs[1].prepare_computations(ray, xs);
   EXPECT_EQ(world.refracted_color(comps, 5), (Color{0.0, 0.0, 0.0}));
@@ -295,7 +295,7 @@ TEST(World, RefractedColorWithRefractedRay) {
   material_b.refractive_index = 1.5;
   B->set_material(material_b);
 
-  const auto ray = Ray{make_point(0.0, 0.0, 0.1), make_vector(0.0, 1.0, 0.0)};
+  const auto ray = Ray{Point(0.0, 0.0, 0.1), Vector(0.0, 1.0, 0.0)};
   const auto xs = Intersections{
       Intersection{-0.9899, A.get()},
       Intersection{-0.4899, B.get()},
@@ -327,7 +327,7 @@ TEST(World, ShadeHitWithTransparentMaterial) {
   world.objects.push_back(ball);
 
   const auto loc = std::sqrt(2.0) / 2.0;
-  const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
+  const auto ray = Ray{Point(0.0, 0.0, -3.0), Vector(0.0, -loc, loc)};
   const auto xs = Intersections{Intersection{std::sqrt(2.0), floor.get()}};
   const auto comps = xs[0].prepare_computations(ray, xs);
   EXPECT_EQ(world.shade_hit(comps, 5), (Color{0.93642, 0.68642, 0.68642}));
@@ -336,7 +336,7 @@ TEST(World, ShadeHitWithTransparentMaterial) {
 TEST(World, ShadeHitWithReflectiveTransparentMaterial) {
   auto world = make_default_world();
   const auto loc = std::sqrt(2.0) / 2.0;
-  const auto ray = Ray{make_point(0.0, 0.0, -3.0), make_vector(0.0, -loc, loc)};
+  const auto ray = Ray{Point(0.0, 0.0, -3.0), Vector(0.0, -loc, loc)};
 
   auto floor = std::make_shared<Plane>(Plane{});
   floor->set_transform(tf::translation(0.0, -1.0, 0.0));

@@ -24,35 +24,35 @@ TEST(Tuple, Addition) {
 
 TEST(Tuple, Subtraction) {
   {
-    const Point p1 = make_point(3.0, 2.0, 1.0);
-    const Point p2 = make_point(5.0, 6.0, 7.0);
-    EXPECT_EQ(p1 - p2, make_vector(-2.0, -4.0, -6.0));
+    const Point p1 = Point(3.0, 2.0, 1.0);
+    const Point p2 = Point(5.0, 6.0, 7.0);
+    EXPECT_EQ(p1 - p2, Vector(-2.0, -4.0, -6.0));
   }
   {
-    const Point p1 = make_point(3.0, 2.0, 1.0);
-    const Vector v1 = make_vector(5.0, 6.0, 7.0);
-    EXPECT_EQ(p1 - v1, make_point(-2.0, -4.0, -6.0));
+    const Point p1 = Point(3.0, 2.0, 1.0);
+    const Vector v1 = Vector(5.0, 6.0, 7.0);
+    EXPECT_EQ(p1 - v1, Point(-2.0, -4.0, -6.0));
   }
   {
-    const Vector v1 = make_vector(3.0, 2.0, 1.0);
-    const Vector v2 = make_vector(5.0, 6.0, 7.0);
-    EXPECT_EQ(v1 - v2, make_vector(-2.0, -4.0, -6.0));
+    const Vector v1 = Vector(3.0, 2.0, 1.0);
+    const Vector v2 = Vector(5.0, 6.0, 7.0);
+    EXPECT_EQ(v1 - v2, Vector(-2.0, -4.0, -6.0));
   }
   {
-    const Vector v1 = make_vector(0.0, 0.0, 0.0);
-    const Vector v2 = make_vector(5.0, 6.0, 7.0);
-    EXPECT_EQ(v1 - v2, make_vector(-5.0, -6.0, -7.0));
+    const Vector v1 = Vector(0.0, 0.0, 0.0);
+    const Vector v2 = Vector(5.0, 6.0, 7.0);
+    EXPECT_EQ(v1 - v2, Vector(-5.0, -6.0, -7.0));
   }
 }
 
 TEST(Tuple, Negation) {
   {
-    const Vector t1 = make_vector(1.0, 2.0, 3.0);
-    EXPECT_EQ(-t1, make_vector(-1.0, -2.0, -3.0));
+    const Vector t1 = Vector(1.0, 2.0, 3.0);
+    EXPECT_EQ(-t1, Vector(-1.0, -2.0, -3.0));
   }
   {
-    const Point t1 = make_point(1.0, 2.0, 3.0);
-    EXPECT_NE(-t1, make_point(-1.0, -2.0, -3.0));
+    const Point t1 = Point(1.0, 2.0, 3.0);
+    EXPECT_NE(-t1, Point(-1.0, -2.0, -3.0));
   }
 }
 
@@ -74,53 +74,53 @@ TEST(Tuple, ScalarDivide) {
 
 TEST(Tuple, Magnitude) {
   {
-    const Vector v = make_vector(1.0, 0.0, 0.0);
+    const Vector v = Vector(1.0, 0.0, 0.0);
     EXPECT_EQ(v.magnitude(), 1.0);
   }
   {
-    const Vector v = make_vector(0.0, 1.0, 0.0);
+    const Vector v = Vector(0.0, 1.0, 0.0);
     EXPECT_EQ(v.magnitude(), 1.0);
   }
   {
-    const Vector v = make_vector(0.0, 0.0, 1.0);
+    const Vector v = Vector(0.0, 0.0, 1.0);
     EXPECT_EQ(v.magnitude(), 1.0);
   }
   {
-    const Vector v = make_vector(1.0, 2.0, 3.0);
+    const Vector v = Vector(1.0, 2.0, 3.0);
     EXPECT_TRUE(within_epsilon(v.magnitude(), std::sqrt(14.0)));
   }
   {
-    const Vector v = make_vector(-1.0, -2.0, -3.0);
+    const Vector v = Vector(-1.0, -2.0, -3.0);
     EXPECT_TRUE(within_epsilon(v.magnitude(), std::sqrt(14.0)));
   }
 }
 
 TEST(Tuple, Normalize) {
   {
-    const Vector v = make_vector(4.0, 0.0, 0.0);
-    EXPECT_EQ(v.normalize(), make_vector(1.0, 0.0, 0.0));
+    const Vector v = Vector(4.0, 0.0, 0.0);
+    EXPECT_EQ(v.normalize(), Vector(1.0, 0.0, 0.0));
   }
   {
-    const Vector v = make_vector(1.0, 2.0, 3.0);
+    const Vector v = Vector(1.0, 2.0, 3.0);
     const double sqrt_of_fourteen = std::sqrt(14.0);
-    EXPECT_EQ(v.normalize(), make_vector(1.0 / sqrt_of_fourteen, 2.0 / sqrt_of_fourteen, 3.0 / sqrt_of_fourteen));
+    EXPECT_EQ(v.normalize(), Vector(1.0 / sqrt_of_fourteen, 2.0 / sqrt_of_fourteen, 3.0 / sqrt_of_fourteen));
   }
   {
-    const Vector v = make_vector(1.0, 2.0, 3.0);
+    const Vector v = Vector(1.0, 2.0, 3.0);
     EXPECT_TRUE(within_epsilon(v.normalize().magnitude(), 1.0));
   }
 }
 
 TEST(Tuple, DotProduct) {
-  const Vector v1 = make_vector(1.0, 2.0, 3.0);
-  const Vector v2 = make_vector(2.0, 3.0, 4.0);
+  const Vector v1 = Vector(1.0, 2.0, 3.0);
+  const Vector v2 = Vector(2.0, 3.0, 4.0);
   EXPECT_EQ(v1.dot(v2), 20.0);
 }
 
 TEST(Tuple, CrossProduct) {
-  const Vector v1 = make_vector(1.0, 2.0, 3.0);
-  const Vector v2 = make_vector(2.0, 3.0, 4.0);
-  const Vector expected = make_vector(-1.0, 2.0, -1.0);
+  const Vector v1 = Vector(1.0, 2.0, 3.0);
+  const Vector v2 = Vector(2.0, 3.0, 4.0);
+  const Vector expected = Vector(-1.0, 2.0, -1.0);
   EXPECT_EQ(v1.cross(v2), expected);
   EXPECT_EQ(v2.cross(v1), -expected);
 }

@@ -2,7 +2,7 @@
 
 Vector Plane::local_normal_at(const Point &point_in_object_space,
                               const std::optional<Intersection> &intersection) const {
-  return make_vector(0.0, 1.0, 0.0);
+  return Vector(0.0, 1.0, 0.0);
 }
 
 [[nodiscard]] Intersections Plane::local_intersect(const Ray &ray) {
@@ -17,7 +17,7 @@ Vector Plane::local_normal_at(const Point &point_in_object_space,
 }
 
 BoundingBox Plane::make_bounding_box() const {
-  return {make_point(-std::numeric_limits<double>::infinity(), 0.0, -std::numeric_limits<double>::infinity()),
-          make_point(std::numeric_limits<double>::infinity(), 0.0, std::numeric_limits<double>::infinity())
+  return {Point(-std::numeric_limits<double>::infinity(), 0.0, -std::numeric_limits<double>::infinity()),
+          Point(std::numeric_limits<double>::infinity(), 0.0, std::numeric_limits<double>::infinity())
   };
 }

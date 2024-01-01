@@ -6,7 +6,7 @@
 
 TEST(Lights, PointLightHasPosAndIntensity) {
   const auto intensity = Color{1.0, 1.0, 1.0};
-  const auto position = make_point(0.0, 0.0, 0.0);
+  const auto position = Point(0.0, 0.0, 0.0);
 
   const auto light = PointLight(position, intensity);
   EXPECT_EQ(light.position(), position);

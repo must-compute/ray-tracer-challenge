@@ -68,19 +68,19 @@ TEST(Intersection, HitLowestNonNegative) {
 }
 
 TEST(Intersection, PrecomputingIntersectionState) {
-  const auto r = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+  const auto r = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)};
   const auto sphere = Sphere{};
   const auto i = Intersection{4.0, &sphere};
   const auto comps = i.prepare_computations(r);
   EXPECT_EQ(comps.t, i.t);
   EXPECT_EQ(comps.object, i.object);
-  EXPECT_EQ(comps.point, make_point(0.0, 0.0, -1.0));
-  EXPECT_EQ(comps.eyev, make_vector(0.0, 0.0, -1.0));
-  EXPECT_EQ(comps.normalv, make_vector(0.0, 0.0, -1.0));
+  EXPECT_EQ(comps.point, Point(0.0, 0.0, -1.0));
+  EXPECT_EQ(comps.eyev, Vector(0.0, 0.0, -1.0));
+  EXPECT_EQ(comps.normalv, Vector(0.0, 0.0, -1.0));
 }
 
 TEST(Intersection, HitIntersectionOutside) {
-  const auto r = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+  const auto r = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)};
   const auto sphere = Sphere{};
   const auto i = Intersection{4.0, &sphere};
   const auto comps = i.prepare_computations(r);
@@ -88,18 +88,18 @@ TEST(Intersection, HitIntersectionOutside) {
 }
 
 TEST(Intersection, HitIntersectionInside) {
-  const auto r = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 0.0, 1.0)};
+  const auto r = Ray{Point(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0)};
   const auto sphere = Sphere{};
   const auto i = Intersection{1.0, &sphere};
   const auto comps = i.prepare_computations(r);
-  EXPECT_EQ(comps.point, make_point(0.0, 0.0, 1.0));
-  EXPECT_EQ(comps.eyev, make_vector(0.0, 0.0, -1.0));
-  EXPECT_EQ(comps.normalv, make_vector(0.0, 0.0, -1.0));
+  EXPECT_EQ(comps.point, Point(0.0, 0.0, 1.0));
+  EXPECT_EQ(comps.eyev, Vector(0.0, 0.0, -1.0));
+  EXPECT_EQ(comps.normalv, Vector(0.0, 0.0, -1.0));
   EXPECT_TRUE(comps.inside);
 }
 
 TEST(Intersection, HitShouldOffsetPoint) {
-  const auto r = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+  const auto r = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)};
   auto sphere = Sphere{};
   sphere.set_transform(tf::translation(0.0, 0.0, 1.0));
   const auto i = Intersection{5.0, &sphere};
@@ -112,12 +112,12 @@ TEST(Intersection, PrecomputingTheReflectionVector) {
   const auto plane = Plane{};
 
   const auto loc = std::sqrt(2.0) / 2.0;
-  const auto r = Ray{make_point(0.0, 1.0, -1.0), make_vector(0.0, -loc, loc)};
+  const auto r = Ray{Point(0.0, 1.0, -1.0), Vector(0.0, -loc, loc)};
 
   const auto i = Intersection{std::sqrt(2.0), &plane};
 
   const auto comps = i.prepare_computations(r);
-  EXPECT_EQ(comps.reflectv, make_vector(0.0, loc, loc));
+  EXPECT_EQ(comps.reflectv, Vector(0.0, loc, loc));
 }
 
 TEST(Intersection, FindingN1AndN2AtVariousIntersections) {
@@ -139,7 +139,7 @@ TEST(Intersection, FindingN1AndN2AtVariousIntersections) {
   material_c.refractive_index = 2.5;
   C.set_material(material_c);
 
-  const auto ray = Ray{make_point(0.0, 0.0, -4.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(0.0, 0.0, -4.0), Vector(0.0, 0.0, 1.0)};
   const auto xs = Intersections{
       Intersection{2, &A},
       Intersection{2.75, &B},
@@ -166,7 +166,7 @@ TEST(Intersection, FindingN1AndN2AtVariousIntersections) {
 }
 
 TEST(Intersection, UnderPointIsOffsetBelowTheSurface) {
-  const auto r = Ray{make_point(0.0, 1.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+  const auto r = Ray{Point(0.0, 1.0, -5.0), Vector(0.0, 0.0, 1.0)};
   auto sphere = make_glass_sphere();
   sphere.set_transform(tf::translation(0.0, 0.0, 1.0));
 
@@ -181,7 +181,7 @@ TEST(Intersection, UnderPointIsOffsetBelowTheSurface) {
 TEST(Intersection, SchlickApproximationUnderTotalInternalReflection) {
   const auto shape = make_glass_sphere();
   const auto loc = std::sqrt(2.0) / 2.0;
-  const auto ray = Ray{make_point(0.0, 0.0, loc), make_vector(0.0, 1.0, 0.0)};
+  const auto ray = Ray{Point(0.0, 0.0, loc), Vector(0.0, 1.0, 0.0)};
   const auto xs = Intersections{Intersection{-loc, &shape}, Intersection{loc, &shape}};
   const auto comps = xs[1].prepare_computations(ray, xs);
   const auto reflectance = comps.schlick();
@@ -190,7 +190,7 @@ TEST(Intersection, SchlickApproximationUnderTotalInternalReflection) {
 
 TEST(Intersection, SchlickApproximationWithPerpendicularViewingAngle) {
   const auto shape = make_glass_sphere();
-  const auto ray = Ray{make_point(0.0, 0.0, 0.0), make_vector(0.0, 1.0, 0.0)};
+  const auto ray = Ray{Point(0.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0)};
   const auto xs = Intersections{Intersection{-1.0, &shape}, Intersection{1.0, &shape}};
   const auto comps = xs[1].prepare_computations(ray, xs);
   const auto reflectance = comps.schlick();
@@ -199,7 +199,7 @@ TEST(Intersection, SchlickApproximationWithPerpendicularViewingAngle) {
 
 TEST(Intersection, SchlickApproximationWithSmallAngleAndN2GreaterThanN1) {
   const auto shape = make_glass_sphere();
-  const auto ray = Ray{make_point(0.0, 0.99, -2.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(0.0, 0.99, -2.0), Vector(0.0, 0.0, 1.0)};
   const auto xs = Intersections{Intersection{1.8589, &shape}};
   const auto comps = xs[0].prepare_computations(ray, xs);
   const auto reflectance = comps.schlick();
@@ -207,7 +207,7 @@ TEST(Intersection, SchlickApproximationWithSmallAngleAndN2GreaterThanN1) {
 }
 
 TEST(Intersection, IntersectionEncapsulatesUAndV) {
-  const auto triangle = Triangle{make_point(0.0, 1.0, 0.0), make_point(-1.0, 0.0, 0.0), make_point(1.0, 0.0, 0.0)};
+  const auto triangle = Triangle{Point(0.0, 1.0, 0.0), Point(-1.0, 0.0, 0.0), Point(1.0, 0.0, 0.0)};
   const auto i = Intersection{3.5, &triangle, 0.2, 0.4};
   ASSERT_TRUE(i.u);
   ASSERT_TRUE(i.v);

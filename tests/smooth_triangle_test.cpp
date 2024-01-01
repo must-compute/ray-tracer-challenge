@@ -6,12 +6,12 @@
 class SmoothTriangleFixture : public ::testing::Test {
 protected:
   SmoothTriangleFixture() :
-      p1{make_point(0.0, 1.0, 0.0)},
-      p2{make_point(-1.0, 0.0, 0.0)},
-      p3{make_point(1.0, 0.0, 0.0)},
-      n1{make_vector(0.0, 1.0, 0.0)},
-      n2{make_vector(-1.0, 0.0, 0.0)},
-      n3{make_vector(1.0, 0.0, 0.0)},
+      p1{Point(0.0, 1.0, 0.0)},
+      p2{Point(-1.0, 0.0, 0.0)},
+      p3{Point(1.0, 0.0, 0.0)},
+      n1{Vector(0.0, 1.0, 0.0)},
+      n2{Vector(-1.0, 0.0, 0.0)},
+      n3{Vector(1.0, 0.0, 0.0)},
       tri{SmoothTriangle{p1, p2, p3, n1, n2, n3}} {}
 
   const Point p1;
@@ -33,7 +33,7 @@ TEST_F(SmoothTriangleFixture, ConstructingSmoothTriangle) {
 }
 
 TEST_F(SmoothTriangleFixture, IntersectionWithSmoothTriangleStoresUAndV) {
-  const auto ray = Ray{make_point(-0.2, 0.3, -2.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(-0.2, 0.3, -2.0), Vector(0.0, 0.0, 1.0)};
   const auto xs = tri.local_intersect(ray);
   ASSERT_EQ(xs.size(), 1);
   ASSERT_TRUE(xs[0].u);
@@ -44,13 +44,13 @@ TEST_F(SmoothTriangleFixture, IntersectionWithSmoothTriangleStoresUAndV) {
 
 TEST_F(SmoothTriangleFixture, SmoothTriangleUsesUAndVToInterpolateNormal) {
   const auto i = Intersection{1.0, &tri, 0.45, 0.25};
-  const auto normal = tri.normal_at(make_point(0.0, 0.0, 0.0), i);
-  EXPECT_EQ(normal, make_vector(-0.5547, 0.83205, 0.0));
+  const auto normal = tri.normal_at(Point(0.0, 0.0, 0.0), i);
+  EXPECT_EQ(normal, Vector(-0.5547, 0.83205, 0.0));
 }
 
 TEST_F(SmoothTriangleFixture, PreparingNormalOnSmoothTriangle) {
   const auto i = Intersection{1.0, &tri, 0.45, 0.25};
-  const auto ray = Ray{make_point(-0.2, 0.3, -2.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(-0.2, 0.3, -2.0), Vector(0.0, 0.0, 1.0)};
   const auto comps = i.prepare_computations(ray, Intersections{i});
-  EXPECT_EQ(comps.normalv, make_vector(-0.5547, 0.83205, 0.0));
+  EXPECT_EQ(comps.normalv, Vector(-0.5547, 0.83205, 0.0));
 }

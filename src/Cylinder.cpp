@@ -29,11 +29,11 @@ Vector Cylinder::local_normal_at(const Point &point_in_object_space,
   const auto dist = std::pow(point_in_object_space.x(), 2) + std::pow(point_in_object_space.z(), 2);
 
   if (dist < 1 && point_in_object_space.y() >= maximum_ - EPSILON) { // ON TOP CAP
-    return make_vector(0.0, 1.0, 0.0);
+    return Vector(0.0, 1.0, 0.0);
   } else if (dist < 1 && point_in_object_space.y() >= minimum_ - EPSILON) { // ON BOTTOM CAP
-    return make_vector(0.0, -1.0, 0.0);
+    return Vector(0.0, -1.0, 0.0);
   } else { // ON CYLINDER
-    return make_vector(point_in_object_space.x(), 0.0, point_in_object_space.z());
+    return Vector(point_in_object_space.x(), 0.0, point_in_object_space.z());
   }
 }
 
@@ -106,5 +106,5 @@ Intersections Cylinder::intersect_caps(const Ray &ray) const {
 }
 
 BoundingBox Cylinder::make_bounding_box() const {
-  return {make_point(-1.0, minimum(), -1.0), make_point(1.0, maximum(), 1.0)};
+  return {Point(-1.0, minimum(), -1.0), Point(1.0, maximum(), 1.0)};
 }

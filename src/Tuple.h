@@ -147,8 +147,4 @@ public:
 
 };
 
-Point make_point(double x, double y, double z);
-
-Vector make_vector(double x, double y, double z);
-
 #endif //RAY_TRACER_CHALLENGE_TUPLE_H

@@ -66,8 +66,8 @@ public:
     const auto world_x = half_width_ - x_offset;
     const auto world_y = half_height_ - y_offset;
 
-    const auto pixel = transform_.inverse() * make_point(world_x, world_y, -1);
-    const auto origin = transform_.inverse() * make_point(0.0, 0.0, 0.0);
+    const auto pixel = transform_.inverse() * Point(world_x, world_y, -1);
+    const auto origin = transform_.inverse() * Point(0.0, 0.0, 0.0);
     const auto direction = (pixel - origin).normalize();
 
     return {origin, direction};

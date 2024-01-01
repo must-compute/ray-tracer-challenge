@@ -83,7 +83,7 @@ TEST(CSG, RayMissesCSGObject) {
   auto sphere{std::make_shared<Sphere>(Sphere{})};
   auto cube{std::make_shared<Cube>(Cube{})};
   const auto csg{CSG::make_csg(CSGOperation::Union, sphere, cube)};
-  const auto ray{Ray{make_point(0.0, 2.0, -5.0), make_vector(0.0, 0.0, 1.0)}};
+  const auto ray{Ray{Point(0.0, 2.0, -5.0), Vector(0.0, 0.0, 1.0)}};
   EXPECT_TRUE(csg->local_intersect(ray).empty());
 }
 
@@ -93,7 +93,7 @@ TEST(CSG, RayHitsCSGObject) {
   sphere2->set_transform(tf::translation(0.0, 0.0, 0.5));
 
   const auto csg{CSG::make_csg(CSGOperation::Union, sphere1, sphere2)};
-  const auto ray{Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)}};
+  const auto ray{Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)}};
   const auto xs = csg->local_intersect(ray);
 
   ASSERT_EQ(xs.size(), 2);
@@ -110,15 +110,15 @@ TEST(CSG, CSGHasBoundingBoxThatContainsItsChildren) {
 
   const auto csg = CSG::make_csg(CSGOperation::Difference, left, right);
   const auto box = csg->make_bounding_box();
-  EXPECT_EQ(box.minimum(), make_point(-1.0, -1.0, -1.0));
-  EXPECT_EQ(box.maximum(), make_point(3.0, 4.0, 5.0));
+  EXPECT_EQ(box.minimum(), Point(-1.0, -1.0, -1.0));
+  EXPECT_EQ(box.maximum(), Point(3.0, 4.0, 5.0));
 }
 
 TEST(CSG, RayDoesNotIntersectChildrenIfBoundingBoxIsMissed) {
   const auto left = std::make_shared<TestShape>(TestShape{});
   const auto right = std::make_shared<TestShape>(TestShape{});
   const auto csg = CSG::make_csg(CSGOperation::Difference, left, right);
-  const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 1.0, 0.0)};
+  const auto ray = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 1.0, 0.0)};
   auto xs = csg->intersect(ray);
   EXPECT_FALSE(left->local_ray());
   EXPECT_FALSE(right->local_ray());
@@ -128,7 +128,7 @@ TEST(CSG, RayIntersectsChildrenIfBoundingBoxIsHit) {
   const auto left = std::make_shared<TestShape>(TestShape{});
   const auto right = std::make_shared<TestShape>(TestShape{});
   const auto csg = CSG::make_csg(CSGOperation::Difference, left, right);
-  const auto ray = Ray{make_point(0.0, 0.0, -5.0), make_vector(0.0, 0.0, 1.0)};
+  const auto ray = Ray{Point(0.0, 0.0, -5.0), Vector(0.0, 0.0, 1.0)};
   auto xs = csg->intersect(ray);
   EXPECT_TRUE(left->local_ray());
   EXPECT_TRUE(right->local_ray());

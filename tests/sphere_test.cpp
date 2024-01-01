@@ -21,49 +21,49 @@ TEST(Sphere, SphereSetTransform) {
 
 TEST(Sphere, NormalAtPointOnAxisX) {
   const auto s = Sphere{};
-  const auto n = s.normal_at(make_point(1.0, 0.0, 0.0));
-  EXPECT_EQ(n, make_vector(1.0, 0.0, 0.0));
+  const auto n = s.normal_at(Point(1.0, 0.0, 0.0));
+  EXPECT_EQ(n, Vector(1.0, 0.0, 0.0));
 }
 
 TEST(Sphere, NormalAtPointOnAxisY) {
   const auto s = Sphere{};
-  const auto n = s.normal_at(make_point(0.0, 1.0, 0.0));
-  EXPECT_EQ(n, make_vector(0.0, 1.0, 0.0));
+  const auto n = s.normal_at(Point(0.0, 1.0, 0.0));
+  EXPECT_EQ(n, Vector(0.0, 1.0, 0.0));
 }
 
 TEST(Sphere, NormalAtPointOnAxisZ) {
   const auto s = Sphere{};
-  const auto n = s.normal_at(make_point(0.0, 0.0, 1.0));
-  EXPECT_EQ(n, make_vector(0.0, 0.0, 1.0));
+  const auto n = s.normal_at(Point(0.0, 0.0, 1.0));
+  EXPECT_EQ(n, Vector(0.0, 0.0, 1.0));
 }
 
 TEST(Sphere, NormalAtPointOnNonAxialPoint) {
   const auto s = Sphere{};
   const auto loc = std::sqrt(3.0) / 3.0;
-  const auto n = s.normal_at(make_point(loc, loc, loc));
-  EXPECT_EQ(n, make_vector(loc, loc, loc));
+  const auto n = s.normal_at(Point(loc, loc, loc));
+  EXPECT_EQ(n, Vector(loc, loc, loc));
 }
 
 TEST(Sphere, NormalIsNormalized) {
   const auto s = Sphere{};
   const auto loc = std::sqrt(3.0) / 3.0;
-  const auto n = s.normal_at(make_point(loc, loc, loc));
+  const auto n = s.normal_at(Point(loc, loc, loc));
   EXPECT_EQ(n, n.normalize());
 }
 
 TEST(Sphere, ReflectingAt45Degrees) {
-  const auto v = make_vector(1.0, -1.0, 0.0);
-  const auto n = make_vector(0.0, 1.0, 0.0);
+  const auto v = Vector(1.0, -1.0, 0.0);
+  const auto n = Vector(0.0, 1.0, 0.0);
   const auto r = v.reflect(n);
-  EXPECT_EQ(r, make_vector(1.0, 1.0, 0.0));
+  EXPECT_EQ(r, Vector(1.0, 1.0, 0.0));
 }
 
 TEST(Sphere, ReflectingSlanted) {
-  const auto v = make_vector(0.0, -1.0, 0.0);
+  const auto v = Vector(0.0, -1.0, 0.0);
   const double loc = std::sqrt(2.0) / 2.0;
-  const auto n = make_vector(loc, loc, 0.0);
+  const auto n = Vector(loc, loc, 0.0);
   const auto r = v.reflect(n);
-  EXPECT_EQ(r, make_vector(1.0, 0.0, 0.0));
+  EXPECT_EQ(r, Vector(1.0, 0.0, 0.0));
 }
 
 TEST(Sphere, SphereHasDefaultMaterial) {
