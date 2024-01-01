@@ -15,3 +15,34 @@ soon. Screenshots will be added soon as well.
 ## License
 
 TBD
+
+## TODO
+
+Performance-related:
+
+- [x] do rendering in multiple threads
+- [ ] profile and look for critical paths
+- [ ] avoid unnecessary copies where it matters
+- [ ] utilize SIMD for Matrix/transform operations
+- [ ] BVH optimization for scenes with many objects
+
+Code style/hygiene:
+
+- [ ] revisit shared_ptr usage and ownership model
+- [ ] redo folder structure (src/ has too many files). Probably put primitives in their own folder. Consider using
+  namespaces.
+- [ ] consider including using absolute paths
+- [ ] strictly enforce include-what-you-use
+- [ ] look for newer C++ 20/23 alternatives to existing code (e.g. ranges::min_element)
+
+Features:
+
+- [ ] render to window and move camera
+    - [ ] low resolution/detail while moving camera (depends on performance)
+- [ ] Next steps chapter
+    - [ ] soft shadows
+    - [ ] focal blur
+    - [ ] motion blur
+    - [ ] anti-aliasing
+    - [ ] texture maps
+- [ ] other bonus chapters
