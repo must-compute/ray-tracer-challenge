@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <limits>
 
 #include "Cube.h"
@@ -31,7 +32,7 @@ Vector Cube::local_normal_at(const Point &point_in_object_space,
   const std::vector<double> maxs = {std::abs(point_in_object_space.x()),
                                     std::abs(point_in_object_space.y()),
                                     std::abs(point_in_object_space.z())};
-  const auto max_c = *std::max_element(maxs.begin(), maxs.end());
+  const auto max_c = *std::ranges::max_element(maxs);
 
   if (max_c == std::abs(point_in_object_space.x())) {
     return make_vector(point_in_object_space.x(), 0.0, 0.0);
@@ -52,8 +53,8 @@ Vector Cube::local_normal_at(const Point &point_in_object_space,
 
   const std::vector<double> mins{x_t_min, y_t_min, z_t_min};
   const std::vector<double> maxs{x_t_max, y_t_max, z_t_max};
-  const auto t_min = *std::max_element(mins.begin(), mins.end());
-  const auto t_max = *std::min_element(maxs.begin(), maxs.end());
+  const auto t_min = *std::ranges::max_element(mins);
+  const auto t_max = *std::ranges::min_element(maxs);
 
   if (t_min > t_max) { // ray miss
     return {};

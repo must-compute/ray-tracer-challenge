@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "BoundingBox.h"
 #include "Intersection.h"
 
@@ -79,8 +81,8 @@ bool BoundingBox::intersects(const Ray &ray) const {
 
   const std::vector<double> mins{x_t_min, y_t_min, z_t_min};
   const std::vector<double> maxs{x_t_max, y_t_max, z_t_max};
-  const auto t_min = *std::max_element(mins.begin(), mins.end());
-  const auto t_max = *std::min_element(maxs.begin(), maxs.end());
+  const auto t_min = *std::ranges::max_element(mins);
+  const auto t_max = *std::ranges::min_element(maxs);
 
   if (t_min > t_max) { // ray miss
     return false;
