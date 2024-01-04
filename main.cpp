@@ -1,6 +1,7 @@
 #include <filesystem>
 #include <numbers>
 #include <memory>
+#include <iostream>
 
 #include "CSG.h"
 #include "Intersection.h"
@@ -17,6 +18,8 @@
 
 int main() {
   using std::numbers::pi;
+
+  std::cout << "Constructing World..." << std::endl;
 
   const size_t width = 500;
   const size_t height = 500;
@@ -96,6 +99,7 @@ int main() {
   world.light = PointLight{Point{-10.0, 10.0, -10.0}, white};
 
   /*
+  std::cout << "Parsing OBJ file into group..." << std::endl;
   //const auto obj = WavefrontOBJ::parse_obj_file(std::filesystem::path("../assets/test_file.obj"));
   const auto obj = WavefrontOBJ::parse_obj_file(std::filesystem::path("../assets/another_test.obj"));
   auto group = obj.to_group();
@@ -130,9 +134,11 @@ int main() {
   camera.set_transform(
       tf::view_transform(Point{1.0, 5.0, -5.0}, Point{0.0, 1.0, 0.0}, Vector{0.0, 1.0, 0.0}));
 
+  std::cout << "Calling render()..." << std::endl;
   auto canvas = camera.render(world);
 
   std::filesystem::path temp_path = "./output.ppm";
+  std::cout << "Writing output ppm to file at: " << temp_path.string() << std::endl;
   canvas.to_file(temp_path);
   return 0;
 }
