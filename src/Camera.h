@@ -73,9 +73,9 @@ public:
     return {origin, direction};
   }
 
-  [[nodiscard]] Canvas<WIDTH, HEIGHT> render(const World &world) const {
+  [[nodiscard]] Canvas<WIDTH, HEIGHT> render(const World &world,
+                                             size_t n_threads = std::thread::hardware_concurrency()) const {
     auto image = Canvas<WIDTH, HEIGHT>{};
-    size_t n_threads = std::thread::hardware_concurrency();
 
     std::vector<std::thread> threads(n_threads);
 

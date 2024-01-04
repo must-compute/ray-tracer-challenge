@@ -5,5 +5,8 @@
   "dependencies" : [ {
     "name" : "gtest",
     "version>=" : "1.14.0"
+  }, {
+    "name" : "benchmark",
+    "version>=" : "1.8.3"
   } ]
 }

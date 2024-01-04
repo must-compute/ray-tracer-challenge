@@ -21,6 +21,8 @@ TBD
 Performance-related:
 
 - [x] do rendering in multiple threads
+- [ ] add microbenchmarks so we can measure something at least
+    - [ ] allow for canvas sizes determined during runtime (so we can benchmark different sizes)
 - [ ] profile and look for critical paths
 - [ ] avoid unnecessary copies where it matters
 - [ ] utilize SIMD for Matrix/transform operations
